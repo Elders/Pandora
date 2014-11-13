@@ -1,0 +1,25 @@
+{
+    "name": "Gno",
+    "defaults": {
+        "key0": "from def",
+        "key": "from def",
+        "key1": "value1"
+    },
+    "clusters": {
+
+        "test": {
+            "key4": "fromCluster"
+        },
+
+        "int": {
+            "key": "value",
+            "key1": "value1"
+        }
+    },
+    "machines": {
+
+        "localhost": {
+            "key": "from machine"
+        }
+    }
+}
