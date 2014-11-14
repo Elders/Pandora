@@ -5,7 +5,7 @@ using System.Linq;
 using Elders.Pandora.Box;
 using Newtonsoft.Json;
 
-namespace Elders.Configuration.Console
+namespace Elders.Pandora
 {
     class Program
     {
@@ -18,7 +18,7 @@ namespace Elders.Configuration.Console
 
 
             var jar = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(applicationName + ".json"));
-            var box = Box.Mistranslate(jar);
+            var box = Elders.Pandora.Box.Box.Mistranslate(jar);
             if (box.Name != applicationName)
                 throw new InvalidProgramException("Invalid grant");
             var cfg = new Pandora(box).Open(cluster, machine);

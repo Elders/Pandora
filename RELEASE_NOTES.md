@@ -1,3 +1,6 @@
+#### 0.1.2 - 14.11.2014
+* Fix misspelled name in the exe file
+
 #### 0.1.1 - 14.11.2014
 * Fix misspelled name
 

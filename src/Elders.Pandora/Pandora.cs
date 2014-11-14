@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Elders.Pandora.Box;
 
-namespace Elders.Configuration.Console
+namespace Elders.Pandora
 {
     /// <summary>
     /// In Greek mythology, Pandora was the first human woman created by the gods, specifically by Hephaestus and Athena on the 
@@ -15,9 +15,9 @@ namespace Elders.Configuration.Console
     /// <remarks>http://en.wikipedia.org/wiki/Pandora</remarks>
     public class Pandora
     {
-        Box box;
+        Elders.Pandora.Box.Box box;
 
-        public Pandora(Box box)
+        public Pandora(Elders.Pandora.Box.Box box)
         {
             this.box = box;
         }
