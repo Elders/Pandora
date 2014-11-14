@@ -41,8 +41,6 @@ namespace Elders.Pandora
                 result = Merge(result, machine.AsDictionary());
             }
 
-
-
             return new Elders.Pandora.Box.Configuration(box.Name, NamenizeConfiguration(result, clusterName, machineName));
         }
 

@@ -22,6 +22,12 @@ namespace Elders.Pandora
             var cfg = new Pandora(box).Open(cluster, machine);
 
             var computedCfg = JsonConvert.SerializeObject(cfg.AsDictionary());
+
+            foreach (var setting in cfg.AsDictionary())
+            {
+                Environment.SetEnvironmentVariable(setting.Key, setting.Value, EnvironmentVariableTarget.Machine);
+            }
+
             File.WriteAllText((NameBuilder.GetFileName(box.Name, cluster, machine) + ".json"), computedCfg);
         }
     }
