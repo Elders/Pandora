@@ -7,8 +7,8 @@
     <ProjectGuid>{69854EA2-20DC-4A51-90F4-4710F88C930F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Elders.Padnora.Box</RootNamespace>
-    <AssemblyName>Elders.Padnora.Box</AssemblyName>
+    <RootNamespace>Elders.Pandora.Box</RootNamespace>
+    <AssemblyName>Elders.Pandora.Box</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

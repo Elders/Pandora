@@ -4,7 +4,7 @@
 ".\tools\Nuget\NuGet.exe" "install" "FSharp.Formatting.CommandTool" "-OutputDirectory" ".\bin\tools" "-ExcludeVersion" "-Prerelease"
 ".\tools\Nuget\NuGet.exe" "install" "SourceLink.Fake" "-OutputDirectory" ".\bin\tools" "-ExcludeVersion"
 
-SET TARGET="CreateNuget"
+SET TARGET="Build"
 
 IF NOT [%1]==[] (set TARGET="%1")
 

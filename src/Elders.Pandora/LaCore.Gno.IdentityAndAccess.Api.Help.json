@@ -1,5 +1,5 @@
 {
-    "name": "Gno",
+    "name": "LaCore.Gno.IdentityAndAccess.Api.Help",
     "defaults": {
         "key0": "from def",
         "key": "from def",
@@ -8,7 +8,7 @@
     "clusters": {
 
         "test": {
-            "key4": "fromCluster"
+            "key": "fromCluster"
         },
 
         "int": {

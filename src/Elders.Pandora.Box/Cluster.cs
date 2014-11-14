@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Elders.Padnora.Box
+namespace Elders.Pandora.Box
 {
     public sealed class Cluster : Configuration
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Elders.Padnora.Box
+namespace Elders.Pandora.Box
 {
     public interface IValueObject<T> : IEqualityComparer<T>, IEquatable<T>
     {

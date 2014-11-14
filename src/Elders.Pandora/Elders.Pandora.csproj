@@ -46,15 +46,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <Content Include="conf.json">
+    <Content Include="LaCore.Gno.IdentityAndAccess.Api.Help.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Elders.Pandora.Box\Elders.Padnora.Box.csproj">
+    <ProjectReference Include="..\Elders.Pandora.Box\Elders.Pandora.Box.csproj">
       <Project>{69854ea2-20dc-4a51-90f4-4710f88c930f}</Project>
-      <Name>Elders.Padnora.Box</Name>
+      <Name>Elders.Pandora.Box</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

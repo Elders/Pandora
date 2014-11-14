@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Elders.Padnora.Box;
+using Elders.Pandora.Box;
 
 namespace Elders.Configuration.Console
 {
@@ -22,7 +22,7 @@ namespace Elders.Configuration.Console
             this.box = box;
         }
 
-        public Elders.Padnora.Box.Configuration Open(string clusterName = "", string machineName = "")
+        public Elders.Pandora.Box.Configuration Open(string clusterName = "", string machineName = "")
         {
             if (String.IsNullOrEmpty(clusterName) && String.IsNullOrEmpty(machineName))
                 throw new ArgumentNullException("clusterName", "When getting configuraion for a machine the clusterName is required");
@@ -41,7 +41,15 @@ namespace Elders.Configuration.Console
                 result = Merge(result, machine.AsDictionary());
             }
 
-            return new Elders.Padnora.Box.Configuration(box.Name, new Dictionary<string, string>(result));
+
+
+            return new Elders.Pandora.Box.Configuration(box.Name, NamenizeConfiguration(result, clusterName, machineName));
+        }
+
+        private Dictionary<string, string> NamenizeConfiguration(Dictionary<string, string> settings, string clusterName, string machineName)
+        {
+            string theName = (box.Name + "@@" + clusterName + "^" + machineName).Replace("^^", "^");
+            return settings.ToDictionary(x => theName + "~~" + x.Key, y => y.Value);
         }
 
         private bool TryFindCluster(string clusterName, out Cluster cluster)

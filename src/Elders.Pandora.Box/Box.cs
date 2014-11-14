@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Elders.Padnora.Box
+namespace Elders.Pandora.Box
 {
     /// <summary>
     /// Pandora's box is an artifact in Greek mythology, taken from the myth of Pandora's creation in Hesiod's Works and Days. 

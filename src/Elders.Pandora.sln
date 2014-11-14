@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elders.Padnora.Box", "Elders.Pandora.Box\Elders.Padnora.Box.csproj", "{69854EA2-20DC-4A51-90F4-4710F88C930F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elders.Pandora.Box", "Elders.Pandora.Box\Elders.Pandora.Box.csproj", "{69854EA2-20DC-4A51-90F4-4710F88C930F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elders.Pandora", "Elders.Pandora\Elders.Pandora.csproj", "{9FA368C6-5AFD-4707-B6C2-50D1DC9A07AA}"
 EndProject

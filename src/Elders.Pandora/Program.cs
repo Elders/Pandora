@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Elders.Padnora.Box;
+using Elders.Pandora.Box;
 using Newtonsoft.Json;
 
 namespace Elders.Configuration.Console
@@ -11,11 +11,20 @@ namespace Elders.Configuration.Console
     {
         static void Main(string[] args)
         {
-            var jar = JsonConvert.DeserializeObject<Jar>(File.ReadAllText("conf.json"));
-            var box = Box.Mistranslate(jar);
-            var cfg = new Pandora(box).Open("test", "localhost");
+            string applicationName = args[0];
+            string cluster = args[1];
+            string machine = args.Length == 3 ? args[2] : String.Empty;
 
-            System.Console.ReadLine();
+
+
+            var jar = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(applicationName + ".json"));
+            var box = Box.Mistranslate(jar);
+            if (box.Name != applicationName)
+                throw new InvalidProgramException("Invalid grant");
+            var cfg = new Pandora(box).Open(cluster, machine);
+
+            var computedCfg = JsonConvert.SerializeObject(cfg.AsDictionary());
+            File.WriteAllText((box.Name + "@@" + cluster + "^" + machine + ".json").Replace("^^", "^"), computedCfg);
         }
     }
 }
