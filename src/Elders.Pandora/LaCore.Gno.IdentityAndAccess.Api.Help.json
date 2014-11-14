@@ -1,25 +1,23 @@
 {
     "name": "LaCore.Gno.IdentityAndAccess.Api.Help",
     "defaults": {
-        "key0": "from def",
-        "key": "from def",
-        "key1": "value1"
+        "ConnectionStringIdentityServer": "",
+        "SiteName": "LaCore GNO Identity Server",
+        "PublicHostName": "",
+        "Issuer": "",
+        "Thumbprint": "",
+        "MobileClientId": "",
+        "MobileClientSecret": ""
     },
     "clusters": {
-
-        "test": {
-            "key": "fromCluster"
-        },
-
-        "int": {
-            "key": "value",
-            "key1": "value1"
-        }
-    },
-    "machines": {
-
-        "localhost": {
-            "key": "from machine"
+        "local": {
+            "ConnectionStringIdentityServer": "Contact Points=10.10.63.65;Port=9042;Default Keyspace=gno_identity_local",
+            "SiteName": "LaCore GNO Local Identity Server",
+            "PublicHostName": "https://account-gno.local.devsmm.com",
+            "Issuer": "https://account-gno.local.devsmm.com/issuer",
+            "Thumbprint": "f700918c326bde51be033228118602ccc40194a5",
+            "MobileClientId": "localroclient",
+            "MobileClientSecret": "localsecret"
         }
     }
 }

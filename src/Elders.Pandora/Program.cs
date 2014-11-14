@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Elders.Pandora.Box;
 using Newtonsoft.Json;
 
@@ -13,7 +11,7 @@ namespace Elders.Pandora
         {
             string applicationName = args[0];
             string cluster = args[1];
-            string machine = args.Length == 3 ? args[2] : String.Empty;
+            string machine = args[2];
 
 
 
@@ -24,7 +22,7 @@ namespace Elders.Pandora
             var cfg = new Pandora(box).Open(cluster, machine);
 
             var computedCfg = JsonConvert.SerializeObject(cfg.AsDictionary());
-            File.WriteAllText((box.Name + "@@" + cluster + "^" + machine + ".json").Replace("^^", "^"), computedCfg);
+            File.WriteAllText((NameBuilder.GetFileName(box.Name, cluster, machine) + ".json"), computedCfg);
         }
     }
 }

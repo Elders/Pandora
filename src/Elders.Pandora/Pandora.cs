@@ -48,8 +48,7 @@ namespace Elders.Pandora
 
         private Dictionary<string, string> NamenizeConfiguration(Dictionary<string, string> settings, string clusterName, string machineName)
         {
-            string theName = (box.Name + "@@" + clusterName + "^" + machineName).Replace("^^", "^");
-            return settings.ToDictionary(x => theName + "~~" + x.Key, y => y.Value);
+            return settings.ToDictionary(x => NameBuilder.GetSettingName(box.Name, clusterName, machineName, x.Key), y => y.Value);
         }
 
         private bool TryFindCluster(string clusterName, out Cluster cluster)
