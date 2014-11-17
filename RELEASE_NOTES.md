@@ -1,3 +1,6 @@
+#### 0.1.7 - 17.11.2014
+* Improve getting settings from env vars using a static class
+
 #### 0.1.6 - 17.11.2014
 * Fix how we get the computer name
 

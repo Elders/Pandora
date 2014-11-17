@@ -3,21 +3,24 @@ using Elders.Pandora.Box;
 
 namespace Elders.Pandora
 {
-    public class ApplicationConfiguration
+    public static class ApplicationConfiguration
     {
-        private readonly string applicationName;
-        private readonly string cluster;
-        private readonly string machine;
+        private static string applicationName;
+        private static string cluster;
+        private static string machine;
 
-        public ApplicationConfiguration(string applicationName, string cluster = null, string machine = null)
+        public static void SetContext(string applicationName, string cluster = null, string machine = null)
         {
-            this.applicationName = applicationName;
-            this.cluster = cluster ?? Environment.GetEnvironmentVariable("CLUSTER_NAME", EnvironmentVariableTarget.Machine);
-            this.machine = machine ?? Environment.GetEnvironmentVariable("COMPUTERNAME");
+            ApplicationConfiguration.applicationName = applicationName;
+            ApplicationConfiguration.cluster = cluster ?? Environment.GetEnvironmentVariable("CLUSTER_NAME", EnvironmentVariableTarget.Machine);
+            ApplicationConfiguration.machine = machine ?? Environment.GetEnvironmentVariable("COMPUTERNAME");
         }
 
-        public string Get(string key)
+        public static string Get(string key)
         {
+            if (String.IsNullOrEmpty(applicationName))
+                throw new ArgumentNullException("Please use 'SetContext' method first.");
+
             string longKey = NameBuilder.GetSettingName(applicationName, cluster, machine, key);
             return Environment.GetEnvironmentVariable(longKey, EnvironmentVariableTarget.Machine);
         }

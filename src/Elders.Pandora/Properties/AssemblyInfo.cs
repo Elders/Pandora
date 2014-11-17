@@ -4,11 +4,11 @@ using System.Reflection;
 [assembly: AssemblyTitleAttribute("Elders.Pandora")]
 [assembly: AssemblyDescriptionAttribute("Elders.Pandora")]
 [assembly: AssemblyProductAttribute("Elders.Pandora")]
-[assembly: AssemblyVersionAttribute("0.1.6")]
-[assembly: AssemblyInformationalVersionAttribute("0.1.6")]
-[assembly: AssemblyFileVersionAttribute("0.1.6")]
+[assembly: AssemblyVersionAttribute("0.1.7")]
+[assembly: AssemblyInformationalVersionAttribute("0.1.7")]
+[assembly: AssemblyFileVersionAttribute("0.1.7")]
 namespace System {
     internal static class AssemblyVersionInformation {
-        internal const string Version = "0.1.6";
+        internal const string Version = "0.1.7";
     }
 }
