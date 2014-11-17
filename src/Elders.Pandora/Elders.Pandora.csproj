@@ -47,7 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <Content Include="LaCore.Gno.IdentityAndAccess.Api.Help.json">
+    <Content Include="LaCore.Gno.IdentityServer.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace Elders.Pandora.Box
@@ -23,7 +24,7 @@ namespace Elders.Pandora.Box
 
         public override int GetHashCode()
         {
-            FieldInfo[] fields = GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            FieldInfo[] fields = GetAllFields(GetType()).ToArray();
 
             int startValue = 23;
             int multiplier = 77;
@@ -40,7 +41,14 @@ namespace Elders.Pandora.Box
             return hashCode;
         }
 
+        public static IEnumerable<FieldInfo> GetAllFields(Type t)
+        {
+            if (t == null)
+                return Enumerable.Empty<FieldInfo>();
 
+            BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.DeclaredOnly;
+            return t.GetFields(flags).Concat(GetAllFields(t.BaseType));
+        }
 
         public virtual bool Equals(T other)
         {
@@ -51,7 +59,7 @@ namespace Elders.Pandora.Box
             if (t != other.GetType())
                 return false;
 
-            FieldInfo[] fields = t.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            FieldInfo[] fields = GetAllFields(t).ToArray();
 
             foreach (FieldInfo field in fields)
             {

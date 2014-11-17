@@ -1,3 +1,6 @@
+#### 0.1.5 - 17.11.2014
+* Fix how the box is converted from a jar
+
 #### 0.1.4 - 14.11.2014
 * Added ApplicationConfiguration for clients to get setting value by key
 

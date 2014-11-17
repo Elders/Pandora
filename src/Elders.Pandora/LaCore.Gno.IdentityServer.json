@@ -1,5 +1,5 @@
 {
-    "name": "LaCore.Gno.IdentityAndAccess.Api.Help",
+    "name": "LaCore.Gno.IdentityServer",
     "defaults": {
         "ConnectionStringIdentityServer": "",
         "SiteName": "LaCore GNO Identity Server",
@@ -18,6 +18,15 @@
             "Thumbprint": "f700918c326bde51be033228118602ccc40194a5",
             "MobileClientId": "localroclient",
             "MobileClientSecret": "localsecret"
+        },
+        "test": {
+            "ConnectionStringIdentityServer": "Contact Points=192.168.1.46;Port=9042;Default Keyspace=gno_identity_test",
+            "SiteName": "LaCore GNO Test Identity Server",
+            "PublicHostName": "https://account-gno.test.devsmm.com",
+            "Issuer": "https://account-gno.test.devsmm.com/issuer",
+            "Thumbprint": "835cd6b8449d9b3772199c12bb323b315a3e720e",
+            "MobileClientId": "testroclient",
+            "MobileClientSecret": "testsecret"
         }
     }
 }
