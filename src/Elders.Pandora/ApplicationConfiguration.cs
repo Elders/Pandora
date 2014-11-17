@@ -13,7 +13,7 @@ namespace Elders.Pandora
         {
             this.applicationName = applicationName;
             this.cluster = cluster ?? Environment.GetEnvironmentVariable("CLUSTER_NAME", EnvironmentVariableTarget.Machine);
-            this.machine = machine ?? Environment.GetEnvironmentVariable("COMPUTERNAME", EnvironmentVariableTarget.Machine);
+            this.machine = machine ?? Environment.GetEnvironmentVariable("COMPUTERNAME");
         }
 
         public string Get(string key)

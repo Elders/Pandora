@@ -1,3 +1,6 @@
+#### 0.1.6 - 17.11.2014
+* Fix how we get the computer name
+
 #### 0.1.5 - 17.11.2014
 * Fix how the box is converted from a jar
 
