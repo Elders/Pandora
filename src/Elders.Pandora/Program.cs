@@ -7,13 +7,12 @@ namespace Elders.Pandora
 {
     class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
+
             string applicationName = args[0];
             string cluster = args[1];
             string machine = args[2];
-
-
 
             var jar = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(applicationName + ".json"));
             var box = Elders.Pandora.Box.Box.Mistranslate(jar);
@@ -29,6 +28,8 @@ namespace Elders.Pandora
             }
 
             File.WriteAllText((NameBuilder.GetFileName(box.Name, cluster, machine) + ".json"), computedCfg);
+
+            return 0;
         }
     }
 }

@@ -1,3 +1,6 @@
+#### 0.1.8 - 13.12.2014
+* Get all machine settings represented as DeployedSetting
+
 #### 0.1.7 - 17.11.2014
 * Improve getting settings from env vars using a static class
 
