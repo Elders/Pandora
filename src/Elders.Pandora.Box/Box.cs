@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Elders.Pandora.Box
 {
@@ -12,23 +13,19 @@ namespace Elders.Pandora.Box
     /// <remarks>http://en.wikipedia.org/wiki/Pandora%27s_box</remarks>
     public class Box
     {
-        private readonly List<Cluster> clusters;
-        private readonly List<Machine> machines;
-        private readonly Configuration defaults;
-
         public Box(string applicationName, Dictionary<string, string> defaultSettings)
         {
             Name = applicationName;
-            clusters = new List<Cluster>();
-            machines = new List<Machine>();
-            defaults = new Configuration(defaultSettings);
+            Clusters = new List<Cluster>();
+            Machines = new List<Machine>();
+            Defaults = new Configuration(defaultSettings);
         }
 
         public string Name { get; private set; }
 
-        public Configuration Defaults { get { return defaults; } }
+        public Configuration Defaults { get; set; }
 
-        public IEnumerable<Cluster> Clusters { get { return clusters.AsReadOnly(); } }
+        public List<Cluster> Clusters { get; set; }
 
         public void AddCluster(string name, Dictionary<string, string> settings)
         {
@@ -40,12 +37,12 @@ namespace Elders.Pandora.Box
         {
             Guard_SettingMustBeDefinedInDefaults(cluster.AsDictionary());
 
-            if (!clusters.Contains(cluster))
-                clusters.Add(cluster);
+            if (!Clusters.Contains(cluster))
+                Clusters.Add(cluster);
         }
 
 
-        public IEnumerable<Machine> Machines { get { return machines.AsReadOnly(); } }
+        public List<Machine> Machines { get; set; }
 
         public void AddMachine(string name, Dictionary<string, string> settings)
         {
@@ -57,8 +54,8 @@ namespace Elders.Pandora.Box
         {
             Guard_SettingMustBeDefinedInDefaults(machine.AsDictionary());
 
-            if (!machines.Contains(machine))
-                machines.Add(machine);
+            if (!Machines.Contains(machine))
+                Machines.Add(machine);
         }
 
         private void Guard_SettingMustBeDefinedInDefaults(Dictionary<string, string> settings)
@@ -103,6 +100,32 @@ namespace Elders.Pandora.Box
                 }
             }
             return box;
+        }
+
+        public static Jar Mistranslate(Box box)
+        {
+            Jar jar = new Jar();
+
+            if (box.Defaults != null)
+                jar.Defaults = box.Defaults.AsDictionary();
+
+            if (box.Clusters != null)
+            {
+                foreach (var cluster in box.Clusters)
+                {
+                    jar.Clusters.Add(cluster.Name, cluster.AsDictionary());
+                }
+            }
+
+            if (box.Machines != null)
+            {
+                foreach (var machine in box.Machines)
+                {
+                    jar.Machines.Add(machine.Name, machine.AsDictionary());
+                }
+            }
+
+            return jar;
         }
     }
 }

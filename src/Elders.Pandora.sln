@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elders.Pandora.Box", "Elders.Pandora.Box\Elders.Pandora.Box.csproj", "{69854EA2-20DC-4A51-90F4-4710F88C930F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elders.Pandora", "Elders.Pandora\Elders.Pandora.csproj", "{9FA368C6-5AFD-4707-B6C2-50D1DC9A07AA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecurityTest", "SecurityTest\SecurityTest.csproj", "{83711A89-8AC4-4474-A036-F344E09A79D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elders.Pandora.Api", "Elders.Pandora.Api\Elders.Pandora.Api.csproj", "{DD7DFFD5-AA54-4F7D-81A9-1ECDD642BEED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{83711A89-8AC4-4474-A036-F344E09A79D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83711A89-8AC4-4474-A036-F344E09A79D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83711A89-8AC4-4474-A036-F344E09A79D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD7DFFD5-AA54-4F7D-81A9-1ECDD642BEED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD7DFFD5-AA54-4F7D-81A9-1ECDD642BEED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD7DFFD5-AA54-4F7D-81A9-1ECDD642BEED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD7DFFD5-AA54-4F7D-81A9-1ECDD642BEED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
