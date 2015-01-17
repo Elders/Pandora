@@ -13,7 +13,7 @@ namespace Elders.Pandora.Api.Controllers
     {
         static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(DefaultsController));
 
-        private string storageFolder = ConfigurationManager.AppSettings["StorageFolder"];
+        private string storageFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Elders", "Pandora");
 
         // GET api/defaults/appName
         public IEnumerable<KeyValuePair<string, string>> Get(string appName)
@@ -103,7 +103,7 @@ namespace Elders.Pandora.Api.Controllers
                 {
                     defaults.Add(setting.Key, setting.Value);
 
-                    box.Defaults = new Configuration(box.Defaults.Name, defaults);
+                    box.Defaults = new Elders.Pandora.Box.Configuration(box.Defaults.Name, defaults);
 
                     var jar = JsonConvert.SerializeObject(Elders.Pandora.Box.Box.Mistranslate(box), Formatting.Indented);
 
@@ -143,7 +143,7 @@ namespace Elders.Pandora.Api.Controllers
                 {
                     defaults[key] = value;
 
-                    box.Defaults = new Configuration(box.Defaults.Name, defaults);
+                    box.Defaults = new Elders.Pandora.Box.Configuration(box.Defaults.Name, defaults);
 
                     var jar = JsonConvert.SerializeObject(Elders.Pandora.Box.Box.Mistranslate(box), Formatting.Indented);
 
@@ -183,7 +183,7 @@ namespace Elders.Pandora.Api.Controllers
                 {
                     defaults.Remove(key);
 
-                    box.Defaults = new Configuration(box.Defaults.Name, defaults);
+                    box.Defaults = new Elders.Pandora.Box.Configuration(box.Defaults.Name, defaults);
 
                     var jar = JsonConvert.SerializeObject(Elders.Pandora.Box.Box.Mistranslate(box));
 

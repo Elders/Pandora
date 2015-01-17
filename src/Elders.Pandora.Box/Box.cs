@@ -106,6 +106,8 @@ namespace Elders.Pandora.Box
         {
             Jar jar = new Jar();
 
+            jar.Name = box.Name;
+
             if (box.Defaults != null)
                 jar.Defaults = box.Defaults.AsDictionary();
 

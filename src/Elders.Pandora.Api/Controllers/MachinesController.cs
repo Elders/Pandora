@@ -13,7 +13,7 @@ namespace Elders.Pandora.Api.Controllers
     {
         static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(MachinesController));
 
-        private string storageFolder = ConfigurationManager.AppSettings["StorageFolder"];
+        private string storageFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Elders", "Pandora");
 
         // GET api/machines
         public IEnumerable<KeyValuePair<string, string>> Get(string appName, string clusterName, string machineName)

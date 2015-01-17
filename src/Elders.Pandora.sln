@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecurityTest", "SecurityTes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elders.Pandora.Api", "Elders.Pandora.Api\Elders.Pandora.Api.csproj", "{DD7DFFD5-AA54-4F7D-81A9-1ECDD642BEED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elders.Pandora.UI", "Elders.Pandora.UI\Elders.Pandora.UI.csproj", "{200B84F4-DA59-4EE3-9FDC-3FC2B72A0092}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{DD7DFFD5-AA54-4F7D-81A9-1ECDD642BEED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD7DFFD5-AA54-4F7D-81A9-1ECDD642BEED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD7DFFD5-AA54-4F7D-81A9-1ECDD642BEED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{200B84F4-DA59-4EE3-9FDC-3FC2B72A0092}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{200B84F4-DA59-4EE3-9FDC-3FC2B72A0092}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{200B84F4-DA59-4EE3-9FDC-3FC2B72A0092}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{200B84F4-DA59-4EE3-9FDC-3FC2B72A0092}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

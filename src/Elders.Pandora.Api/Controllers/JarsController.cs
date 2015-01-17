@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Web.Http;
 
@@ -12,7 +11,7 @@ namespace Elders.Pandora.Api.Controllers
     {
         static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(JarsController));
 
-        private string storageFolder = ConfigurationManager.AppSettings["StorageFolder"];
+        private string storageFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Elders", "Pandora");
 
         // GET api/jars
         public IEnumerable<Jar> Get()
@@ -44,10 +43,11 @@ namespace Elders.Pandora.Api.Controllers
         {
             try
             {
-                if (!name.EndsWith(".json"))
-                    name += ".json";
+                var workingDir = Path.Combine(storageFolder, name);
 
-                return JsonConvert.DeserializeObject<Jar>(File.ReadAllText(Path.Combine(storageFolder, name)));
+                var filePath = Path.Combine(workingDir, name + ".json");
+
+                return JsonConvert.DeserializeObject<Jar>(File.ReadAllText(filePath));
             }
             catch (Exception ex)
             {
@@ -58,7 +58,7 @@ namespace Elders.Pandora.Api.Controllers
         }
 
         // POST api/jars
-        public void Post([FromBody]string value)
+        public void Post(string gitUrl, string email, string username, string password, string message, [FromBody]string value)
         {
             try
             {
@@ -67,7 +67,9 @@ namespace Elders.Pandora.Api.Controllers
                 if (string.IsNullOrWhiteSpace(cfg.Name))
                     return;
 
-                var filePath = Path.Combine(storageFolder, cfg.Name);
+                var workingDir = Path.Combine(storageFolder, cfg.Name);
+
+                var filePath = Path.Combine(workingDir, cfg.Name + ".json");
 
                 if (File.Exists(filePath))
                     throw new ArgumentException("There is already a configuration with name " + cfg.Name);
@@ -77,6 +79,11 @@ namespace Elders.Pandora.Api.Controllers
                 var jar = JsonConvert.SerializeObject(Elders.Pandora.Box.Box.Mistranslate(box), Formatting.Indented);
 
                 File.WriteAllText(filePath, jar);
+
+                Git.Clone(gitUrl, workingDir);
+                var git = new Git(workingDir, email, username, password);
+                git.Commit(new List<string>() { filePath }, message);
+                git.Push();
             }
             catch (Exception ex)
             {
@@ -86,23 +93,29 @@ namespace Elders.Pandora.Api.Controllers
             }
         }
 
-        // PUT api/jars/name
-        public void Put(string name, [FromBody]string value)
+        // PUT api/jars
+        public void Put(string gitUrl, string email, string username, string password, string message, [FromBody]string value)
         {
             try
             {
-                if (!name.EndsWith(".json"))
-                    name += ".json";
-
                 var cfg = JsonConvert.DeserializeObject<Jar>(value);
 
-                var filePath = Path.Combine(storageFolder, name);
+                var workingDir = Path.Combine(storageFolder, cfg.Name);
+
+                var filePath = Path.Combine(workingDir, cfg.Name + ".json");
+
+                if (!File.Exists(filePath))
+                    throw new ArgumentException("There is no configuration with name " + cfg.Name);
 
                 var box = Elders.Pandora.Box.Box.Mistranslate(cfg);
 
                 var jar = JsonConvert.SerializeObject(Elders.Pandora.Box.Box.Mistranslate(box), Formatting.Indented);
 
                 File.WriteAllText(filePath, jar);
+
+                var git = new Git(workingDir, email, username, password);
+                git.Commit(new List<string>() { filePath }, message);
+                git.Push();
             }
             catch (Exception ex)
             {
@@ -113,14 +126,22 @@ namespace Elders.Pandora.Api.Controllers
         }
 
         // DELETE api/jars/name
-        public void Delete(string name)
+        public void Delete(string name, string gitUrl, string email, string username, string password, string message)
         {
             try
             {
-                var filePath = Path.Combine(storageFolder, name);
+                var workingDir = Path.Combine(storageFolder, name);
+
+                var filePath = Path.Combine(workingDir, name + ".json");
 
                 if (File.Exists(filePath))
+                {
                     File.Delete(filePath);
+
+                    var git = new Git(workingDir, email, username, password);
+                    git.Commit(new List<string>(), message);
+                    git.Push();
+                }
             }
             catch (Exception ex)
             {
