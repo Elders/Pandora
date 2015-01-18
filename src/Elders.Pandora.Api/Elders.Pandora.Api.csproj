@@ -105,6 +105,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tcp\Server.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

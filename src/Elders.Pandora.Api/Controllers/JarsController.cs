@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Web.Http;
 
 namespace Elders.Pandora.Api.Controllers
@@ -74,13 +75,24 @@ namespace Elders.Pandora.Api.Controllers
                 if (File.Exists(filePath))
                     throw new ArgumentException("There is already a configuration with name " + cfg.Name);
 
+                Git.Clone(gitUrl, workingDir);
+
                 var box = Elders.Pandora.Box.Box.Mistranslate(cfg);
 
                 var jar = JsonConvert.SerializeObject(Elders.Pandora.Box.Box.Mistranslate(box), Formatting.Indented);
 
+                Directory.CreateDirectory(workingDir);
+
                 File.WriteAllText(filePath, jar);
 
-                Git.Clone(gitUrl, workingDir);
+                foreach (var client in WebApiApplication.TcpServer.Clients)
+                {
+                    if (client.Connected)
+                    {
+                        client.Client.Send(Encoding.UTF8.GetBytes(jar));
+                    }
+                }
+
                 var git = new Git(workingDir, email, username, password);
                 git.Commit(new List<string>() { filePath }, message);
                 git.Push();
@@ -112,6 +124,14 @@ namespace Elders.Pandora.Api.Controllers
                 var jar = JsonConvert.SerializeObject(Elders.Pandora.Box.Box.Mistranslate(box), Formatting.Indented);
 
                 File.WriteAllText(filePath, jar);
+
+                foreach (var client in WebApiApplication.TcpServer.Clients)
+                {
+                    if (client.Connected)
+                    {
+                        client.Client.Send(Encoding.UTF8.GetBytes(jar));
+                    }
+                }
 
                 var git = new Git(workingDir, email, username, password);
                 git.Commit(new List<string>() { filePath }, message);

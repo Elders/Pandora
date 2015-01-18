@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elders.Pandora.Api", "Elder
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elders.Pandora.UI", "Elders.Pandora.UI\Elders.Pandora.UI.csproj", "{200B84F4-DA59-4EE3-9FDC-3FC2B72A0092}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elders.Pandora.Client", "Elders.Pandora.Client\Elders.Pandora.Client.csproj", "{3074B4A3-B6B1-44BB-A456-E8212BEBCD4C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{200B84F4-DA59-4EE3-9FDC-3FC2B72A0092}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{200B84F4-DA59-4EE3-9FDC-3FC2B72A0092}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{200B84F4-DA59-4EE3-9FDC-3FC2B72A0092}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3074B4A3-B6B1-44BB-A456-E8212BEBCD4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3074B4A3-B6B1-44BB-A456-E8212BEBCD4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3074B4A3-B6B1-44BB-A456-E8212BEBCD4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3074B4A3-B6B1-44BB-A456-E8212BEBCD4C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
