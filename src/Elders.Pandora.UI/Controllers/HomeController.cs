@@ -13,29 +13,19 @@ namespace Elders.Pandora.UI.Controllers
     {
         public ActionResult Index()
         {
-            return View();
-        }
+            var url = Request.Url.Scheme + Uri.SchemeDelimiter + Request.Url.Host + ":" + Request.Url.Port + "/api/Jars";
 
-        [HttpPost]
-        public ActionResult Connect(string apiEndPoint)
-        {
-            Session.Add("ApiEndPoint", apiEndPoint);
-
-            return RedirectToAction("Configs");
-        }
-
-        public ActionResult Configs()
-        {
-            var apiEndPoint = Session["ApiEndPoint"];
-
-            if (apiEndPoint == null)
-                return RedirectToAction("Index");
-
-            var client = new RestSharp.RestClient(apiEndPoint.ToString() + "/Jars");
+            var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.GET);
             request.RequestFormat = RestSharp.DataFormat.Json;
             request.AddHeader("Content-Type", "application/json");
             var response = client.Execute(request);
+
+            if (!string.IsNullOrWhiteSpace(response.ErrorMessage))
+            {
+                throw response.ErrorException;
+            }
+
             var jars = JsonConvert.DeserializeObject<List<Elders.Pandora.Box.Jar>>(response.Content);
 
             var configs = new List<Configuration>();
@@ -50,16 +40,19 @@ namespace Elders.Pandora.UI.Controllers
 
         public ActionResult Config(string name)
         {
-            var apiEndPoint = Session["ApiEndPoint"];
+            var url = Request.Url.Scheme + Uri.SchemeDelimiter + Request.Url.Host + ":" + Request.Url.Port + "/api/Jars?name=" + name;
 
-            if (apiEndPoint == null)
-                return RedirectToAction("Index");
-
-            var client = new RestSharp.RestClient(apiEndPoint.ToString() + "/Jars?name=" + name);
+            var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.GET);
             request.RequestFormat = RestSharp.DataFormat.Json;
             request.AddHeader("Content-Type", "application/json");
             var response = client.Execute(request);
+
+            if (!string.IsNullOrWhiteSpace(response.ErrorMessage))
+            {
+                throw response.ErrorException;
+            }
+
             var jar = JsonConvert.DeserializeObject<Elders.Pandora.Box.Jar>(response.Content);
 
             var config = new Configuration(jar.Name, JsonConvert.SerializeObject(jar, Formatting.Indented));
@@ -70,12 +63,7 @@ namespace Elders.Pandora.UI.Controllers
         [HttpPost]
         public ActionResult Config(string gitUrl, string email, string username, string password, string message, string content)
         {
-            var apiEndPoint = Session["ApiEndPoint"];
-
-            if (apiEndPoint == null)
-                return RedirectToAction("Index");
-
-            var url = string.Format(apiEndPoint.ToString() + "/Jars?gitUrl={0}&email={1}&username={2}&password={3}&message={4}", gitUrl, email, username, password, message);
+            var url = Request.Url.Scheme + Uri.SchemeDelimiter + Request.Url.Host + ":" + Request.Url.Port + "/api/Jars?gitUrl=" + gitUrl + "&email=" + email + "&username=" + username + "&password=" + password + "&message=" + message;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.PUT);
@@ -88,6 +76,11 @@ namespace Elders.Pandora.UI.Controllers
 
             var response = client.Execute(request);
 
+            if (!string.IsNullOrWhiteSpace(response.ErrorMessage))
+            {
+                throw response.ErrorException;
+            }
+
             return RedirectToAction("Config", new { name = jar.Name });
         }
 
@@ -99,12 +92,7 @@ namespace Elders.Pandora.UI.Controllers
         [HttpPost]
         public ActionResult AddConfig(string gitUrl, string email, string username, string password, string message, string config)
         {
-            var apiEndPoint = Session["ApiEndPoint"];
-
-            if (apiEndPoint == null)
-                return RedirectToAction("Index");
-
-            var url = string.Format(apiEndPoint.ToString() + "/Jars?gitUrl={0}&email={1}&username={2}&password={3}&message={4}", gitUrl, email, username, password, message);
+            var url = Request.Url.Scheme + Uri.SchemeDelimiter + Request.Url.Host + ":" + Request.Url.Port + "/api/Jars?gitUrl=" + gitUrl + "&email=" + email + "&username=" + username + "&password=" + password + "&message=" + message;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.POST);
@@ -116,6 +104,11 @@ namespace Elders.Pandora.UI.Controllers
             request.AddBody(JsonConvert.SerializeObject(jar));
 
             var response = client.Execute(request);
+
+            if (!string.IsNullOrWhiteSpace(response.ErrorMessage))
+            {
+                throw response.ErrorException;
+            }
 
             return RedirectToAction("Config", new { name = jar.Name });
         }

@@ -1,4 +1,6 @@
-﻿@{
+﻿@model List<Elders.Pandora.UI.Models.Configuration>
+
+@{
     Layout = null;
 }
 
@@ -7,17 +9,18 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
+    <title>Configs</title>
 </head>
 <body>
     <div>
-        @using (Html.BeginForm("Connect", "Home"))
+        @foreach (var cfg in Model)
         {
-            <label for="apiEndPoint">Api URL:</label>
-            <input type="text" name="apiEndPoint" id="apiEndPoint" value="" />
+            <a href="~/Home/Config?name=@cfg.Name">@cfg.Name</a>
             <br />
-            <input type="submit" name="connect" value="Connect" />
         }
+    </div>
+    <div>
+        <a href="~/Home/AddConfig">Add Config</a>
     </div>
 </body>
 </html>

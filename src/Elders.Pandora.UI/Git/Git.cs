@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Elders.Pandora.Api
+namespace Elders.Pandora.UI
 {
     public class Git
     {

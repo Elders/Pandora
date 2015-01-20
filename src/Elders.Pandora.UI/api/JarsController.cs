@@ -6,7 +6,7 @@ using System.IO;
 using System.Text;
 using System.Web.Http;
 
-namespace Elders.Pandora.Api.Controllers
+namespace Elders.Pandora.UI.api
 {
     public class JarsController : ApiController
     {
@@ -85,17 +85,11 @@ namespace Elders.Pandora.Api.Controllers
 
                 File.WriteAllText(filePath, jar);
 
-                foreach (var client in WebApiApplication.TcpServer.Clients)
-                {
-                    if (client.Connected)
-                    {
-                        client.Client.Send(Encoding.UTF8.GetBytes(jar));
-                    }
-                }
-
                 var git = new Git(workingDir, email, username, password);
                 git.Commit(new List<string>() { filePath }, message);
                 git.Push();
+
+                MvcApplication.TcpServer.SendToAllClients(Encoding.UTF8.GetBytes(jar));
             }
             catch (Exception ex)
             {
@@ -125,17 +119,11 @@ namespace Elders.Pandora.Api.Controllers
 
                 File.WriteAllText(filePath, jar);
 
-                foreach (var client in WebApiApplication.TcpServer.Clients)
-                {
-                    if (client.Connected)
-                    {
-                        client.Client.Send(Encoding.UTF8.GetBytes(jar));
-                    }
-                }
-
                 var git = new Git(workingDir, email, username, password);
                 git.Commit(new List<string>() { filePath }, message);
                 git.Push();
+
+                MvcApplication.TcpServer.SendToAllClients(Encoding.UTF8.GetBytes(jar));
             }
             catch (Exception ex)
             {

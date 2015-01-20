@@ -26,11 +26,8 @@ namespace Elders.Pandora.Client
                         {
                             byte[] bytes = new byte[tcpClient.ReceiveBufferSize];
 
-                            // Read can return anything from 0 to numBytesToRead.  
-                            // This method blocks until at least one byte is read.
                             netStream.Read(bytes, 0, (int)tcpClient.ReceiveBufferSize);
 
-                            // Returns the data received from the host to the console. 
                             string message = Encoding.UTF8.GetString(bytes);
 
                             var cfg = JsonConvert.DeserializeObject<Jar>(message);
@@ -38,11 +35,18 @@ namespace Elders.Pandora.Client
                             var box = Elders.Pandora.Box.Box.Mistranslate(cfg);
 
                             var pandora = new Pandora(box).Open("local", Environment.MachineName);
+
+                            foreach (var setting in pandora.AsDictionary())
+                            {
+                                Environment.SetEnvironmentVariable(setting.Key, setting.Value, EnvironmentVariableTarget.Machine);
+                            }
+
+                            Console.WriteLine("Configuration with name " + cfg.Name + " has been recieved.");
                         }
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        //a socket error has occured
+                        //log
                         break;
                     }
                 }

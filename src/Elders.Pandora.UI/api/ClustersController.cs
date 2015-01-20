@@ -2,12 +2,11 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Web.Http;
 
-namespace Elders.Pandora.Api.Controllers
+namespace Elders.Pandora.UI.api
 {
     public class ClustersController : ApiController
     {
