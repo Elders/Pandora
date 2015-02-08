@@ -1,3 +1,6 @@
+#### 0.1.9 - 08.02.2015
+* Generic T Get<T>(string key)
+
 #### 0.1.8 - 13.12.2014
 * Get all machine settings represented as DeployedSetting
 
