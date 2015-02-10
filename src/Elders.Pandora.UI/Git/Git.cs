@@ -1,6 +1,7 @@
 ﻿using LibGit2Sharp;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 
 namespace Elders.Pandora.UI
 {
@@ -12,12 +13,12 @@ namespace Elders.Pandora.UI
         private readonly string username;
         private readonly string password;
 
-        public Git(string workingDir, string email, string username, string password)
+        public Git(string workingDir)
         {
             this.workingDir = workingDir;
-            this.email = email;
-            this.username = username;
-            this.password = password;
+            this.email = ConfigurationManager.AppSettings["GitEmail"];
+            this.username = ConfigurationManager.AppSettings["GitUsername"];
+            this.password = ConfigurationManager.AppSettings["GitPassword"];
             this.repo = new Repository(workingDir);
         }
 
@@ -29,10 +30,19 @@ namespace Elders.Pandora.UI
             Repository.Clone(sourceUrl, workingDir, cloneOptions);
         }
 
-        public void Commit(IEnumerable<string> files, string message)
+        public void Stage(IEnumerable<string> stageFiles)
         {
-            repo.Stage(files);
-            repo.Commit(message, new Signature(username, email, DateTimeOffset.Now), new Signature(username, email, DateTimeOffset.Now));
+            repo.Stage(stageFiles);
+        }
+
+        public void Remove(IEnumerable<string> removeFiles)
+        {
+            repo.Remove(removeFiles);
+        }
+
+        public void Commit(string message, string username, string email)
+        {
+            repo.Commit(message, new Signature(this.username, this.email, DateTimeOffset.Now), new Signature(username, email, DateTimeOffset.Now));
         }
 
         public void Push()
@@ -42,48 +52,11 @@ namespace Elders.Pandora.UI
             pushOptions.CredentialsProvider = new LibGit2Sharp.Handlers.CredentialsHandler(
                 (_url, _user, _cred) => new UsernamePasswordCredentials()
                 {
-                    Username = username,
-                    Password = password
+                    Username = this.username,
+                    Password = this.password
                 });
 
             repo.Network.Push(repo.Branches["master"], pushOptions);
-        }
-
-        private void Go()
-        {
-            var cloneOptions = new CloneOptions();
-            cloneOptions.IsBare = false;
-            cloneOptions.Checkout = true;
-
-            var sourceUrl = "https://github.com/ethno2405/Samodiva_old.git";
-            var workingDir = @"D:\Projects\Test";
-
-            var r = Repository.Clone(sourceUrl, workingDir, cloneOptions);
-
-            using (var repo = new Repository(workingDir))
-            {
-                var localBranch = repo.CreateBranch("test-branch", new Signature("Sinstraliz", "blagovest.vp@gmail.com", DateTimeOffset.Now));
-
-                Remote remote = repo.Network.Remotes["origin"];
-
-                repo.Branches.Update(localBranch,
-                    b => b.Remote = remote.Name,
-                    b => b.UpstreamBranch = localBranch.CanonicalName);
-
-                repo.Checkout(localBranch);
-
-
-                var pushOptions = new PushOptions();
-
-                pushOptions.CredentialsProvider = new LibGit2Sharp.Handlers.CredentialsHandler(
-                    (_url, _user, _cred) => new UsernamePasswordCredentials()
-                {
-                    Username = "Sinstraliz",
-                    Password = "pr0st0passa"
-                });
-
-                repo.Network.Push(repo.Branches["test-branch"], pushOptions);
-            }
         }
     }
 }

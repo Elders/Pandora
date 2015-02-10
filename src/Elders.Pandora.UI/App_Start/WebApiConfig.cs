@@ -38,7 +38,7 @@ namespace Elders.Pandora.UI.App_Start
             );
 
             config.Formatters.JsonFormatter.Indent = true;
-            config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new JsonContractResolver(config.Formatters.JsonFormatter);
             config.Formatters.JsonFormatter.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
 
             config.Formatters.JsonFormatter.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;

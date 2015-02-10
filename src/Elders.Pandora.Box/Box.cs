@@ -13,12 +13,12 @@ namespace Elders.Pandora.Box
     /// <remarks>http://en.wikipedia.org/wiki/Pandora%27s_box</remarks>
     public class Box
     {
-        public Box(string applicationName, Dictionary<string, string> defaultSettings)
+        public Box(Jar jar)
         {
-            Name = applicationName;
+            Name = jar.Name;
             Clusters = new List<Cluster>();
             Machines = new List<Machine>();
-            Defaults = new Configuration(defaultSettings);
+            Defaults = new Configuration(jar.Defaults);
         }
 
         public string Name { get; private set; }
@@ -82,7 +82,7 @@ namespace Elders.Pandora.Box
         /// <returns>Returns Pandora's box</returns>
         public static Box Mistranslate(Jar jar)
         {
-            Box box = new Box(jar.Name, jar.Defaults);
+            Box box = new Box(jar);
 
             if (jar.Clusters != null)
             {

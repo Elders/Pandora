@@ -3,18 +3,20 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Claims;
 using System.Text;
 using System.Web.Http;
+using System.Linq;
 
 namespace Elders.Pandora.UI.api
 {
+    [Authorize]
     public class JarsController : ApiController
     {
         static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(JarsController));
 
         private string storageFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Elders", "Pandora");
 
-        // GET api/jars
         public IEnumerable<Jar> Get()
         {
             var jars = Directory.GetFiles(storageFolder, "*.json", SearchOption.AllDirectories);
@@ -39,14 +41,37 @@ namespace Elders.Pandora.UI.api
             }
         }
 
-        // GET api/jars/name
-        public Jar Get(string name)
+        public IEnumerable<Jar> Get(string projectName)
+        {
+            var jars = Directory.GetFiles(Path.Combine(storageFolder, projectName), "*.json", SearchOption.AllDirectories);
+
+            foreach (var jar in jars)
+            {
+                Jar jarObject = null;
+
+                try
+                {
+                    jarObject = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(jar));
+                }
+                catch (Exception ex)
+                {
+                    log.Error(ex);
+
+                    continue;
+                }
+
+                if (jar != null)
+                    yield return jarObject;
+            }
+        }
+
+        public Jar Get(string projectName, string applicationName)
         {
             try
             {
-                var workingDir = Path.Combine(storageFolder, name);
+                var workingDir = Path.Combine(storageFolder, projectName);
 
-                var filePath = Path.Combine(workingDir, name + ".json");
+                var filePath = Path.Combine(workingDir, applicationName, applicationName + ".json");
 
                 return JsonConvert.DeserializeObject<Jar>(File.ReadAllText(filePath));
             }
@@ -58,38 +83,42 @@ namespace Elders.Pandora.UI.api
             }
         }
 
-        // POST api/jars
-        public void Post(string gitUrl, string email, string username, string password, string message, [FromBody]string value)
+        public void Post(string projectName, [FromBody]string value)
         {
             try
             {
                 var cfg = JsonConvert.DeserializeObject<Jar>(value);
 
-                if (string.IsNullOrWhiteSpace(cfg.Name))
+                if (string.IsNullOrWhiteSpace(cfg.Name) || string.IsNullOrWhiteSpace(projectName))
                     return;
 
-                var workingDir = Path.Combine(storageFolder, cfg.Name);
+                var workingDir = Path.Combine(storageFolder, projectName);
 
-                var filePath = Path.Combine(workingDir, cfg.Name + ".json");
+                var filePath = Path.Combine(workingDir, cfg.Name, cfg.Name + ".json");
 
                 if (File.Exists(filePath))
                     throw new ArgumentException("There is already a configuration with name " + cfg.Name);
-
-                Git.Clone(gitUrl, workingDir);
 
                 var box = Elders.Pandora.Box.Box.Mistranslate(cfg);
 
                 var jar = JsonConvert.SerializeObject(Elders.Pandora.Box.Box.Mistranslate(box), Formatting.Indented);
 
-                Directory.CreateDirectory(workingDir);
+                Directory.CreateDirectory(Path.Combine(workingDir, cfg.Name));
 
                 File.WriteAllText(filePath, jar);
 
-                var git = new Git(workingDir, email, username, password);
-                git.Commit(new List<string>() { filePath }, message);
+                var nameClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "name");
+                var username = nameClaim != null ? nameClaim.Value : "no name claim";
+                var emailClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "email");
+                var email = emailClaim != null ? emailClaim.Value : "no email claim";
+                var message = "Added new application configuration: " + cfg.Name + " in " + projectName;
+
+                var git = new Git(workingDir);
+                git.Stage(new List<string>() { filePath });
+                git.Commit(message, username, email);
                 git.Push();
 
-                MvcApplication.TcpServer.SendToAllClients(Encoding.UTF8.GetBytes(jar));
+                //MvcApplication.TcpServer.SendToAllClients(Encoding.UTF8.GetBytes(jar));
             }
             catch (Exception ex)
             {
@@ -99,16 +128,15 @@ namespace Elders.Pandora.UI.api
             }
         }
 
-        // PUT api/jars
-        public void Put(string gitUrl, string email, string username, string password, string message, [FromBody]string value)
+        public void Put(string projectName, [FromBody]string value)
         {
             try
             {
                 var cfg = JsonConvert.DeserializeObject<Jar>(value);
 
-                var workingDir = Path.Combine(storageFolder, cfg.Name);
+                var workingDir = Path.Combine(storageFolder, projectName);
 
-                var filePath = Path.Combine(workingDir, cfg.Name + ".json");
+                var filePath = Path.Combine(workingDir, cfg.Name, cfg.Name + ".json");
 
                 if (!File.Exists(filePath))
                     throw new ArgumentException("There is no configuration with name " + cfg.Name);
@@ -119,8 +147,15 @@ namespace Elders.Pandora.UI.api
 
                 File.WriteAllText(filePath, jar);
 
-                var git = new Git(workingDir, email, username, password);
-                git.Commit(new List<string>() { filePath }, message);
+                var nameClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "name");
+                var username = nameClaim != null ? nameClaim.Value : "no name claim";
+                var emailClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "email");
+                var email = emailClaim != null ? emailClaim.Value : "no email claim";
+                var message = "Updated configuration " + cfg.Name + " for " + projectName;
+
+                var git = new Git(workingDir);
+                git.Stage(new List<string>() { filePath });
+                git.Commit(message, username, email);
                 git.Push();
 
                 MvcApplication.TcpServer.SendToAllClients(Encoding.UTF8.GetBytes(jar));
@@ -133,21 +168,26 @@ namespace Elders.Pandora.UI.api
             }
         }
 
-        // DELETE api/jars/name
-        public void Delete(string name, string gitUrl, string email, string username, string password, string message)
+        public void Delete(string projectName, string applicationName)
         {
             try
             {
-                var workingDir = Path.Combine(storageFolder, name);
+                var workingDir = Path.Combine(storageFolder, projectName);
 
-                var filePath = Path.Combine(workingDir, name + ".json");
+                var filePath = Path.Combine(workingDir, applicationName, applicationName + ".json");
 
                 if (File.Exists(filePath))
                 {
-                    File.Delete(filePath);
+                    var nameClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "name");
+                    var username = nameClaim != null ? nameClaim.Value : "no name claim";
+                    var emailClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "email");
+                    var email = emailClaim != null ? emailClaim.Value : "no email claim";
+                    var message = "Deleted configuration " + applicationName + " from " + projectName;
 
-                    var git = new Git(workingDir, email, username, password);
-                    git.Commit(new List<string>(), message);
+                    var git = new Git(workingDir);
+                    git.Remove(new List<string>() { filePath });
+                    git.Stage(new List<string>() { filePath });
+                    git.Commit(message, username, email);
                     git.Push();
                 }
             }

@@ -1,0 +1,105 @@
+﻿@model Tuple<string, string, Configuration>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="modal fade" id="machineModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" id="defaultsModalClose" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Add Default Setting</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="applicationName">Setting Name: </label>
+                            <input type="text" id="settingName" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label for="applicationName">Setting Value: </label>
+                            <input type="text" id="settingValue" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <a href="#" class="btn btn-success" onclick="addMachineValue()">Add</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-12">
+                <form action="" method="post">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <h2>@Model.Item2</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <a class="btn btn-success btn-circle" href="#" data-toggle="modal" data-target="#machineModal"><i class="fa fa-plus"></i></a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        @foreach (var setting in Model.Item3.GetMachine(Model.Item1, Model.Item2).Value)
+                        {
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="@setting.Key">@setting.Key</label>
+                                    <input type="text" id="@setting.Key" name="config[@setting.Key]" class="form-control" value="@setting.Value" @(Model.Item3.GetCluster(Model.Item1).Key.Access.HasAccess(Access.WriteAccess) ? string.Empty : "disabled") />
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    @if (Model.Item3.GetCluster(Model.Item1).Key.Access.HasAccess(Access.WriteAccess))
+                    {
+                        <hr />
+                        <div class="row">
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <input class="btn btn-success" type="submit" name="submit" value="Save" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function addMachineValue() {
+        var settingName = $('#settingName').val();
+        var settingValue = $('#settingValue').val();
+
+        if (settingName && settingValue) {
+            var row1 = '<div class="col-lg-6">';
+            var row2 = '<div class="form-group">';
+            var row3 = '<label for="' + settingName + '">' + settingName + '</label>';
+            var row4 = '<input type="text" id="' + settingName + '" name="config[' + settingName + ']" class="form-control" value="' + settingValue + '" @(Model.Item3.GetCluster(Model.Item1).Key.Access.HasAccess(Access.WriteAccess) ? string.Empty : "disabled") />';
+            var row5 = '</div>';
+            var row6 = '</div>';
+
+            var html = row1 + row2 + row3 + row4 + row5 + row6;
+
+            $('#defaults').append(html);
+            $('#defaultsModalClose').click();
+            $('#settingName').val('');
+            $('#settingValue').val('');
+        }
+    }
+
+</script>

@@ -5,16 +5,19 @@ namespace Elders.Pandora.Box
 {
     public class Configuration : ValueObject<Configuration>
     {
-        private readonly Dictionary<string, string> settings;
+        public Dictionary<string, string> Settings { get; private set; }
 
         public Configuration(Dictionary<string, string> settings) : this("defaults", settings) { }
 
         public Configuration(string name, Dictionary<string, string> settings)
         {
             if (String.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
-            if (settings == null || settings.Count == 0) throw new ArgumentNullException("name");
 
-            this.settings = new Dictionary<string, string>(settings);
+            if (settings != null)
+                this.Settings = new Dictionary<string, string>(settings);
+            else
+                this.Settings = new Dictionary<string, string>();
+
             this.Name = name;
         }
 
@@ -25,7 +28,7 @@ namespace Elders.Pandora.Box
             get
             {
                 string value = String.Empty;
-                if (settings.TryGetValue(settingName, out value))
+                if (Settings.TryGetValue(settingName, out value))
                 {
                     return value;
                 }
@@ -38,12 +41,18 @@ namespace Elders.Pandora.Box
 
         public Dictionary<string, string> AsDictionary()
         {
-            return new Dictionary<string, string>(settings);
+            return new Dictionary<string, string>(Settings);
         }
 
         public bool ContainsKey(string key)
         {
-            return settings.ContainsKey(key);
+            return Settings.ContainsKey(key);
+        }
+
+        public void DeleteKey(string key)
+        {
+            if (Settings.ContainsKey(key))
+                Settings.Remove(key);
         }
     }
 }

@@ -1,0 +1,94 @@
+﻿@model Tuple<string, Configuration>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="modal fade" id="machineModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Add Cluster</h4>
+            </div>
+            <div class="modal-body">
+
+                <form action="@(Request.Url.AbsoluteUri)/AddMachine" method="post">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="machineName">Machine Name: </label>
+                                <input type="text" name="machineName" id="machineName" class="form-control" required />
+                            </div>
+                            <div class="form-group">
+                                <input class="btn btn-success" type="submit" name="submit" value="Add" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-2">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h4>Machines:</h4>
+                    </div>
+                    <div class="col-lg-12">
+                        <a class="btn btn-success btn-circle" href="#" data-toggle="modal" data-target="#machineModal"><i class="fa fa-plus"></i></a>
+                    </div>
+                </div>
+                <hr />
+                @foreach (var machine in Model.Item2.GetAllMachines(Model.Item1))
+                {
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <a href="~/Projects/@(Model.Item2.ProjectName)/@(Model.Item2.ApplicationName)/@(Model.Item1)/@(machine.Key)"><h4>@machine.Key</h4></a>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="col-lg-10">
+                <form action="" method="post">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <h2>@Model.Item1</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        @foreach (var setting in Model.Item2.GetCluster(Model.Item1).Value)
+                        {
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="@setting.Key">@setting.Key</label>
+                                    <input type="text" id="@setting.Key" name="config[@setting.Key]" class="form-control" value="@setting.Value" @(Model.Item2.GetCluster(Model.Item1).Key.Access.HasAccess(Access.WriteAccess) ? string.Empty : "disabled") />
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    @if (Model.Item2.GetCluster(Model.Item1).Key.Access.HasAccess(Access.WriteAccess))
+                    {
+                        <hr />
+                        <div class="row">
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <input class="btn btn-success" type="submit" name="submit" value="Save" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

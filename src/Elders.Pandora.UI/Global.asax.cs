@@ -1,7 +1,9 @@
-﻿using Elders.Pandora.UI.Tcp;
+﻿using Elders.Pandora.UI.App_Start;
+using Elders.Pandora.UI.Tcp;
 using System;
 using System.IO;
 using System.Web.Mvc;
+using System.Web.Optimization;
 using System.Web.Routing;
 
 namespace Elders.Pandora.UI
@@ -23,13 +25,20 @@ namespace Elders.Pandora.UI
             log4net.Config.XmlConfigurator.Configure();
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             string storageFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Elders", "Pandora");
 
             if (!Directory.Exists(storageFolder))
                 Directory.CreateDirectory(storageFolder);
 
-            tcpServer = new TcpServer();
+            //System.Diagnostics.Debugger.Launch();
+
+            //if (tcpServer == null)
+            //{
+            //    tcpServer = new TcpServer();
+            //    tcpServer.Start();
+            //}
         }
     }
 }

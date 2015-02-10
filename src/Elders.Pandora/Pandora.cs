@@ -22,7 +22,7 @@ namespace Elders.Pandora
             this.box = box;
         }
 
-        public Elders.Pandora.Box.Configuration Open(string clusterName = "", string machineName = "")
+        public Elders.Pandora.Box.Configuration Open(string clusterName = "", string machineName = "", bool rawSettingsNames = false)
         {
             if (String.IsNullOrEmpty(clusterName) && String.IsNullOrEmpty(machineName))
                 throw new ArgumentNullException("clusterName", "When getting configuraion for a machine the clusterName is required");
@@ -41,7 +41,10 @@ namespace Elders.Pandora
                 result = Merge(result, machine.AsDictionary());
             }
 
-            return new Elders.Pandora.Box.Configuration(box.Name, NamenizeConfiguration(result, clusterName, machineName));
+            if (rawSettingsNames)
+                return new Elders.Pandora.Box.Configuration(box.Name, result);
+            else
+                return new Elders.Pandora.Box.Configuration(box.Name, NamenizeConfiguration(result, clusterName, machineName));
         }
 
         private Dictionary<string, string> NamenizeConfiguration(Dictionary<string, string> settings, string clusterName, string machineName)
