@@ -3,37 +3,6 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<div class="modal fade" id="machineModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" id="defaultsModalClose" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title">Add Default Setting</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="form-group">
-                            <label for="applicationName">Setting Name: </label>
-                            <input type="text" id="settingName" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <label for="applicationName">Setting Value: </label>
-                            <input type="text" id="settingValue" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <a href="#" class="btn btn-success" onclick="addMachineValue()">Add</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
-
 <div class="row">
     <div class="col-lg-12">
         <div class="row">
@@ -47,11 +16,6 @@
                         </div>
                     </div>
                     <hr />
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <a class="btn btn-success btn-circle" href="#" data-toggle="modal" data-target="#machineModal"><i class="fa fa-plus"></i></a>
-                        </div>
-                    </div>
                     <div class="row">
                         @foreach (var setting in Model.Item3.GetMachine(Model.Item1, Model.Item2).Value)
                         {
