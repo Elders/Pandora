@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Elders.Pandora.Box;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Elders.Pandora
 {
@@ -29,6 +31,15 @@ namespace Elders.Pandora
             if (setting == null)
                 throw new KeyNotFoundException("Unable to find environment variable " + longKey);
             return setting;
+        }
+
+        public static T Get<T>(string key)
+        {
+            var json = Get(key);
+            if (json == null)
+                return default(T);
+            var result = JsonConvert.DeserializeObject<T>(json);
+            return result;
         }
 
         public static IEnumerable<DeployedSetting> GetAll()
