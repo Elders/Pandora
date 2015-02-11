@@ -5,7 +5,7 @@ SETLOCAL
 SET CACHED_NUGET=%LocalAppData%\NuGet\NuGet.exe
 SET SOLUTION_PATH=%~dp0src\CodeFormatter.sln
 SET BUILD_TOOLS_PATH="%ProgramFiles(x86)%\MSBuild\12.0\bin\MSBuild.exe"
-SET FAKE_PATH="%LocalAppData%"
+SET FAKE_PATH=".\bin\tools"
 
 IF NOT EXIST %BUILD_TOOLS_PATH% (
   echo In order to build or run this tool you need either Visual Studio 2015 or

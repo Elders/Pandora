@@ -24,7 +24,8 @@ let projectDescription = "Elders.Pandora"
 let projectAuthors = ["Nikolai Mynkow"; "Simeon Dimov";]
 
 let packages = ["Pandora", projectDescription]
-let nugetDir = "./bin/nuget"
+let nuget = environVar "CACHED_NUGET"
+let nugetArtifactsDir = "./bin/nuget"
 let nugetDependencies = ["Newtonsoft.Json", "6.0.6";]
 let nugetDependenciesFlat, _ = nugetDependencies |> List.unzip
 let excludeNugetDependencies = excludePaths nugetDependenciesFlat
@@ -51,13 +52,16 @@ Target "Build" (fun _ ->
 
 Target "RestorePackages" (fun _ ->
     !! "./**/packages.config"
-    |> Seq.iter (RestorePackage (fun p -> { p with OutputPath = "./src/packages" }))
+    |> Seq.iter (RestorePackage (fun p -> 
+        { p with 
+            ToolPath = nuget 
+            OutputPath = "./src/packages" }))
 )
 
 Target "CreateNuGet" (fun _ ->
     for package,description in packages do
     
-        let nugetToolsDir = nugetDir @@ "lib" @@ "net40-full"
+        let nugetToolsDir = nugetArtifactsDir @@ "lib" @@ "net45-full"
         CleanDir nugetToolsDir
 
         match package with
@@ -77,9 +81,9 @@ Target "CreateNuGet" (fun _ ->
                 Dependencies = nugetDependencies
                 AccessKey = getBuildParamOrDefault "nugetkey" ""
                 Publish = hasBuildParam "nugetkey"
-                ToolPath = "./tools/NuGet/nuget.exe"
-                OutputPath = nugetDir
-                WorkingDir = nugetDir }) nuspecFile
+                ToolPath = nuget
+                OutputPath = nugetArtifactsDir
+                WorkingDir = nugetArtifactsDir }) nuspecFile
 )
 
 Target "Release" (fun _ ->
