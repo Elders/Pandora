@@ -9,7 +9,7 @@ using System.Web.Http;
 
 namespace Elders.Pandora.UI.api
 {
-    [Authorize]
+    //[Authorize]
     public class ProjectsController : ApiController
     {
         static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(ProjectsController));
@@ -27,6 +27,9 @@ namespace Elders.Pandora.UI.api
                 if (project != null)
                 {
                     var projectName = project.Replace(storageFolder + "\\", "");
+
+                    if (projectName == "Users")
+                        continue;
 
                     var configs = Directory.GetFiles(Path.Combine(storageFolder, projectName), "*.json", SearchOption.AllDirectories);
 
@@ -88,7 +91,7 @@ namespace Elders.Pandora.UI.api
                 catch (Exception ex)
                 {
                     log.Fatal(ex);
-                    throw ex;
+                    throw;
                 }
             }
         }

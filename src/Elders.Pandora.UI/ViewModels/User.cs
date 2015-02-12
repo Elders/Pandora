@@ -11,7 +11,7 @@ namespace Elders.Pandora.UI.ViewModels
 {
     public class User
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         public string Email { get; set; }
 
@@ -20,6 +20,10 @@ namespace Elders.Pandora.UI.ViewModels
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
+
+        public string AvatarUrl { get; set; }
+
+        public string Organization { get; set; }
 
         public SecurityAccess Access { get; set; }
     }
@@ -177,6 +181,42 @@ namespace Elders.Pandora.UI.ViewModels
             if (self is ClaimsPrincipal)
             {
                 var fullname = (self as ClaimsPrincipal).Claims.Where(x => x.Type == "name").FirstOrDefault();
+
+                if (fullname != null && !string.IsNullOrWhiteSpace(fullname.Value))
+                    return fullname.Value;
+            }
+            return self.Email();
+        }
+
+        public static string FirstName(this IPrincipal self)
+        {
+            if (self is ClaimsPrincipal)
+            {
+                var firstname = (self as ClaimsPrincipal).Claims.Where(x => x.Type == "given_name").FirstOrDefault();
+
+                if (firstname != null && !string.IsNullOrWhiteSpace(firstname.Value))
+                    return firstname.Value;
+            }
+            return string.Empty;
+        }
+
+        public static string LastName(this IPrincipal self)
+        {
+            if (self is ClaimsPrincipal)
+            {
+                var lastname = (self as ClaimsPrincipal).Claims.Where(x => x.Type == "family_name").FirstOrDefault();
+
+                if (lastname != null && !string.IsNullOrWhiteSpace(lastname.Value))
+                    return lastname.Value;
+            }
+            return string.Empty;
+        }
+
+        public static string Avatar(this IPrincipal self)
+        {
+            if (self is ClaimsPrincipal)
+            {
+                var fullname = (self as ClaimsPrincipal).Claims.Where(x => x.Type == "picture").FirstOrDefault();
 
                 if (fullname != null && !string.IsNullOrWhiteSpace(fullname.Value))
                     return fullname.Value;

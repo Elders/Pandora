@@ -2,9 +2,15 @@
 using Owin;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
+using System.IdentityModel.Tokens;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
@@ -17,21 +23,86 @@ namespace Elders.Pandora.UI.Security
     {
         public static IAppBuilder UseIdentitiyServerSelfContainedToken(this IAppBuilder app, SelfContainedTokenValidationOptions options)
         {
+            Byte[][] certBytes = getCertBytes();
+
+            var certificates = certBytes.Select(x => new X509Certificate2(x)).ToList();
+            var tokenProviders = certificates.Select(x => new X509CertificateSecurityTokenProvider("accounts.google.com", x)).ToList();
+            tokenProviders.Add(new X509CertificateSecurityTokenProvider(options.IssuerName, options.SigningCertificate));
             app.UseJwtBearerAuthentication(new Microsoft.Owin.Security.Jwt.JwtBearerAuthenticationOptions
             {
+                TokenValidationParameters = GetTvp(certificates),
                 AllowedAudiences = new[] { options.Audiance },
-                IssuerSecurityTokenProviders = new[]
-                        {
-                            new X509CertificateSecurityTokenProvider(
-                                options.IssuerName,
-                                options.SigningCertificate)
-                        },
-
+                IssuerSecurityTokenProviders = tokenProviders
             });
             app.UseResourceAuthorization(new ResourceRoleManager());
 
             app.UseClaimsTransformation(new RoClientClaimsTransformer());
             return app;
+        }
+
+        private static TokenValidationParameters GetTvp(List<X509Certificate2> certs)
+        {
+            TokenValidationParameters tvp = new TokenValidationParameters();
+            tvp.ValidIssuer = "accounts.google.com";
+            tvp.ValidateIssuer = true;
+            tvp.ValidateAudience = true;
+            tvp.ValidateIssuerSigningKey = true;
+            tvp.ValidateLifetime = true;
+
+            var tokens = new List<SecurityToken>();
+            var keys = new List<X509SecurityKey>();
+
+            foreach (var certificate in certs)
+            {
+                X509SecurityToken certToken = new X509SecurityToken(certificate);
+
+                var key = new X509SecurityKey(certificate);
+
+                tokens.Add(certToken);
+                keys.Add(key);
+            }
+            tvp.IssuerSigningKeyResolver = (a, b, c, d) =>
+            {
+                var key = keys.Where(x => b.ToString().ToLower().Contains(x.Certificate.Thumbprint.ToLower())).First();
+                return key;
+            };
+            tvp.IssuerSigningTokens = tokens;
+            tvp.IssuerSigningKeys = keys;
+
+            return tvp;
+        }
+
+        // Used for string parsing the Certificates from Google
+        private const string beginCert = "-----BEGIN CERTIFICATE-----\\n";
+        private const string endCert = "\\n-----END CERTIFICATE-----\\n";
+        public static byte[][] getCertBytes()
+        {
+            // The request will be made to the authentication server.
+            WebRequest request = WebRequest.Create(
+                "https://www.googleapis.com/oauth2/v1/certs"
+            );
+
+            StreamReader reader = new StreamReader(request.GetResponse().GetResponseStream());
+
+            string responseFromServer = reader.ReadToEnd();
+
+            String[] split = responseFromServer.Split(':');
+
+            // There are two certificates returned from Google
+            byte[][] certBytes = new byte[2][];
+            int index = 0;
+            UTF8Encoding utf8 = new UTF8Encoding();
+            for (int i = 0; i < split.Length; i++)
+            {
+                if (split[i].IndexOf(beginCert) > 0)
+                {
+                    int startSub = split[i].IndexOf(beginCert);
+                    int endSub = split[i].IndexOf(endCert) + endCert.Length;
+                    certBytes[index] = utf8.GetBytes(split[i].Substring(startSub, endSub).Replace("\\n", "\n"));
+                    index++;
+                }
+            }
+            return certBytes;
         }
     }
     public class ProfileAuthorizeAttribute : AuthorizeAttribute
@@ -62,47 +133,19 @@ namespace Elders.Pandora.UI.Security
 
         private Task<ClaimsPrincipal> ClaimsTransformer(ClaimsPrincipal principal)
         {
+            var emailClaim = principal.Claims.SingleOrDefault(x => x.Type == "email");
 
-            if (principal.HasClaim("scope", "email") && principal.HasClaim(x => x.Type == "email") == false)
+            if (emailClaim != null && !string.IsNullOrWhiteSpace(emailClaim.Value))
             {
-                //Open Id Spec
+                var adminUsers = ConfigurationManager.AppSettings["SuperAdminUsers"].Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
-                var config = Thinktecture.IdentityModel.Oidc.OidcClientConfigurationSection.Instance;
-
-                var client = new RestSharp.RestClient(config.Endpoints.UserInfo);
-                var request = new RestSharp.RestRequest(RestSharp.Method.GET);
-
-                request.AddHeader("Authorization", HttpContext.Current.Request.Headers["Authorization"]);
-                var response = client.Execute<Dictionary<string, string>>(request);
-                if (response.StatusCode == System.Net.HttpStatusCode.OK && response.Data != null)
+                if (adminUsers.Contains(emailClaim.Value))
                 {
-                    var claims = new List<Claim>();
-                    var claimsTypes = principal.Claims.Select(x => x.Type);
-                    foreach (var pair in response.Data)
-                    {
-                        if (claimsTypes.Contains(pair.Key))
-                            continue;
-                        if (pair.Value.Contains(',') && !IsJson(pair.Value))
-                        {
-                            foreach (var item in pair.Value.Split(','))
-                            {
-                                claims.Add(new Claim(pair.Key, item));
-                            }
-                        }
-                        else
-                            claims.Add(new Claim(pair.Key, pair.Value));
-                    }
-
-
-
-                    principal.Identities.First().AddClaims(claims);
-                    //var identity = new ClaimsIdentity(claims);
-                    //principal.AddIdentity(identity);
+                    principal.Identities.First().AddClaim(new Claim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "superAdmin"));
                 }
-                return Task.FromResult<ClaimsPrincipal>(principal);
             }
-            else
-                return Task.FromResult<ClaimsPrincipal>(principal);
+
+            return Task.FromResult<ClaimsPrincipal>(principal);
         }
         private static bool IsJson(string str)
         {

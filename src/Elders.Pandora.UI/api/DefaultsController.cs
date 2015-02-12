@@ -9,7 +9,7 @@ using System.Web.Http;
 
 namespace Elders.Pandora.UI.api
 {
-    [Authorize]
+    //[Authorize]
     public class DefaultsController : ApiController
     {
         static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(DefaultsController));
@@ -39,8 +39,7 @@ namespace Elders.Pandora.UI.api
             catch (Exception ex)
             {
                 log.Fatal(ex);
-
-                throw ex;
+                throw;
             }
         }
 
@@ -72,8 +71,7 @@ namespace Elders.Pandora.UI.api
             catch (Exception ex)
             {
                 log.Fatal(ex);
-
-                throw ex;
+                throw;
             }
         }
 
@@ -124,62 +122,9 @@ namespace Elders.Pandora.UI.api
             catch (Exception ex)
             {
                 log.Fatal(ex);
-
-                throw ex;
+                throw;
             }
         }
-
-        //public void Put(string projectName, string applicationName, [FromBody]KeyValuePair<string, string> setting)
-        //{
-        //    try
-        //    {
-        //        if (string.IsNullOrWhiteSpace(applicationName) || string.IsNullOrWhiteSpace(projectName))
-        //            return;
-
-        //        var workingDir = Path.Combine(storageFolder, projectName);
-
-        //        var cfgPath = Path.Combine(workingDir, applicationName, applicationName += ".json");
-
-        //        var exists = File.Exists(cfgPath);
-
-        //        if (!exists)
-        //            throw new ArgumentException("There is no configuration for application " + applicationName);
-
-        //        var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(cfgPath));
-
-        //        var box = Elders.Pandora.Box.Box.Mistranslate(cfg);
-
-        //        var defaults = box.Defaults.AsDictionary();
-
-        //        if (defaults.ContainsKey(setting.Key))
-        //        {
-        //            defaults[setting.Key] = setting.Value;
-
-        //            box.Defaults = new Configuration(box.Defaults.Name, defaults);
-
-        //            var jar = JsonConvert.SerializeObject(Elders.Pandora.Box.Box.Mistranslate(box), Formatting.Indented);
-
-        //            File.WriteAllText(cfgPath, jar);
-
-        //            var nameClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "name");
-        //            var username = nameClaim != null ? nameClaim.Value : "no name claim";
-        //            var emailClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "email");
-        //            var email = emailClaim != null ? emailClaim.Value : "no email claim";
-        //            var message = "Updated setting " + setting.Key + " in " + applicationName + " in " + projectName;
-
-        //            var git = new Git(workingDir);
-        //            git.Stage(new List<string>() { cfgPath });
-        //            git.Commit(message, username, email);
-        //            git.Push();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        log.Fatal(ex);
-
-        //        throw ex;
-        //    }
-        //}
 
         public void Put(string projectName, string applicationName, [FromBody]Dictionary<string, string> defaults)
         {
@@ -222,8 +167,7 @@ namespace Elders.Pandora.UI.api
             catch (Exception ex)
             {
                 log.Fatal(ex);
-
-                throw ex;
+                throw;
             }
         }
 
@@ -284,8 +228,7 @@ namespace Elders.Pandora.UI.api
             catch (Exception ex)
             {
                 log.Fatal(ex);
-
-                throw ex;
+                throw;
             }
         }
     }

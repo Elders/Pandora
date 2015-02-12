@@ -46,7 +46,7 @@
         <!-- start: header -->
         <header class="header">
             <div class="logo-container">
-                <a href="../" class="logo">
+                <a href="/" class="logo">
                     <img src="~/assets/images/logo.png" height="35" alt="Pandora Admin" />
                 </a>
                 <div class="visible-xs toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html" data-fire-event="sidebar-left-opened">
@@ -61,9 +61,9 @@
 
                 <div id="userbox" class="userbox">
                     <a href="#" data-toggle="dropdown">
-                        @*<figure class="profile-picture">
-                                <img src="assets/images/!logged-user.jpg" alt="Joseph Doe" class="img-circle" data-lock-picture="assets/images/!logged-user.jpg" />
-                            </figure>*@
+                        <figure class="profile-picture">
+                            <img src="@User.Avatar()" alt="Joseph Doe" class="img-circle" data-lock-picture="~/assets/images/!logged-user.jpg" />
+                        </figure>
                         <div class="profile-info" data-lock-name="@User.FullName()" data-lock-email="@User.Email()">
                             <span class="name">@User.FullName()</span>
                         </div>
@@ -129,15 +129,21 @@
 
             <section role="main" class="content-body">
                 <header class="page-header">
-                    <div>
+                    <div style="margin-left:10px">
                         <ol class="breadcrumbs">
                             <li>
-                                <a href="index.html">
+                                <a href="/">
                                     <i class="fa fa-home"></i>
+                                    Home
                                 </a>
                             </li>
-                            <li><span>Layouts</span></li>
-                            <li><span>Default</span></li>
+                            @if (ViewBag.Breadcrumbs != null)
+                            {
+                                foreach (var bredcrumb in ViewBag.Breadcrumbs)
+                                {
+                                    <li><a href="@bredcrumb.Value">@bredcrumb.Key</a></li>
+                                }
+                            }
                         </ol>
                     </div>
                 </header>

@@ -34,7 +34,7 @@ namespace Thinktecture.IdentityModel.SystemWeb
             SetDpapiTransforms();
         }
 
-        public SelfProtectedCookie(ProtectionMode mode, bool enforceSSL )
+        public SelfProtectedCookie(ProtectionMode mode, bool enforceSSL)
         {
             InitializeHandler(enforceSSL);
             switch (mode)
@@ -62,7 +62,7 @@ namespace Thinktecture.IdentityModel.SystemWeb
         }
 
         // custom transform pipeline
-        public SelfProtectedCookie(List<CookieTransform> transforms, bool enforceSSL )
+        public SelfProtectedCookie(List<CookieTransform> transforms, bool enforceSSL)
         {
             InitializeHandler(enforceSSL);
             _transforms = transforms;
@@ -102,9 +102,18 @@ namespace Thinktecture.IdentityModel.SystemWeb
             return DecodeCookieValue(bytes);
         }
 
-        public static void Delete(string name, HttpContext context = null)
+        public static void TryDelete(string name, HttpContext context = null)
         {
-            _handler.Delete(name, context ?? HttpContext.Current);
+            try
+            {
+                _handler.Delete(name, context ?? HttpContext.Current);
+            }
+            catch (Exception)
+            {
+
+                // throw;
+            }
+
         }
 
         public static void Delete(string name, string domain, string path,

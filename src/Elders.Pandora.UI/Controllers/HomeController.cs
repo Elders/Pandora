@@ -8,6 +8,7 @@ using Thinktecture.IdentityModel.Oidc;
 
 namespace Elders.Pandora.UI.Controllers
 {
+
     [Authorize]
     public class HomeController : Controller
     {
@@ -19,7 +20,7 @@ namespace Elders.Pandora.UI.Controllers
         public ActionResult Logout()
         {
             OidcClient.SignOut();
-            return Redirect(ConfigurationManager.AppSettings["LogoutUrl"]);
+            return Redirect("/Login");
         }
     }
 }

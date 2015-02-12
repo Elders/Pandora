@@ -10,7 +10,7 @@ using System.Web.Http;
 
 namespace Elders.Pandora.UI.api
 {
-    [Authorize]
+    //[Authorize]
     public class MachinesController : ApiController
     {
         static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(MachinesController));
@@ -87,6 +87,7 @@ namespace Elders.Pandora.UI.api
             catch (Exception ex)
             {
                 log.Fatal(ex);
+                throw;
             }
         }
 
@@ -143,6 +144,7 @@ namespace Elders.Pandora.UI.api
             catch (Exception ex)
             {
                 log.Fatal(ex);
+                throw;
             }
         }
 
@@ -195,6 +197,7 @@ namespace Elders.Pandora.UI.api
             catch (Exception ex)
             {
                 log.Fatal(ex);
+                throw;
             }
         }
     }

@@ -4,7 +4,7 @@ namespace Elders.Pandora.UI.Security
 {
     public static class Resources
     {
-        public const string Admin = "Admin";
+        public const string Users = "Users";
 
         public static class Actions
         {
@@ -24,8 +24,8 @@ namespace Elders.Pandora.UI.Security
     {
         public static List<Resource> ResourceRules = new List<Resource>()
             {
-                new Resource(Resources.Admin,
-                    new ResourceAction(Resources.Actions.Read,Roles.Admin, Roles.SuperAdmin),
+                new Resource(Resources.Users,
+                    new ResourceAction(Resources.Actions.Read, Roles.Admin, Roles.SuperAdmin),
                     new ResourceAction(Resources.Actions.Manage, Roles.SuperAdmin))
             };
     }

@@ -90,11 +90,11 @@ a,
 }
 
 .body-sign .panel-sign .panel-body {
-    border-top-color: #0088cc;
+    border-top-color: white;
 }
 /* Lock Screen */
 .body-locked .current-user .user-image {
-    border-color: #0088cc;
+    border-color: white;
 }
 /* Blockquote */
 blockquote.primary {

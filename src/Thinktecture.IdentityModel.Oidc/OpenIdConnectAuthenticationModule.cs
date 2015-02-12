@@ -113,6 +113,16 @@ namespace Thinktecture.IdentityModel.Oidc
                 UserInfoClaimsReceived(this, args);
             }
         }
+
+        public static event EventHandler<ClaimsIdentity> ClaimsTransformed;
+        protected virtual void OnClaimsTransformed(ClaimsIdentity args)
+        {
+            if (ClaimsTransformed != null)
+            {
+                ClaimsTransformed(this, args);
+            }
+        }
+
         public event EventHandler<SessionTokenCreatedEventArgs> SessionSecurityTokenCreated;
         protected virtual void OnSessionSecurityTokenCreated(SessionTokenCreatedEventArgs args)
         {
@@ -214,7 +224,7 @@ namespace Thinktecture.IdentityModel.Oidc
                     // read and parse state cookie
                     var cookie = new SelfProtectedCookie(ProtectionMode.MachineKey, HttpContext.Current.Request.IsSecureConnection);
                     var storedState = cookie.Read("oidcstate");
-                    SelfProtectedCookie.Delete("oidcstate");
+                    SelfProtectedCookie.TryDelete("oidcstate");
 
                     var separator = storedState.IndexOf('_');
                     if (separator == -1)
@@ -314,7 +324,12 @@ namespace Thinktecture.IdentityModel.Oidc
                     {
                         id.AddClaim(new Claim("refresh_token", tokenResponse.RefreshToken));
                     }
+                    if (!string.IsNullOrWhiteSpace(tokenResponse.IdentityToken))
+                    {
+                        id.AddClaim(new Claim("id_token", tokenResponse.IdentityToken));
+                    }
 
+                    OnClaimsTransformed(id);
                     // create principal
                     var principal = new ClaimsPrincipal(id);
                     var transformedPrincipal = FederatedAuthentication.FederationConfiguration.IdentityConfiguration.ClaimsAuthenticationManager.Authenticate(string.Empty, principal);
@@ -385,29 +400,28 @@ namespace Thinktecture.IdentityModel.Oidc
 
         void OnEndRequest(object sender, EventArgs e)
         {
-            var context = HttpContext.Current;
-            var exipire = new SelfProtectedCookie(ProtectionMode.MachineKey, HttpContext.Current.Request.IsSecureConnection);
-            string expired = null;
-            try
-            {
-                expired = exipire.Read("tryGoOp");
-            }
-            catch (Exception ex)
-            {
 
-            }
-            var tryGoOp = expired != null ? long.Parse(expired) < DateTime.UtcNow.ToFileTimeUtc() : false;
-            if (context.Error != null && context.Error.Message.Contains("ID1073: A CryptographicException occurred when attempting to decrypt the cookie using the ProtectedData API (see inner exception for details). If you are using IIS 7.5, this could be due to the loadUserProfile setting on the Application Pool being set to fals"))
-            {
-                tryGoOp = true;
-                OidcClient.SignOut();
-            }
+            //  Login();
+
+            var context = HttpContext.Current;
             if ((context.Response.StatusCode == 401 &&
-                !context.User.Identity.IsAuthenticated &&
-                !context.Response.SuppressFormsAuthenticationRedirect) || tryGoOp)
+              !context.User.Identity.IsAuthenticated &&
+              !context.Response.SuppressFormsAuthenticationRedirect) && !context.Request.RawUrl.Contains("/api"))
+            {
+                //context.Response.Redirect(LoginUrl());
+                context.Response.Redirect("/Login");
+            }
+        }
+
+
+        public static string LoginUrl()
+        {
+
+            var context = HttpContext.Current;
+
             {
                 var config = OidcClientConfigurationSection.Instance;
-                SelfProtectedCookie.Delete("tryGoOp");
+                //  SelfProtectedCookie.Delete("tryGoOp");
                 var authorizeUrl = config.Endpoints.Authorize;
                 var clientId = config.ClientId;
                 var scopes = "openid " + config.Scope;
@@ -440,10 +454,12 @@ namespace Thinktecture.IdentityModel.Oidc
                 var cookie = new SelfProtectedCookie(ProtectionMode.MachineKey, HttpContext.Current.Request.IsSecureConnection);
                 cookie.Write("oidcstate", state + "_" + returnUrl, DateTime.UtcNow.AddHours(24));
                 context.ClearError();
-                context.Response.Redirect(authorizeUri.AbsoluteUri + (newUser ? "&newUser=true" : "") + (reset ? "&reset=true" : ""));
+                return (authorizeUri.AbsoluteUri + (newUser ? "&newUser=true" : "") + (reset ? "&reset=true" : ""));
             }
-        }
+            return null;
 
+
+        }
         public void Dispose()
         { }
     }
