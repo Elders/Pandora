@@ -17,7 +17,8 @@ namespace Elders.Pandora.UI.Controllers
         [ResourceAuthorize(Resources.Actions.Read, Resources.Users)]
         public ActionResult Index(int count = 0, int start = 0, string filter = null)
         {
-            var url = ConfigurationManager.AppSettings["BaseUrl"] + "/api/Users";
+            var hostName = ApplicationConfiguration.Get("host_name");
+            var url = hostName + "/api/Users";
 
             var restClient = new RestSharp.RestClient(url);
 
@@ -53,7 +54,8 @@ namespace Elders.Pandora.UI.Controllers
         [ResourceAuthorize(Resources.Actions.Manage, Resources.Users)]
         public ActionResult Edit(string userId, AccessRules[] access)
         {
-            var url = ConfigurationManager.AppSettings["BaseUrl"] + "/api/Users?Id=" + userId;
+            var hostName = ApplicationConfiguration.Get("host_name");
+            var url = hostName + "/api/Users?Id=" + userId;
 
             var restClient = new RestSharp.RestClient(url);
 
@@ -86,7 +88,8 @@ namespace Elders.Pandora.UI.Controllers
 
         private User GetUser(string userId)
         {
-            var url = ConfigurationManager.AppSettings["BaseUrl"] + "/api/Users?Id=" + userId;
+            var hostName = ApplicationConfiguration.Get("host_name");
+            var url = hostName + "/api/Users?Id=" + userId;
 
             var restClient = new RestSharp.RestClient(url);
 
@@ -103,7 +106,8 @@ namespace Elders.Pandora.UI.Controllers
 
         private Dictionary<string, List<Jar>> GetProjects()
         {
-            var url = ConfigurationManager.AppSettings["BaseUrl"] + "/api/Projects";
+            var hostName = ApplicationConfiguration.Get("host_name");
+            var url = hostName + "/api/Projects";
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.GET);
@@ -133,19 +137,24 @@ namespace Elders.Pandora.UI.Controllers
             var result = restClient.Execute<GoogleUserInfo>(request);
 
             var info = result.Data;
+            if (info != null)
+            {
+                user.AvatarUrl = info.Image.Url;
+                user.FullName = info.DisplayName;
+                user.FirstName = info.Name.GivenName;
+                user.LastName = info.Name.FamilyName;
 
-            user.AvatarUrl = info.Image.Url;
-            user.FullName = info.DisplayName;
-            user.FirstName = info.Name.GivenName;
-            user.LastName = info.Name.FamilyName;
+                if (info.Organizations != null)
+                {
+                    var organization = info.Organizations.FirstOrDefault(x => x.Primay == true);
 
-            var organization = info.Organizations.FirstOrDefault(x => x.Primay == true);
+                    if (organization == null)
+                        organization = info.Organizations.FirstOrDefault();
 
-            if (organization == null)
-                organization = info.Organizations.FirstOrDefault();
-
-            if (organization != null)
-                user.Organization = organization.Name;
+                    if (organization != null)
+                        user.Organization = organization.Name;
+                }
+            }
         }
 
         public class GoogleUserInfo

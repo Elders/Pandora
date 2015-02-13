@@ -1,4 +1,5 @@
-﻿using Elders.Pandora.UI.Security;
+﻿using Elders.Pandora.Box;
+using Elders.Pandora.UI.Security;
 using Elders.Pandora.UI.ViewModels;
 using Newtonsoft.Json;
 using System;
@@ -16,12 +17,14 @@ namespace Elders.Pandora.UI.Controllers
     {
         public ActionResult Index(string projectName, string applicationName)
         {
+            var hostName = ApplicationConfiguration.Get("host_name");
+
             var breadcrumbs = new List<KeyValuePair<string, string>>();
-            breadcrumbs.Add(new KeyValuePair<string, string>("Projects", ConfigurationManager.AppSettings["BaseUrl"] + "/Projects"));
-            breadcrumbs.Add(new KeyValuePair<string, string>(projectName, ConfigurationManager.AppSettings["BaseUrl"] + "/Projects/" + projectName));
+            breadcrumbs.Add(new KeyValuePair<string, string>("Projects", hostName + "/Projects"));
+            breadcrumbs.Add(new KeyValuePair<string, string>(projectName, hostName + "/Projects/" + projectName));
             ViewBag.Breadcrumbs = breadcrumbs;
 
-            var url = ConfigurationManager.AppSettings["BaseUrl"] + "/api/Jars?projectName=" + projectName + "&applicationName=" + applicationName;
+            var url = hostName + "/api/Jars?projectName=" + projectName + "&applicationName=" + applicationName;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.GET);
@@ -46,12 +49,13 @@ namespace Elders.Pandora.UI.Controllers
         [HttpPost]
         public ActionResult Index(string projectName, string applicationName, string clusterName)
         {
+            var hostName = ApplicationConfiguration.Get("host_name");
             var newCluster = new Elders.Pandora.Box.Cluster(clusterName, new Dictionary<string, string>());
 
             var jar = GetConfig(projectName, applicationName);
             jar.Clusters.Add(newCluster.Name, newCluster.AsDictionary());
 
-            var url = ConfigurationManager.AppSettings["BaseUrl"] + "/api/Clusters?projectName=" + projectName + "&applicationName=" + applicationName;
+            var url = hostName + "/api/Clusters?projectName=" + projectName + "&applicationName=" + applicationName;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.POST);
@@ -75,10 +79,11 @@ namespace Elders.Pandora.UI.Controllers
         [HttpPost]
         public ActionResult Defaults(string projectName, string applicationName, Dictionary<string, string> config)
         {
+            var hostName = ApplicationConfiguration.Get("host_name");
             if (config.ContainsKey("controller"))
                 return RedirectToAction("Index");
 
-            var url = ConfigurationManager.AppSettings["BaseUrl"] + "/api/Defaults?projectName=" + projectName + "&applicationName=" + applicationName;
+            var url = hostName + "/api/Defaults?projectName=" + projectName + "&applicationName=" + applicationName;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.PUT);
@@ -99,7 +104,8 @@ namespace Elders.Pandora.UI.Controllers
 
         private Elders.Pandora.Box.Jar GetConfig(string projectName, string applicationName)
         {
-            var url = ConfigurationManager.AppSettings["BaseUrl"] + "/api/Jars?projectName=" + projectName + "&applicationName=" + applicationName;
+            var hostName = ApplicationConfiguration.Get("host_name");
+            var url = hostName + "/api/Jars?projectName=" + projectName + "&applicationName=" + applicationName;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.GET);

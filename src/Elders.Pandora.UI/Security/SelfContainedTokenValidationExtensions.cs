@@ -26,8 +26,8 @@ namespace Elders.Pandora.UI.Security
             Byte[][] certBytes = getCertBytes();
 
             var certificates = certBytes.Select(x => new X509Certificate2(x)).ToList();
-            var tokenProviders = certificates.Select(x => new X509CertificateSecurityTokenProvider("accounts.google.com", x)).ToList();
-            tokenProviders.Add(new X509CertificateSecurityTokenProvider(options.IssuerName, options.SigningCertificate));
+            var tokenProviders = certificates.Select(x => new X509CertificateSecurityTokenProvider(options.IssuerName, x)).ToList();
+            //tokenProviders.Add(new X509CertificateSecurityTokenProvider(options.IssuerName, options.SigningCertificate));
             app.UseJwtBearerAuthentication(new Microsoft.Owin.Security.Jwt.JwtBearerAuthenticationOptions
             {
                 TokenValidationParameters = GetTvp(certificates),

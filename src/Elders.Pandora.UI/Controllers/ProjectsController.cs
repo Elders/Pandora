@@ -17,7 +17,8 @@ namespace Elders.Pandora.UI.Controllers
     {
         public ActionResult Index()
         {
-            var url = ConfigurationManager.AppSettings["BaseUrl"] + "/api/Projects";
+            var hostName = ApplicationConfiguration.Get("host_name");
+            var url = hostName + "/api/Projects";
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.GET);
@@ -37,7 +38,8 @@ namespace Elders.Pandora.UI.Controllers
         [HttpPost]
         public ActionResult Index(string projectName, string gitUrl)
         {
-            var url = ConfigurationManager.AppSettings["BaseUrl"] + "/api/Projects?projectName=" + projectName + "&gitUrl=" + gitUrl;
+            var hostName = ApplicationConfiguration.Get("host_name");
+            var url = hostName + "/api/Projects?projectName=" + projectName + "&gitUrl=" + gitUrl;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.POST);
@@ -51,11 +53,12 @@ namespace Elders.Pandora.UI.Controllers
 
         public ActionResult Applications(string projectName)
         {
+            var hostName = ApplicationConfiguration.Get("host_name");
             var breadcrumbs = new List<KeyValuePair<string, string>>();
-            breadcrumbs.Add(new KeyValuePair<string, string>("Projects", ConfigurationManager.AppSettings["BaseUrl"] + "/Projects"));
+            breadcrumbs.Add(new KeyValuePair<string, string>("Projects", hostName + "/Projects"));
             ViewBag.Breadcrumbs = breadcrumbs;
 
-            var url = ConfigurationManager.AppSettings["BaseUrl"] + "/api/Jars?projectName=" + projectName;
+            var url = hostName + "/api/Jars?projectName=" + projectName;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.GET);
@@ -84,7 +87,8 @@ namespace Elders.Pandora.UI.Controllers
         [HttpPost]
         public ActionResult Applications(string projectName, string applicationName)
         {
-            var url = ConfigurationManager.AppSettings["BaseUrl"] + "/api/Jars?projectName=" + projectName;
+            var hostName = ApplicationConfiguration.Get("host_name");
+            var url = hostName + "/api/Jars?projectName=" + projectName;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.POST);
