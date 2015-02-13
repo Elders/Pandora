@@ -27,6 +27,11 @@ namespace Elders.Pandora.UI
             var cloneOptions = new CloneOptions();
             cloneOptions.IsBare = false;
             cloneOptions.Checkout = true;
+            cloneOptions.CredentialsProvider = new LibGit2Sharp.Handlers.CredentialsHandler((a, b, c) => new UsernamePasswordCredentials()
+            {
+                Username = ConfigurationManager.AppSettings["GitUsername"],
+                Password = ConfigurationManager.AppSettings["GitPassword"]
+            });
             Repository.Clone(sourceUrl, workingDir, cloneOptions);
         }
 
