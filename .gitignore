@@ -33,3 +33,4 @@ src/packages
 packages/
 *.sln.ide/
 release.cmd
+PublishProfiles*
