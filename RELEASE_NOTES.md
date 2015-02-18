@@ -1,3 +1,6 @@
+#### 0.1.11 - 18.02.2015
+* Exit if the jar file is not found
+
 #### 0.1.10 - 18.02.2015
 * Allow to specify json config file
 

@@ -15,7 +15,14 @@ namespace Elders.Pandora
             string machine = args[2];
             string file = args.Length == 4 ? args[3] : applicationName;
 
-            var jar = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(file + ".json"));
+            string jarFile = file + ".json";
+            if (!File.Exists(jarFile))
+            {
+                Console.WriteLine("File '{0}' was not found.", jarFile);
+                return 0;
+            }
+
+            var jar = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(jarFile));
             var box = Elders.Pandora.Box.Box.Mistranslate(jar);
             if (box.Name != applicationName)
                 throw new InvalidProgramException("Invalid grant");
