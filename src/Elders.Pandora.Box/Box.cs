@@ -41,7 +41,6 @@ namespace Elders.Pandora.Box
                 Clusters.Add(cluster);
         }
 
-
         public List<Machine> Machines { get; set; }
 
         public void AddMachine(string name, Dictionary<string, string> settings)

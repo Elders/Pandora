@@ -71,6 +71,8 @@ namespace Elders.Pandora.UI.Controllers
                 throw response.ErrorException;
             }
 
+            Elders.Pandora.UI.ViewModels.User.GiveAccess(projectName, applicationName, clusterName, Access.WriteAccess);
+
             var config = new Elders.Pandora.UI.ViewModels.Configuration(jar, projectName);
 
             return View(config);

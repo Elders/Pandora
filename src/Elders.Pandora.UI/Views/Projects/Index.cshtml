@@ -48,8 +48,18 @@
                 <div class="col-lg-12">
                     @foreach (var projectName in Model)
                     {
-                        <div class="row">
-                            <a href="~/Projects/@projectName"><h4>@projectName</h4></a>
+                        <div class="row fa-border">
+                            <div class="col-lg-11">
+                                <a href="~/Projects/@projectName"><h4>@projectName</h4></a>
+                            </div>
+                            <div class="col-lg-1">
+                                <div class="btn-group">
+                                    <button type="button" class="mb-xs mt-xs mr-xs btn btn-default dropdown-toggle" data-toggle="dropdown">Tasks <span class="caret"></span></button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="~/Projects/@projectName/Update" class="btn btn-default">Update</a></li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     }
                 </div>

@@ -3,6 +3,7 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@{var defaults = Model.GetDefaults();}
 
 <div class="modal fade" id="clusterModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -84,6 +85,13 @@
                         <a href="~/Projects/@(Model.ProjectName)/@(Model.ApplicationName)/@(cluster.Key.Name)/Machines"><h4>@cluster.Key.Name</h4></a>
                     </div>
                 }
+
+                @if (defaults.Key.Access.HasAccess(Access.WriteAccess))
+                {
+                    <div class="form-group">
+                        <a class="btn btn-success btn-circle" href="#" data-toggle="modal" data-target="#clusterModal"><i class="fa fa-plus"></i></a>
+                    </div>
+                }
             </div>
         </div>
         <hr />
@@ -95,13 +103,16 @@
                             <div class="form-group">
                                 <h2>Defaults:</h2>
                             </div>
-                            <div class="form-group">
-                                <a class="btn btn-success btn-circle" href="#" data-toggle="modal" data-target="#defaultsModal"><i class="fa fa-plus"></i></a>
-                            </div>
+                            @if (defaults.Key.Access.HasAccess(Access.WriteAccess))
+                            {
+                                <div class="form-group">
+                                    <a class="btn btn-success btn-circle" href="#" data-toggle="modal" data-target="#defaultsModal"><i class="fa fa-plus"></i></a>
+                                </div>
+                            }
                         </div>
                     </div>
                     <div id="defaults" class="row">
-                        @{var defaults = Model.GetDefaults();}
+
                         @foreach (var setting in defaults.Value)
                         {
                             <div class="col-lg-6">

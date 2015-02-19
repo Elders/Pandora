@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Web.Http;
+using Elders.Pandora.UI.Common;
 
 namespace Elders.Pandora.UI.api
 {
@@ -14,11 +15,9 @@ namespace Elders.Pandora.UI.api
     {
         static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(ProjectsController));
 
-        private string storageFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Elders", "Pandora");
-
         public Dictionary<string, List<Jar>> Get()
         {
-            var projects = Directory.GetDirectories(storageFolder);
+            var projects = Directory.GetDirectories(Folders.Projects);
 
             var configurations = new Dictionary<string, List<Jar>>();
 
@@ -26,12 +25,7 @@ namespace Elders.Pandora.UI.api
             {
                 if (project != null)
                 {
-                    var projectName = project.Replace(storageFolder + "\\", "");
-
-                    if (projectName == "Users")
-                        continue;
-
-                    var configs = Directory.GetFiles(Path.Combine(storageFolder, projectName), "*.json", SearchOption.AllDirectories);
+                    var configs = Directory.GetFiles(project, "*.json", SearchOption.AllDirectories);
 
                     var jars = new List<Jar>();
 
@@ -53,7 +47,7 @@ namespace Elders.Pandora.UI.api
                         jars.Add(jarObject);
                     }
 
-                    configurations.Add(projectName, jars);
+                    configurations.Add(project.Replace(Folders.Projects + "\\", ""), jars);
                 }
             }
 
@@ -62,7 +56,7 @@ namespace Elders.Pandora.UI.api
 
         public void Post(string projectName, string gitUrl)
         {
-            var workingDir = Path.Combine(storageFolder, projectName);
+            var workingDir = Path.Combine(Folders.Projects, projectName);
 
             var project = Directory.Exists(workingDir);
 
@@ -98,13 +92,30 @@ namespace Elders.Pandora.UI.api
 
         public void Delete(string projectName)
         {
-            var workingDir = Path.Combine(storageFolder, projectName);
+            var workingDir = Path.Combine(Folders.Projects, projectName);
 
             var project = Directory.Exists(workingDir);
 
             if (project)
             {
                 Directory.Delete(workingDir);
+            }
+        }
+
+        [HttpPost]
+        public void Update(string projectName)
+        {
+            try
+            {
+                var projectPath = Path.Combine(Folders.Projects, projectName);
+
+                var git = new Git(projectPath);
+                git.Pull();
+            }
+            catch (Exception ex)
+            {
+                log.Fatal(ex);
+                throw;
             }
         }
     }

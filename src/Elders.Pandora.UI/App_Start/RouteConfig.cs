@@ -50,10 +50,35 @@ namespace Elders.Pandora.UI
             );
 
             routes.MapRoute(
+                name: "ApplicationDownloadJsonRoute",
+                url: "Projects/{projectName}/{applicationName}/DownloadJson",
+                defaults: new { controller = "Projects", action = "DownloadJson" }
+            );
+
+            routes.MapRoute(
+                name: "ApplicationOpenJsonRoute",
+                url: "Projects/{projectName}/{applicationName}/OpenJson",
+                defaults: new { controller = "Projects", action = "OpenJson" }
+            );
+
+            routes.MapRoute(
+                name: "ApplicationCloneRoute",
+                url: "Projects/{projectName}/{applicationName}/Clone",
+                defaults: new { controller = "Projects", action = "Clone" }
+            );
+
+            routes.MapRoute(
+                name: "ProjectUpdateRoute",
+                url: "Projects/{projectName}/Update",
+                defaults: new { controller = "Projects", action = "Update" }
+            );
+
+            routes.MapRoute(
                  name: "ProjectRoute",
                  url: "Projects/{projectName}",
                  defaults: new { controller = "Projects", action = "Applications" }
              );
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

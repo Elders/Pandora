@@ -1,11 +1,10 @@
-﻿using Elders.Pandora.UI.ViewModels;
+﻿using Elders.Pandora.UI.Common;
+using Elders.Pandora.UI.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace Elders.Pandora.UI.api
@@ -15,11 +14,9 @@ namespace Elders.Pandora.UI.api
     {
         static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(UsersController));
 
-        private string storageFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Elders", "Pandora", "Users");
-
         public IEnumerable<User> Get()
         {
-            var users = Directory.GetFiles(storageFolder, "*.json", SearchOption.AllDirectories);
+            var users = Directory.GetFiles(Folders.Users, "*.json", SearchOption.AllDirectories);
 
             foreach (var user in users)
             {
@@ -43,7 +40,7 @@ namespace Elders.Pandora.UI.api
 
         public User Get(string id)
         {
-            var userFilePath = Path.Combine(storageFolder, id.ToString(), id.ToString() + ".json");
+            var userFilePath = Path.Combine(Folders.Users, id.ToString(), id.ToString() + ".json");
 
             if (File.Exists(userFilePath))
             {
@@ -59,7 +56,7 @@ namespace Elders.Pandora.UI.api
         {
             try
             {
-                var workingDir = Path.Combine(storageFolder, id.ToString());
+                var workingDir = Path.Combine(Folders.Users, id.ToString());
 
                 var userFilePath = Path.Combine(workingDir, id.ToString() + ".json");
 
@@ -83,7 +80,7 @@ namespace Elders.Pandora.UI.api
         {
             try
             {
-                var workingDir = Path.Combine(storageFolder, id.ToString());
+                var workingDir = Path.Combine(Folders.Users, id.ToString());
 
                 var userFilePath = Path.Combine(workingDir, id.ToString() + ".json");
 

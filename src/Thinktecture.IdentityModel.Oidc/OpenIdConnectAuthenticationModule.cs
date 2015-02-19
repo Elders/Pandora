@@ -413,52 +413,45 @@ namespace Thinktecture.IdentityModel.Oidc
             }
         }
 
-
         public static string LoginUrl()
         {
-
             var context = HttpContext.Current;
 
+            var config = OidcClientConfigurationSection.Instance;
+            //  SelfProtectedCookie.Delete("tryGoOp");
+            var authorizeUrl = config.Endpoints.Authorize;
+            var clientId = config.ClientId;
+            var scopes = "openid " + config.Scope;
+            var state = Guid.NewGuid().ToString("N");
+            var returnUrl = context.Request.RawUrl;
+
+            var appRelativeCallbackUrl = config.AppRelativeCallbackUrl;
+            if (appRelativeCallbackUrl.StartsWith("~/"))
             {
-                var config = OidcClientConfigurationSection.Instance;
-                //  SelfProtectedCookie.Delete("tryGoOp");
-                var authorizeUrl = config.Endpoints.Authorize;
-                var clientId = config.ClientId;
-                var scopes = "openid " + config.Scope;
-                var state = Guid.NewGuid().ToString("N");
-                var returnUrl = context.Request.RawUrl;
-
-                var appRelativeCallbackUrl = config.AppRelativeCallbackUrl;
-                if (appRelativeCallbackUrl.StartsWith("~/"))
-                {
-                    appRelativeCallbackUrl = appRelativeCallbackUrl.Substring(2);
-                }
-                var redirectUri = context.Request.GetApplicationUrl() + appRelativeCallbackUrl;
-                bool newUser = false;
-                bool reset = false;
-                if (returnUrl.ToLower().Contains("newuser=true"))
-                {
-                    newUser = true;
-                }
-                if (returnUrl.ToLower().Contains("reset=true"))
-                {
-                    reset = true;
-                }
-                var authorizeUri = OidcClient.GetAuthorizeUrl(
-                    new Uri(authorizeUrl),
-                    new Uri(redirectUri),
-                    clientId,
-                    scopes,
-                    state);
-
-                var cookie = new SelfProtectedCookie(ProtectionMode.MachineKey, HttpContext.Current.Request.IsSecureConnection);
-                cookie.Write("oidcstate", state + "_" + returnUrl, DateTime.UtcNow.AddHours(24));
-                context.ClearError();
-                return (authorizeUri.AbsoluteUri + (newUser ? "&newUser=true" : "") + (reset ? "&reset=true" : ""));
+                appRelativeCallbackUrl = appRelativeCallbackUrl.Substring(2);
             }
-            return null;
+            var redirectUri = context.Request.GetApplicationUrl() + appRelativeCallbackUrl;
+            bool newUser = false;
+            bool reset = false;
+            if (returnUrl.ToLower().Contains("newuser=true"))
+            {
+                newUser = true;
+            }
+            if (returnUrl.ToLower().Contains("reset=true"))
+            {
+                reset = true;
+            }
+            var authorizeUri = OidcClient.GetAuthorizeUrl(
+                new Uri(authorizeUrl),
+                new Uri(redirectUri),
+                clientId,
+                scopes,
+                state);
 
-
+            var cookie = new SelfProtectedCookie(ProtectionMode.MachineKey, HttpContext.Current.Request.IsSecureConnection);
+            cookie.Write("oidcstate", state + "_" + returnUrl, DateTime.UtcNow.AddHours(24));
+            context.ClearError();
+            return (authorizeUri.AbsoluteUri + (newUser ? "&newUser=true" : "") + (reset ? "&reset=true" : ""));
         }
         public void Dispose()
         { }

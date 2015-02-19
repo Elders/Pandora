@@ -1,4 +1,5 @@
 ﻿using Elders.Pandora.Box;
+using Elders.Pandora.UI.Common;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,8 +15,6 @@ namespace Elders.Pandora.UI.api
     {
         static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(DefaultsController));
 
-        private string storageFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Elders", "Pandora");
-
         public Configuration Get(string projectName, string applicationName)
         {
             try
@@ -23,14 +22,19 @@ namespace Elders.Pandora.UI.api
                 if (string.IsNullOrWhiteSpace(applicationName) || string.IsNullOrWhiteSpace(projectName))
                     return null;
 
-                var cfgPath = Path.Combine(storageFolder, projectName, applicationName, applicationName += ".json");
+                var applicationPath = Path.Combine(Folders.Projects, projectName, applicationName);
 
-                var exists = File.Exists(cfgPath);
+                var files = Directory.GetFiles(applicationPath, "*.json");
 
-                if (!exists)
-                    throw new ArgumentException("There is no configuration for application " + applicationName);
+                if (files.Count() == 0)
+                    throw new InvalidOperationException("There is no configuration file for application: " + applicationName);
 
-                var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(cfgPath));
+                if (files.Count() > 1)
+                    throw new InvalidOperationException("There are multiple configuration files for application: " + applicationName);
+
+                var configPath = files.First();
+
+                var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(configPath));
 
                 var box = Elders.Pandora.Box.Box.Mistranslate(cfg);
 
@@ -50,21 +54,26 @@ namespace Elders.Pandora.UI.api
                 if (string.IsNullOrWhiteSpace(applicationName) || string.IsNullOrWhiteSpace(projectName) || string.IsNullOrWhiteSpace(defaultName))
                     return null;
 
-                var cfgPath = Path.Combine(storageFolder, projectName, applicationName, applicationName += ".json");
+                var applicationPath = Path.Combine(Folders.Projects, projectName, applicationName);
 
-                var exists = File.Exists(cfgPath);
+                var files = Directory.GetFiles(applicationPath, "*.json");
 
-                if (!exists)
-                    throw new ArgumentException("There is no configuration for application " + applicationName);
+                if (files.Count() == 0)
+                    throw new InvalidOperationException("There is no configuration file for application: " + applicationName);
 
-                var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(cfgPath));
+                if (files.Count() > 1)
+                    throw new InvalidOperationException("There are multiple configuration files for application: " + applicationName);
+
+                var configPath = files.First();
+
+                var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(configPath));
 
                 var box = Elders.Pandora.Box.Box.Mistranslate(cfg);
 
                 var setting = box.Defaults.AsDictionary().FirstOrDefault(x => x.Key == defaultName);
 
                 if (string.IsNullOrWhiteSpace(setting.Value))
-                    throw new ArgumentNullException("There is no default setting with name " + defaultName);
+                    throw new InvalidOperationException("There is no default setting with name " + defaultName);
                 else
                     return setting.Value;
             }
@@ -82,22 +91,27 @@ namespace Elders.Pandora.UI.api
                 if (string.IsNullOrWhiteSpace(applicationName) || string.IsNullOrWhiteSpace(projectName))
                     return;
 
-                var workingDir = Path.Combine(storageFolder, projectName);
+                var projectPath = Path.Combine(Folders.Projects, projectName);
 
-                var cfgPath = Path.Combine(workingDir, applicationName, applicationName += ".json");
+                var applicationPath = Path.Combine(projectPath, applicationName);
 
-                var exists = File.Exists(cfgPath);
+                var files = Directory.GetFiles(applicationPath, "*.json");
 
-                if (!exists)
-                    throw new ArgumentException("There is no configuration for application " + applicationName);
+                if (files.Count() == 0)
+                    throw new InvalidOperationException("There is no configuration file for application: " + applicationName);
 
-                var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(cfgPath));
+                if (files.Count() > 1)
+                    throw new InvalidOperationException("There are multiple configuration files for application: " + applicationName);
+
+                var configPath = files.First();
+
+                var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(configPath));
 
                 var box = Elders.Pandora.Box.Box.Mistranslate(cfg);
 
                 var defaults = box.Defaults.AsDictionary();
 
-                if (!box.Defaults.ContainsKey(setting.Key))
+                if (!defaults.ContainsKey(setting.Key))
                 {
                     defaults.Add(setting.Key, setting.Value);
 
@@ -105,7 +119,7 @@ namespace Elders.Pandora.UI.api
 
                     var jar = JsonConvert.SerializeObject(Elders.Pandora.Box.Box.Mistranslate(box), Formatting.Indented);
 
-                    File.WriteAllText(cfgPath, jar);
+                    File.WriteAllText(configPath, jar);
 
                     var nameClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "name");
                     var username = nameClaim != null ? nameClaim.Value : "no name claim";
@@ -113,8 +127,8 @@ namespace Elders.Pandora.UI.api
                     var email = emailClaim != null ? emailClaim.Value : "no email claim";
                     var message = "Added setting " + setting.Key + " in " + applicationName + " in " + projectName;
 
-                    var git = new Git(workingDir);
-                    git.Stage(new List<string>() { cfgPath });
+                    var git = new Git(projectPath);
+                    git.Stage(new List<string>() { configPath });
                     git.Commit(message, username, email);
                     git.Push();
                 }
@@ -126,41 +140,45 @@ namespace Elders.Pandora.UI.api
             }
         }
 
-        public void Put(string projectName, string applicationName, [FromBody]Dictionary<string, string> defaults)
+        public void Put(string projectName, string applicationName, [FromBody]Dictionary<string, string> settings)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(applicationName) || string.IsNullOrWhiteSpace(projectName) || defaults == null || defaults.Count == 0)
+                if (string.IsNullOrWhiteSpace(applicationName) || string.IsNullOrWhiteSpace(projectName))
                     return;
 
-                var workingDir = Path.Combine(storageFolder, projectName);
+                var projectPath = Path.Combine(Folders.Projects, projectName);
 
-                var cfgPath = Path.Combine(workingDir, applicationName, applicationName += ".json");
+                var applicationPath = Path.Combine(projectPath, applicationName);
 
-                var exists = File.Exists(cfgPath);
+                var files = Directory.GetFiles(applicationPath, "*.json");
 
-                if (!exists)
-                    throw new ArgumentException("There is no configuration for application " + applicationName);
+                if (files.Count() == 0)
+                    throw new InvalidOperationException("There is no configuration file for application: " + applicationName);
 
-                var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(cfgPath));
+                if (files.Count() > 1)
+                    throw new InvalidOperationException("There are multiple configuration files for application: " + applicationName);
+
+                var configPath = files.First();
+
+                var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(configPath));
 
                 var box = Elders.Pandora.Box.Box.Mistranslate(cfg);
 
-
-                box.Defaults = new Configuration(box.Defaults.Name, defaults);
+                box.Defaults = new Configuration(box.Defaults.Name, settings);
 
                 var jar = JsonConvert.SerializeObject(Elders.Pandora.Box.Box.Mistranslate(box), Formatting.Indented);
 
-                File.WriteAllText(cfgPath, jar);
+                File.WriteAllText(configPath, jar);
 
                 var nameClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "name");
                 var username = nameClaim != null ? nameClaim.Value : "no name claim";
                 var emailClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "email");
                 var email = emailClaim != null ? emailClaim.Value : "no email claim";
-                var message = "Updated default settings for " + applicationName + " in " + projectName;
+                var message = "Updated default settings in " + applicationName + " in " + projectName;
 
-                var git = new Git(workingDir);
-                git.Stage(new List<string>() { cfgPath });
+                var git = new Git(projectPath);
+                git.Stage(new List<string>() { configPath });
                 git.Commit(message, username, email);
                 git.Push();
             }
@@ -178,16 +196,21 @@ namespace Elders.Pandora.UI.api
                 if (string.IsNullOrWhiteSpace(applicationName) || string.IsNullOrWhiteSpace(projectName))
                     return;
 
-                var workingDir = Path.Combine(storageFolder, projectName);
+                var projectPath = Path.Combine(Folders.Projects, projectName);
 
-                var cfgPath = Path.Combine(workingDir, applicationName, applicationName += ".json");
+                var applicationPath = Path.Combine(projectPath, applicationName);
 
-                var exists = File.Exists(cfgPath);
+                var files = Directory.GetFiles(applicationPath, "*.json");
 
-                if (!exists)
-                    throw new ArgumentException("There is no configuration for application " + applicationName);
+                if (files.Count() == 0)
+                    throw new InvalidOperationException("There is no configuration file for application: " + applicationName);
 
-                var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(cfgPath));
+                if (files.Count() > 1)
+                    throw new InvalidOperationException("There are multiple configuration files for application: " + applicationName);
+
+                var configPath = files.First();
+
+                var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(configPath));
 
                 var box = Elders.Pandora.Box.Box.Mistranslate(cfg);
 
@@ -211,7 +234,7 @@ namespace Elders.Pandora.UI.api
 
                     var jar = JsonConvert.SerializeObject(Elders.Pandora.Box.Box.Mistranslate(box));
 
-                    File.WriteAllText(cfgPath, jar);
+                    File.WriteAllText(configPath, jar);
 
                     var nameClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "name");
                     var username = nameClaim != null ? nameClaim.Value : "no name claim";
@@ -219,8 +242,8 @@ namespace Elders.Pandora.UI.api
                     var email = emailClaim != null ? emailClaim.Value : "no email claim";
                     var message = "Removed setting " + key + " from " + applicationName + " in " + projectName;
 
-                    var git = new Git(workingDir);
-                    git.Stage(new List<string>() { cfgPath });
+                    var git = new Git(projectPath);
+                    git.Stage(new List<string>() { configPath });
                     git.Commit(message, username, email);
                     git.Push();
                 }

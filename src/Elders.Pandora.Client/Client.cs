@@ -44,7 +44,7 @@ namespace Elders.Pandora.Client
                             Console.WriteLine("Configuration with name " + cfg.Name + " has been recieved.");
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         //log
                         break;

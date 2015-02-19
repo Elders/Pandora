@@ -26,6 +26,63 @@ namespace Elders.Pandora.UI.ViewModels
         public string Organization { get; set; }
 
         public SecurityAccess Access { get; set; }
+
+        public static void GiveAccess(string projectName, string applicationName, string cluster, Access access)
+        {
+            var user = GetUser();
+
+            UpdateUserAccess(user, projectName, applicationName, cluster, access);
+
+            UpdateClaimsPrincipal(user.Access);
+        }
+
+        private static User GetUser()
+        {
+            var hostName = ApplicationConfiguration.Get("host_name");
+            var url = hostName + "/api/Users?Id=" + ClaimsPrincipal.Current.Id();
+
+            var restClient = new RestSharp.RestClient(url);
+
+            var request = new RestSharp.RestRequest();
+            request.Method = RestSharp.Method.GET;
+            request.RequestFormat = RestSharp.DataFormat.Json;
+            request.AddHeader("Content-Type", "application/json;charset=utf-8");
+            request.AddHeader("Authorization", "Bearer " + ClaimsPrincipal.Current.Token());
+
+            var result = restClient.Execute(request);
+
+            return JsonConvert.DeserializeObject<User>(result.Content);
+        }
+
+        private static void UpdateUserAccess(User user, string projectName, string applicationName, string cluster, Access access)
+        {
+            user.Access.AddRule(new AccessRules() { Project = projectName, Application = applicationName, Cluster = cluster, Access = access });
+
+            var hostName = ApplicationConfiguration.Get("host_name");
+            var url = hostName + "/api/Users?Id=" + ClaimsPrincipal.Current.Id();
+
+            var restClient = new RestSharp.RestClient(url);
+
+            var editRequest = new RestSharp.RestRequest();
+            editRequest.Method = RestSharp.Method.PUT;
+            editRequest.RequestFormat = RestSharp.DataFormat.Json;
+            editRequest.AddHeader("Content-Type", "application/json;charset=utf-8");
+            editRequest.AddHeader("Authorization", "Bearer " + ClaimsPrincipal.Current.Token());
+
+            editRequest.AddBody(user);
+
+            var editResult = restClient.Execute(editRequest);
+        }
+
+        private static void UpdateClaimsPrincipal(SecurityAccess access)
+        {
+            var accessClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "SecurityAccess");
+
+            if (accessClaim != null)
+                ClaimsPrincipal.Current.Identities.First().RemoveClaim(accessClaim);
+
+            ClaimsPrincipal.Current.Identities.First().AddClaim(new Claim("SecurityAccess", JsonConvert.SerializeObject(access)));
+        }
     }
 
     public class AccessRules

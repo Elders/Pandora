@@ -47,7 +47,7 @@ namespace Elders.Pandora.UI
 
         public void Commit(string message, string username, string email)
         {
-            repo.Commit(message, new Signature(this.username, this.email, DateTimeOffset.Now), new Signature(username, email, DateTimeOffset.Now));
+            repo.Commit(message, new Signature(this.username, this.email, DateTimeOffset.UtcNow), new Signature(username, email, DateTimeOffset.UtcNow));
         }
 
         public void Push()
@@ -62,6 +62,20 @@ namespace Elders.Pandora.UI
                 });
 
             repo.Network.Push(repo.Branches["master"], pushOptions);
+        }
+
+        public void Pull()
+        {
+            var pullOptions = new PullOptions();
+
+            pullOptions.FetchOptions.CredentialsProvider = new LibGit2Sharp.Handlers.CredentialsHandler(
+                (_url, _user, _cred) => new UsernamePasswordCredentials()
+                {
+                    Username = this.username,
+                    Password = this.password
+                });
+
+            repo.Network.Pull(new Signature(this.username, this.email, DateTimeOffset.UtcNow), pullOptions);
         }
     }
 }

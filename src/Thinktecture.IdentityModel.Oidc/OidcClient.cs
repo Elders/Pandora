@@ -127,7 +127,6 @@ namespace Thinktecture.IdentityModel.Oidc
                 // Configure validation
                 Byte[][] certBytes = getCertBytes();
 
-                Exception ex;
                 for (int i = 0; i < certBytes.Length; i++)
                 {
                     X509Certificate2 certificate = new X509Certificate2(certBytes[i]);
@@ -161,7 +160,7 @@ namespace Thinktecture.IdentityModel.Oidc
                         // Validate using the provider
                         cp = jwt.ValidateToken(token, tvp, out securityToken);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         if (i == certBytes.Length)
                             throw;
@@ -251,7 +250,7 @@ namespace Thinktecture.IdentityModel.Oidc
                     var json = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(str);
                     return true;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return false;
                 }

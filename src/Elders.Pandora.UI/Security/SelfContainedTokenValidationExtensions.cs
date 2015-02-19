@@ -156,7 +156,7 @@ namespace Elders.Pandora.UI.Security
                     var json = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(str);
                     return true;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return false;
                 }
