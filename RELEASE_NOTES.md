@@ -1,3 +1,6 @@
+#### 0.1.15 - 07.04.2015
+* Add overload for ApplicationConfiguration.Get<T>(key,context)
+
 #### 0.1.14 - 07.04.2015
 * Make setting keys case insensitive
 

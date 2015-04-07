@@ -52,6 +52,15 @@ namespace Elders.Pandora
             return result;
         }
 
+        public static T Get<T>(string key, ApplicationContext context)
+        {
+            var json = Get(key, context);
+            if (json == null)
+                return default(T);
+            var result = JsonConvert.DeserializeObject<T>(json);
+            return result;
+        }
+
         public static IEnumerable<DeployedSetting> GetAll()
         {
             Guard_ValidPandoraContext();
