@@ -1,3 +1,6 @@
+#### 0.1.12 - 07.04.2015
+* Added optional cluster configuration for machines
+
 #### 0.1.11 - 18.02.2015
 * Exit if the jar file is not found
 

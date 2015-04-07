@@ -52,6 +52,7 @@ namespace Elders.Pandora.Box
         public void AddMachine(Machine machine)
         {
             Guard_SettingMustBeDefinedInDefaults(machine.AsDictionary());
+            Guard_MachineClusterConfiguration(machine);
 
             if (!Machines.Contains(machine))
                 Machines.Add(machine);
@@ -62,6 +63,18 @@ namespace Elders.Pandora.Box
             foreach (var setting in settings)
             {
                 Guard_SettingMustBeDefinedInDefaults(setting.Key);
+            }
+        }
+
+        private void Guard_MachineClusterConfiguration(Machine machine)
+        {
+            string clusterKey = "cluster";
+            if (machine.ContainsKey(clusterKey))
+            {
+                var clusterName = machine.Settings[clusterKey];
+                var isValid = Clusters.Any(x => x.Name == clusterName);
+                if (isValid == false)
+                    throw new ArgumentException(string.Format("Invalid machine configuration. The machine '{0}' is explicitly configured in cluster '{1}' but cluster configuration with that name does not exist.", machine.Name, clusterName));
             }
         }
 
@@ -98,6 +111,7 @@ namespace Elders.Pandora.Box
                     box.AddMachine(machine.Key, machine.Value);
                 }
             }
+
             return box;
         }
 

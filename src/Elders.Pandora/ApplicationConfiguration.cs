@@ -5,28 +5,37 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Elders.Pandora.Box;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Elders.Pandora
 {
     public static class ApplicationConfiguration
     {
-        private static string applicationName;
-        private static string cluster;
-        private static string machine;
+        static ApplicationContext context = null;
 
         public static void SetContext(string applicationName, string cluster = null, string machine = null)
         {
-            ApplicationConfiguration.applicationName = applicationName;
-            ApplicationConfiguration.cluster = cluster ?? Environment.GetEnvironmentVariable("CLUSTER_NAME", EnvironmentVariableTarget.Machine);
-            ApplicationConfiguration.machine = machine ?? Environment.GetEnvironmentVariable("COMPUTERNAME");
+            SetContext(new ApplicationContext(applicationName, cluster, machine));
+        }
+
+        public static void SetContext(ApplicationContext applicationContext)
+        {
+            context = applicationContext;
+        }
+
+        public static ApplicationContext CreateContext(string applicationName)
+        {
+            return new ApplicationContext(applicationName);
         }
 
         public static string Get(string key)
         {
             Guard_ValidPandoraContext();
+            return Get(key, context);
+        }
 
-            string longKey = NameBuilder.GetSettingName(applicationName, cluster, machine, key);
+        public static string Get(string key, ApplicationContext context)
+        {
+            string longKey = NameBuilder.GetSettingName(context.ApplicationName, context.Cluster, context.Machine, key);
             var setting = Environment.GetEnvironmentVariable(longKey, EnvironmentVariableTarget.Machine);
             if (setting == null)
                 throw new KeyNotFoundException("Unable to find environment variable " + longKey);
@@ -47,7 +56,9 @@ namespace Elders.Pandora
             Guard_ValidPandoraContext();
 
             return from setting in GetAllOnMachine()
-                   where setting.Cluster == cluster && setting.Machine == machine && setting.ApplicationName == applicationName
+                   where setting.Cluster == context.Cluster &&
+                         setting.Machine == context.Machine &&
+                         setting.ApplicationName == context.ApplicationName
                    select setting;
         }
 
@@ -75,9 +86,7 @@ namespace Elders.Pandora
 
         private static void Guard_ValidPandoraContext()
         {
-            if (String.IsNullOrEmpty(cluster) ||
-                String.IsNullOrEmpty(machine) ||
-                String.IsNullOrEmpty(applicationName))
+            if (context == null)
                 throw new ArgumentNullException("Please use 'SetContext' method first.");
         }
     }
