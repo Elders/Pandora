@@ -1,3 +1,6 @@
+#### 0.1.13 - 07.04.2015
+* Added 'cluster' setting key to the reserved settings collection
+
 #### 0.1.12 - 07.04.2015
 * Added optional cluster configuration for machines
 

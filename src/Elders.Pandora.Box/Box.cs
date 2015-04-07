@@ -13,12 +13,15 @@ namespace Elders.Pandora.Box
     /// <remarks>http://en.wikipedia.org/wiki/Pandora%27s_box</remarks>
     public class Box
     {
+        private readonly List<string> reservedKeys;
+
         public Box(Jar jar)
         {
             Name = jar.Name;
             Clusters = new List<Cluster>();
             Machines = new List<Machine>();
             Defaults = new Configuration(jar.Defaults);
+            reservedKeys = new List<string>() { Machine.ClusterKey };
         }
 
         public string Name { get; private set; }
@@ -68,10 +71,9 @@ namespace Elders.Pandora.Box
 
         private void Guard_MachineClusterConfiguration(Machine machine)
         {
-            string clusterKey = "cluster";
-            if (machine.ContainsKey(clusterKey))
+            if (machine.ContainsKey(Machine.ClusterKey))
             {
-                var clusterName = machine.Settings[clusterKey];
+                var clusterName = machine.Settings[Machine.ClusterKey];
                 var isValid = Clusters.Any(x => x.Name == clusterName);
                 if (isValid == false)
                     throw new ArgumentException(string.Format("Invalid machine configuration. The machine '{0}' is explicitly configured in cluster '{1}' but cluster configuration with that name does not exist.", machine.Name, clusterName));
@@ -80,6 +82,9 @@ namespace Elders.Pandora.Box
 
         private void Guard_SettingMustBeDefinedInDefaults(string settingKey)
         {
+            if (reservedKeys.Contains(settingKey))
+                return;
+
             if (!Defaults.ContainsKey(settingKey))
                 throw new ArgumentException(String.Format("The setting key '{0}' was not found in the Default settings for application '{1}'. You can override only settings inside the default settings", settingKey, Name));
         }
