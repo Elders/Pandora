@@ -35,7 +35,8 @@ namespace Elders.Pandora
 
         public static string Get(string key, ApplicationContext context)
         {
-            string longKey = NameBuilder.GetSettingName(context.ApplicationName, context.Cluster, context.Machine, key);
+            var sanitizedKey = key.ToLowerInvariant();
+            string longKey = NameBuilder.GetSettingName(context.ApplicationName, context.Cluster, context.Machine, sanitizedKey);
             var setting = Environment.GetEnvironmentVariable(longKey, EnvironmentVariableTarget.Machine);
             if (setting == null)
                 throw new KeyNotFoundException("Unable to find environment variable " + longKey);

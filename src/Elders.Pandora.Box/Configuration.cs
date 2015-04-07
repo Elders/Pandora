@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Elders.Pandora.Box
 {
     public class Configuration : ValueObject<Configuration>
     {
-        public Dictionary<string, string> Settings { get; private set; }
+        private readonly Dictionary<string, string> settings;
 
         public Configuration(Dictionary<string, string> settings) : this("defaults", settings) { }
 
@@ -14,9 +15,9 @@ namespace Elders.Pandora.Box
             if (String.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
 
             if (settings != null)
-                this.Settings = new Dictionary<string, string>(settings);
+                this.settings = settings.ToDictionary(key => key.Key.ToLowerInvariant(), val => val.Value);
             else
-                this.Settings = new Dictionary<string, string>();
+                this.settings = new Dictionary<string, string>();
 
             this.Name = name;
         }
@@ -28,7 +29,7 @@ namespace Elders.Pandora.Box
             get
             {
                 string value = String.Empty;
-                if (Settings.TryGetValue(settingName, out value))
+                if (settings.TryGetValue(settingName.ToLowerInvariant(), out value))
                 {
                     return value;
                 }
@@ -41,18 +42,18 @@ namespace Elders.Pandora.Box
 
         public Dictionary<string, string> AsDictionary()
         {
-            return new Dictionary<string, string>(Settings);
+            return new Dictionary<string, string>(settings);
         }
 
         public bool ContainsKey(string key)
         {
-            return Settings.ContainsKey(key);
+            return settings.ContainsKey(key.ToLowerInvariant());
         }
 
         public void DeleteKey(string key)
         {
-            if (Settings.ContainsKey(key))
-                Settings.Remove(key);
+            if (settings.ContainsKey(key.ToLowerInvariant()))
+                settings.Remove(key.ToLowerInvariant());
         }
     }
 }

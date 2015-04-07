@@ -1,3 +1,6 @@
+#### 0.1.14 - 07.04.2015
+* Make setting keys case insensitive
+
 #### 0.1.13 - 07.04.2015
 * Added 'cluster' setting key to the reserved settings collection
 
