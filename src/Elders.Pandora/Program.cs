@@ -9,33 +9,53 @@ namespace Elders.Pandora
     {
         static int Main(string[] args)
         {
+            string invokedVerb = string.Empty;
+            object invokedVerbInstance = null;
 
-            string applicationName = args[0];
-            string cluster = args[1];
-            string machine = args[2];
-            string file = args.Length == 4 ? args[3] : applicationName;
+            var options = new Options();
 
-            string jarFile = file + ".json";
-            if (!File.Exists(jarFile))
+            if (!CommandLine.Parser.Default.ParseArguments(
+                args,
+                options,
+                (verb, subOptions) => { invokedVerb = verb; invokedVerbInstance = subOptions; }))
             {
-                Console.WriteLine("File '{0}' was not found.", jarFile);
-                return 0;
+
+                Console.WriteLine(options.GetUsage());
+                Console.ReadLine();
+                Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
             }
 
-            var jar = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(jarFile));
-            var box = Elders.Pandora.Box.Box.Mistranslate(jar);
-            if (box.Name != applicationName)
-                throw new InvalidProgramException("Invalid grant");
-            var cfg = new Pandora(box).Open(cluster, machine);
-
-            var computedCfg = JsonConvert.SerializeObject(cfg.AsDictionary());
-
-            foreach (var setting in cfg.AsDictionary())
+            if (invokedVerb == "open")
             {
-                Environment.SetEnvironmentVariable(setting.Key, setting.Value, EnvironmentVariableTarget.Machine);
-            }
+                var openOptions = (OpenOptions)invokedVerbInstance;
 
-            File.WriteAllText((NameBuilder.GetFileName(box.Name, cluster, machine) + ".json"), computedCfg);
+                string applicationName = openOptions.Application;
+                string cluster = openOptions.Cluster;
+                string machine = openOptions.Machine;
+                string jarFile = openOptions.Jar ?? openOptions.Application + ".json";
+                if (!File.Exists(jarFile)) throw new FileNotFoundException("Jar file is required.", jarFile);
+
+                var jar = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(jarFile));
+                var box = Elders.Pandora.Box.Box.Mistranslate(jar);
+                if (box.Name != applicationName) throw new InvalidProgramException("Invalid grant");
+
+                var cfg = new Pandora(box).Open(cluster, machine);
+
+                if (openOptions.Output == OpenOptions.EnvVarOutput)
+                {
+
+                    foreach (var setting in cfg.AsDictionary())
+                    {
+                        Environment.SetEnvironmentVariable(setting.Key, setting.Value, EnvironmentVariableTarget.Machine);
+                    }
+                }
+                else
+                {
+                    var computedCfg = JsonConvert.SerializeObject(cfg.AsDictionary());
+                    File.WriteAllText(openOptions.Output, computedCfg);
+                }
+
+            }
 
             return 0;
         }

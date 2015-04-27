@@ -1,3 +1,6 @@
+#### 0.1.16 - 27.04.2015
+* Completely rewrite the CLI
+
 #### 0.1.15 - 07.04.2015
 * Add overload for ApplicationConfiguration.Get<T>(key,context)
 

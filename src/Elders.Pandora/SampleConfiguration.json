@@ -1,24 +1,33 @@
 {
-  "name": "ApplicationName",
-  "defaults": {
-    "ConnectionString": "",
-    "SiteName": "Identity Server"
-  },
-  "clusters": {
-    "local": {
-      "ConnectionString": "Contact Points=127.0.0.1;Port=9042;Default Keyspace=identity_local",
-      "SiteName": "Local Identity Server"
+    "name": "SampleConfiguration",
+    "defaults": {
+        "premiumUsers": "{ 'disableOnTimeInterval': { 'turn_off_feature': false, 'feature_start_date': '03 04 2020', 'switch': true, 'periodInMinutes': 0, 'periodInSeconds': 5 } }",
+        "youtubeVideos": "{ 'disableOnTimeInterval': { 'turn_off_feature': false, 'feature_start_date': '03 04 2020', 'switch': true, 'periodInMinutes': 0, 'periodInSeconds': 5 } }",
+        "systemAlerts": "{ 'disableOnTimeInterval': { 'turn_off_feature': false, 'feature_start_date': '03 04 2020', 'switch': true, 'periodInMinutes': 0, 'periodInSeconds': 5 } }",
+        "userAvatar": "{ 'disableOnTimeInterval': { 'turn_off_feature': false, 'feature_start_date': '03 04 2020', 'switch': true, 'periodInMinutes': 0, 'periodInSeconds': 5 } }",
+        "hideGroupMembers": "{ 'disableOnTimeInterval': { 'turn_off_feature': false, 'feature_start_date': '03 04 2020', 'switch': true, 'periodInMinutes': 0, 'periodInSeconds': 5 } }"
     },
-    "test": {
-      "ConnectionString": "Contact Points=192.168.1.46;Port=9042;Default Keyspace=identity_test",
-      "SiteName": "Test Identity Server"
+    "clusters": {
+        "int": {
+            "premiumUsers": "{ 'disableOnTimeInterval': { 'turn_off_feature': true, 'feature_start_date': '03 04 2020', 'switch': true, 'periodInMinutes': 5, 'periodInSeconds': 5 } }",
+            "youtubeVideos": "{ 'disableOnTimeInterval': { 'turn_off_feature': true, 'feature_start_date': '03 04 2020', 'switch': true, 'periodInMinutes': 5, 'periodInSeconds': 5 } }",
+            "systemAlerts": "{ 'disableOnTimeInterval': { 'turn_off_feature': true, 'feature_start_date': '03 04 2020', 'switch': true, 'periodInMinutes': 5, 'periodInSeconds': 5 } }",
+            "userAvatar": "{ 'disableOnTimeInterval': { 'turn_off_feature': true, 'feature_start_date': '03 04 2020', 'switch': true, 'periodInMinutes': 5, 'periodInSeconds': 5 } }",
+            "hideGroupMembers": "{ 'disableOnTimeInterval': { 'turn_off_feature': true, 'feature_start_date': '03 04 2020', 'switch': true, 'periodInMinutes': 5, 'periodInSeconds': 5 } }"
+        },
+        "level": {
+            "premiumUsers": "{ 'disableOnTimeInterval': { 'turn_off_feature': true, 'feature_start_date': '03 04 2020', 'switch': false, 'periodInMinutes': 0, 'periodInSeconds': 5 } }",
+            "youtubeVideos": "{ 'disableOnTimeInterval': { 'turn_off_feature': false, 'feature_start_date': '03 04 2020', 'switch': true, 'periodInMinutes': 0, 'periodInSeconds': 5 } }",
+            "systemAlerts": "{ 'disableOnTimeInterval': { 'turn_off_feature': false, 'feature_start_date': '03 04 2020', 'switch': true, 'periodInMinutes': 0, 'periodInSeconds': 5 } }",
+            "userAvatar": "{ 'disableOnTimeInterval': { 'turn_off_feature': false, 'feature_start_date': '03 04 2020', 'switch': true, 'periodInMinutes': 0, 'periodInSeconds': 5 } }",
+            "hideGroupMembers": "{ 'disableOnTimeInterval': { 'turn_off_feature': false, 'feature_start_date': '03 04 2020', 'switch': true, 'periodInMinutes': 0, 'periodInSeconds': 5 } }"
+        },
+        "gno": {
+            "premiumUsers": "{ 'disableOnTimeInterval': { 'turn_off_feature': false, 'feature_start_date': '03 04 2020', 'switch': false, 'periodInMinutes': 0, 'periodInSeconds': 5 } }",
+            "youtubeVideos": "{ 'disableOnTimeInterval': { 'turn_off_feature': true, 'feature_start_date': '03 04 2020', 'switch': false, 'periodInMinutes': 0, 'periodInSeconds': 5 } }",
+            "systemAlerts": "{ 'disableOnTimeInterval': { 'turn_off_feature': true, 'feature_start_date': '03 04 2020', 'switch': false, 'periodInMinutes': 0, 'periodInSeconds': 5 } }",
+            "userAvatar": "{ 'disableOnTimeInterval': { 'turn_off_feature': true, 'feature_start_date': '03 04 2020', 'switch': false, 'periodInMinutes': 0, 'periodInSeconds': 5 } }",
+            "hideGroupMembers": "{ 'disableOnTimeInterval': { 'turn_off_feature': true, 'feature_start_date': '03 04 2020', 'switch': false, 'periodInMinutes': 0, 'periodInSeconds': 5 } }"
+        }
     }
-  },
-  "machines": {
-    "Name-PC": {
-      "cluster": "test",
-      "ConnectionString": "Contact Points=192.168.1.46;Port=9042;Default Keyspace=identity_test",
-      "SiteName": "Test Identity Server"
-    }
-  }
 }
