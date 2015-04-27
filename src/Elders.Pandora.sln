@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elders.Pandora.Box", "Elders.Pandora.Box\Elders.Pandora.Box.csproj", "{69854EA2-20DC-4A51-90F4-4710F88C930F}"
 EndProject
@@ -14,6 +14,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elders.Pandora.Client", "Elders.Pandora.Client\Elders.Pandora.Client.csproj", "{3074B4A3-B6B1-44BB-A456-E8212BEBCD4C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Thinktecture.IdentityModel.Oidc", "Thinktecture.IdentityModel.Oidc\Thinktecture.IdentityModel.Oidc.csproj", "{9669AED6-CC75-4DA4-A639-13E084905CA7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{9B98927F-2F3A-4F37-B97C-FE67EA98473D}"
+	ProjectSection(SolutionItems) = preProject
+		..\build.cmd = ..\build.cmd
+		..\build.fsx = ..\build.fsx
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

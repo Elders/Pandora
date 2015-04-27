@@ -56,6 +56,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config" />
+    <None Include="RELEASE_NOTES.md" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Elders.Pandora.Box\Elders.Pandora.Box.csproj">

@@ -7,8 +7,11 @@ using System.Reflection;
 [assembly: AssemblyVersionAttribute("0.1.16")]
 [assembly: AssemblyInformationalVersionAttribute("0.1.16")]
 [assembly: AssemblyFileVersionAttribute("0.1.16")]
-namespace System {
-    internal static class AssemblyVersionInformation {
+[assembly: AssemblyCopyright("(c) Elders")]
+namespace System
+{
+    internal static class AssemblyVersionInformation
+    {
         internal const string Version = "0.1.16";
     }
 }
