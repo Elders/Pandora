@@ -1,3 +1,6 @@
+#### 0.1.18 - 09.05.2015
+* Fix minor issues with the CLI
+
 #### 0.1.17 - 27.04.2015
 * Fix assembly attribute for copyright
 

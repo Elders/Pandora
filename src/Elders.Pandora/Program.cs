@@ -14,6 +14,12 @@ namespace Elders.Pandora
 
             var options = new Options();
 
+            if (args == null || args.Length == 0)
+            {
+                Console.WriteLine(options.GetUsage());
+                return 0;
+            }
+
             if (!CommandLine.Parser.Default.ParseArguments(
                 args,
                 options,
@@ -21,8 +27,7 @@ namespace Elders.Pandora
             {
 
                 Console.WriteLine(options.GetUsage());
-                Console.ReadLine();
-                Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
+                return 0;
             }
 
             if (invokedVerb == "open")
