@@ -1,3 +1,6 @@
+#### 0.2.0 - 10.05.2015
+* New feature: You can now reference configurations
+
 #### 0.1.18 - 09.05.2015
 * Fix minor issues with the CLI
 

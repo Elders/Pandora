@@ -57,6 +57,9 @@
     </Content>
     <None Include="packages.config" />
     <None Include="RELEASE_NOTES.md" />
+    <Content Include="ReferenceConfiguration.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Elders.Pandora.Box\Elders.Pandora.Box.csproj">

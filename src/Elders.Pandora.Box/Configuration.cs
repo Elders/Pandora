@@ -56,4 +56,25 @@ namespace Elders.Pandora.Box
                 settings.Remove(key.ToLowerInvariant());
         }
     }
+
+    public static class ConfigurationExtensions
+    {
+        public static Configuration Join(this Configuration self, Configuration configurationToJoin)
+        {
+            return self.Join(new List<Configuration>() { configurationToJoin });
+        }
+
+        public static Configuration Join(this Configuration self, IEnumerable<Configuration> configurationsToJoin)
+        {
+            var settings = self.AsDictionary();
+            foreach (var cfgToJoin in configurationsToJoin)
+            {
+                if (self.Name != cfgToJoin.Name) continue;
+                settings = settings.Union(cfgToJoin.AsDictionary()).ToDictionary(key => key.Key, val => val.Value);
+            }
+
+            var cfg = new Configuration(self.Name, settings);
+            return cfg;
+        }
+    }
 }

@@ -30,6 +30,21 @@ namespace Elders.Pandora.Box
 
         public List<Cluster> Clusters { get; set; }
 
+        public void Join(Box box)
+        {
+            Defaults = Defaults.Join(box.Defaults);
+            for (int i = 0; i < Clusters.Count; i++)
+            {
+                var newCfg = Clusters[i].Join(box.Clusters);
+                Clusters[i] = new Cluster(newCfg);
+            }
+            for (int i = 0; i < Machines.Count; i++)
+            {
+                var newCfg = Machines[i].Join(box.Clusters);
+                Machines[i] = new Machine(newCfg);
+            }
+        }
+
         public void AddCluster(string name, Dictionary<string, string> settings)
         {
             var cluster = new Cluster(name, settings);

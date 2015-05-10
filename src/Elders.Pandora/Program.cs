@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Elders.Pandora.Box;
 using Newtonsoft.Json;
 
@@ -43,6 +44,15 @@ namespace Elders.Pandora
                 var jar = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(jarFile));
                 var box = Elders.Pandora.Box.Box.Mistranslate(jar);
                 if (box.Name != applicationName) throw new InvalidProgramException("Invalid grant");
+
+                foreach (var reference in jar.References)
+                {
+                    var refJarFile = reference.Values.First();
+                    var referenceJar = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(refJarFile));
+                    var referenceBox = Elders.Pandora.Box.Box.Mistranslate(referenceJar);
+
+                    box.Join(referenceBox);
+                }
 
                 var cfg = new Pandora(box).Open(cluster, machine);
 

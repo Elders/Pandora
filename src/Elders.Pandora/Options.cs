@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using CommandLine;
+﻿using CommandLine;
 using CommandLine.Text;
 
 namespace Elders.Pandora
@@ -43,7 +41,5 @@ namespace Elders.Pandora
         {
             return HelpText.AutoBuild(this, verb);
         }
-
-
     }
 }
