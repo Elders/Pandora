@@ -16,5 +16,10 @@
             "refSetting1": "test_refSetting1",
             "refSetting2": "test_refSetting2"
         }
+    },
+    "machines": {
+        "NMANKOV-PC": {
+            "refSetting0": "machine_refSetting0"
+        }
     }
 }

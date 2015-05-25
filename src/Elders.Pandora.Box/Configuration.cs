@@ -59,12 +59,28 @@ namespace Elders.Pandora.Box
 
     public static class ConfigurationExtensions
     {
-        public static Configuration Join(this Configuration self, Configuration configurationToJoin)
+        /// <summary>
+        /// Joins a configuration with a collection of configurations. If the collection configurations such does NOT contain
+        /// a set of configurations such as 'Cluster' it will NOT appear within the result set.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="self">The self.</param>
+        /// <param name="configurationToJoin">The configuration to join.</param>
+        /// <returns></returns>
+        public static T Join<T>(this T self, T configurationToJoin) where T : Configuration
         {
-            return self.Join(new List<Configuration>() { configurationToJoin });
+            return self.Join(new List<T>() { configurationToJoin });
         }
 
-        public static Configuration Join(this Configuration self, IEnumerable<Configuration> configurationsToJoin)
+        /// <summary>
+        /// Joins a configuration with a collection of configurations. If the collection configurations such does NOT contain
+        /// a set of configurations such as 'Cluster' it will NOT appear within the result set.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="self">The self.</param>
+        /// <param name="configurationsToJoin">The configurations to join.</param>
+        /// <returns></returns>
+        public static T Join<T>(this T self, IEnumerable<T> configurationsToJoin) where T : Configuration
         {
             var settings = self.AsDictionary();
             foreach (var cfgToJoin in configurationsToJoin)
@@ -73,8 +89,27 @@ namespace Elders.Pandora.Box
                 settings = settings.Union(cfgToJoin.AsDictionary()).ToDictionary(key => key.Key, val => val.Value);
             }
 
-            var cfg = new Configuration(self.Name, settings);
+            var cfg = (T)Activator.CreateInstance(typeof(T), new object[] { self.Name, settings });
             return cfg;
+        }
+
+        /// <summary>
+        /// Merges two collections of configurations. If one set of configurations such as 'Cluster' does NOT exists within
+        /// one of the collections it WILL appear with the result set. 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="self">The self.</param>
+        /// <param name="other">The other.</param>
+        /// <returns></returns>
+        public static IEnumerable<T> Merge<T>(this IEnumerable<T> self, IEnumerable<T> other) where T : Configuration
+        {
+            var firstSet = self.Count() >= other.Count() ? self : other;
+            var secondSet = self.Count() < other.Count() ? self : other;
+
+            foreach (var cfg in firstSet)
+            {
+                yield return cfg.Join(secondSet);
+            }
         }
     }
 }

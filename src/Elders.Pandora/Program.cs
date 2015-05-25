@@ -51,7 +51,7 @@ namespace Elders.Pandora
                     var referenceJar = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(refJarFile));
                     var referenceBox = Elders.Pandora.Box.Box.Mistranslate(referenceJar);
 
-                    box.Join(referenceBox);
+                    box.Merge(referenceBox);
                 }
 
                 var cfg = new Pandora(box).Open(cluster, machine);

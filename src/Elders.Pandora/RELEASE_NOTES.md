@@ -1,3 +1,6 @@
+#### 0.2.1 - 25.05.2015
+* Properly merge two boxes
+
 #### 0.2.0 - 10.05.2015
 * New feature: You can now reference configurations
 

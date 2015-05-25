@@ -5,6 +5,7 @@ SETLOCAL
 SET TOOLS_PATH=.\bin\tools
 SET NUGET=%TOOLS_PATH%\NuGet\NuGet.exe
 SET FAKE=%TOOLS_PATH%\FAKE\tools\Fake.exe
+SET NYX=%TOOLS_PATH%\Nyx\tools\build.fsx
 SET BUILD_TOOLS_PATH="%ProgramFiles(x86)%\MSBuild\12.0\bin\MSBuild.exe"
 
 IF NOT EXIST %BUILD_TOOLS_PATH% (
@@ -23,7 +24,13 @@ IF NOT EXIST %TOOLS_PATH%\NuGet md %TOOLS_PATH%\NuGet
 @powershell -NoProfile -ExecutionPolicy unrestricted -Command "$ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest 'https://www.nuget.org/nuget.exe' -OutFile '%NUGET%'"
 
 echo Downloading latest version of Fake.exe...
-%NUGET% "install" "FAKE" "-OutputDirectory" "%TOOLS_PATH%" "-ExcludeVersion" "-Prerelease" "-version" "3.27.0"
+%NUGET% "install" "FAKE" "-OutputDirectory" "%TOOLS_PATH%" "-ExcludeVersion" "-Prerelease"
+
+echo Downloading latest version of Nuget.Core...
+%NUGET% "install" "Nuget.Core" "-OutputDirectory" "%TOOLS_PATH%" "-ExcludeVersion" "-Prerelease"
+
+echo Downloading latest version of Nyx...
+%NUGET% "install" "Nyx" "-OutputDirectory" "%TOOLS_PATH%" "-ExcludeVersion" "-Prerelease"
 
 SET TARGET="Build"
 
@@ -32,4 +39,4 @@ IF NOT [%1]==[] (set TARGET="%1")
 SET SUMMARY="Elders.Pandora"
 SET DESCRIPTION="Elders.Pandora"
 
-%FAKE% "build.fsx" "target=%TARGET%" appName=Elders.Pandora appSummary=%SUMMARY% appDescription=%DESCRIPTION%
+%FAKE% %NYX% "target=%TARGET%"  appName=Elders.Pandora appType=lib appSummary=%SUMMARY% appDescription=%DESCRIPTION% nugetPackageName=Pandora
