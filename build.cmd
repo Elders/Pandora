@@ -39,4 +39,5 @@ IF NOT [%1]==[] (set TARGET="%1")
 SET SUMMARY="Elders.Pandora"
 SET DESCRIPTION="Elders.Pandora"
 
-%FAKE% %NYX% "target=%TARGET%"  appName=Elders.Pandora appType=lib appSummary=%SUMMARY% appDescription=%DESCRIPTION% nugetPackageName=Pandora
+%FAKE% %NYX% "target=%TARGET%"  appName=Elders.Pandora      appSummary=%SUMMARY% appDescription=%DESCRIPTION% nugetPackageName=Pandora
+%FAKE% %NYX% "target=%TARGET%"  appName=Elders.Pandora.Cli  appSummary=%SUMMARY% appDescription=%DESCRIPTION% nugetPackageName=Pandora.Cli

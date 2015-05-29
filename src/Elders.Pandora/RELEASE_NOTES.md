@@ -1,3 +1,6 @@
+#### 0.3.0 - 29.05.2015
+* Remove the Cli.
+
 #### 0.2.1 - 25.05.2015
 * Properly merge two boxes
 

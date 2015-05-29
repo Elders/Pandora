@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{9B9892
 		..\build.fsx = ..\build.fsx
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elders.Pandora.Cli", "Elders.Pandora.Cli\Elders.Pandora.Cli.csproj", "{D152BF03-7A41-443B-AC0E-DF2CB0AEE6AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Azure|Any CPU = Azure|Any CPU
@@ -99,6 +101,18 @@ Global
 		{9669AED6-CC75-4DA4-A639-13E084905CA7}.Stage|Any CPU.Build.0 = Stage|Any CPU
 		{9669AED6-CC75-4DA4-A639-13E084905CA7}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{9669AED6-CC75-4DA4-A639-13E084905CA7}.Test|Any CPU.Build.0 = Test|Any CPU
+		{D152BF03-7A41-443B-AC0E-DF2CB0AEE6AB}.Azure|Any CPU.ActiveCfg = Release|Any CPU
+		{D152BF03-7A41-443B-AC0E-DF2CB0AEE6AB}.Azure|Any CPU.Build.0 = Release|Any CPU
+		{D152BF03-7A41-443B-AC0E-DF2CB0AEE6AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D152BF03-7A41-443B-AC0E-DF2CB0AEE6AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D152BF03-7A41-443B-AC0E-DF2CB0AEE6AB}.Int|Any CPU.ActiveCfg = Release|Any CPU
+		{D152BF03-7A41-443B-AC0E-DF2CB0AEE6AB}.Int|Any CPU.Build.0 = Release|Any CPU
+		{D152BF03-7A41-443B-AC0E-DF2CB0AEE6AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D152BF03-7A41-443B-AC0E-DF2CB0AEE6AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D152BF03-7A41-443B-AC0E-DF2CB0AEE6AB}.Stage|Any CPU.ActiveCfg = Release|Any CPU
+		{D152BF03-7A41-443B-AC0E-DF2CB0AEE6AB}.Stage|Any CPU.Build.0 = Release|Any CPU
+		{D152BF03-7A41-443B-AC0E-DF2CB0AEE6AB}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{D152BF03-7A41-443B-AC0E-DF2CB0AEE6AB}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
