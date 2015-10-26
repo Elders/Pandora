@@ -149,9 +149,9 @@ namespace Elders.Pandora.UI.api
 
                 var filePath = Path.Combine(applicationPath, fileName + ".json");
 
-                var box = Elders.Pandora.Box.Box.Mistranslate(cfg);
+                var box = Box.Box.Mistranslate(cfg);
 
-                var jar = JsonConvert.SerializeObject(Elders.Pandora.Box.Box.Mistranslate(box), Formatting.Indented);
+                var jar = JsonConvert.SerializeObject(Box.Box.Mistranslate(box), Formatting.Indented);
 
                 File.WriteAllText(filePath, jar);
 
@@ -195,9 +195,9 @@ namespace Elders.Pandora.UI.api
 
                 var filePath = Path.Combine(applicationPath, fileName + ".json");
 
-                var box = Elders.Pandora.Box.Box.Mistranslate(cfg);
+                var box = Box.Box.Mistranslate(cfg);
 
-                var jar = JsonConvert.SerializeObject(Elders.Pandora.Box.Box.Mistranslate(box), Formatting.Indented);
+                var jar = JsonConvert.SerializeObject(Box.Box.Mistranslate(box), Formatting.Indented);
 
                 File.WriteAllText(filePath, jar);
 

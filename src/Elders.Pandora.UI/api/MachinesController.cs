@@ -37,7 +37,7 @@ namespace Elders.Pandora.UI.api
 
             var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(configPath));
 
-            var box = Elders.Pandora.Box.Box.Mistranslate(cfg);
+            var box = Box.Box.Mistranslate(cfg);
 
             return box.Machines.SingleOrDefault(x => x.Name == machineName);
         }
@@ -65,7 +65,7 @@ namespace Elders.Pandora.UI.api
 
                 var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(configPath));
 
-                var box = Elders.Pandora.Box.Box.Mistranslate(cfg);
+                var box = Box.Box.Mistranslate(cfg);
 
                 var newMachine = JsonConvert.DeserializeObject<Machine>(value);
 
@@ -77,7 +77,7 @@ namespace Elders.Pandora.UI.api
 
                     box.Machines = machines;
 
-                    var jar = JsonConvert.SerializeObject(Elders.Pandora.Box.Box.Mistranslate(box), Formatting.Indented);
+                    var jar = JsonConvert.SerializeObject(Box.Box.Mistranslate(box), Formatting.Indented);
 
                     File.WriteAllText(configPath, jar);
 
@@ -123,7 +123,7 @@ namespace Elders.Pandora.UI.api
 
                 var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(configPath));
 
-                var box = Elders.Pandora.Box.Box.Mistranslate(cfg);
+                var box = Box.Box.Mistranslate(cfg);
 
                 var newMachine = JsonConvert.DeserializeObject<Machine>(value);
 
@@ -139,7 +139,7 @@ namespace Elders.Pandora.UI.api
 
                     box.Machines = machines;
 
-                    var jar = JsonConvert.SerializeObject(Elders.Pandora.Box.Box.Mistranslate(box), Formatting.Indented);
+                    var jar = JsonConvert.SerializeObject(Box.Box.Mistranslate(box), Formatting.Indented);
 
                     File.WriteAllText(configPath, jar);
 
@@ -185,7 +185,7 @@ namespace Elders.Pandora.UI.api
 
                 var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(configPath));
 
-                var box = Elders.Pandora.Box.Box.Mistranslate(cfg);
+                var box = Box.Box.Mistranslate(cfg);
 
                 var machines = box.Machines.ToList();
 
@@ -197,7 +197,7 @@ namespace Elders.Pandora.UI.api
 
                     box.Machines = machines;
 
-                    var jar = JsonConvert.SerializeObject(Elders.Pandora.Box.Box.Mistranslate(box));
+                    var jar = JsonConvert.SerializeObject(Box.Box.Mistranslate(box));
 
                     File.WriteAllText(configPath, jar);
 

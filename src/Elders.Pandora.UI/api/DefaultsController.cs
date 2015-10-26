@@ -36,7 +36,7 @@ namespace Elders.Pandora.UI.api
 
                 var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(configPath));
 
-                var box = Elders.Pandora.Box.Box.Mistranslate(cfg);
+                var box = Box.Box.Mistranslate(cfg);
 
                 return box.Defaults;
             }
@@ -68,7 +68,7 @@ namespace Elders.Pandora.UI.api
 
                 var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(configPath));
 
-                var box = Elders.Pandora.Box.Box.Mistranslate(cfg);
+                var box = Box.Box.Mistranslate(cfg);
 
                 var setting = box.Defaults.AsDictionary().FirstOrDefault(x => x.Key == defaultName);
 
@@ -107,7 +107,7 @@ namespace Elders.Pandora.UI.api
 
                 var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(configPath));
 
-                var box = Elders.Pandora.Box.Box.Mistranslate(cfg);
+                var box = Box.Box.Mistranslate(cfg);
 
                 var defaults = box.Defaults.AsDictionary();
 
@@ -117,7 +117,7 @@ namespace Elders.Pandora.UI.api
 
                     box.Defaults = new Configuration(box.Defaults.Name, defaults);
 
-                    var jar = JsonConvert.SerializeObject(Elders.Pandora.Box.Box.Mistranslate(box), Formatting.Indented);
+                    var jar = JsonConvert.SerializeObject(Box.Box.Mistranslate(box), Formatting.Indented);
 
                     File.WriteAllText(configPath, jar);
 
@@ -163,11 +163,11 @@ namespace Elders.Pandora.UI.api
 
                 var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(configPath));
 
-                var box = Elders.Pandora.Box.Box.Mistranslate(cfg);
+                var box = Box.Box.Mistranslate(cfg);
 
                 box.Defaults = new Configuration(box.Defaults.Name, settings);
 
-                var jar = JsonConvert.SerializeObject(Elders.Pandora.Box.Box.Mistranslate(box), Formatting.Indented);
+                var jar = JsonConvert.SerializeObject(Box.Box.Mistranslate(box), Formatting.Indented);
 
                 File.WriteAllText(configPath, jar);
 
@@ -212,7 +212,7 @@ namespace Elders.Pandora.UI.api
 
                 var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(configPath));
 
-                var box = Elders.Pandora.Box.Box.Mistranslate(cfg);
+                var box = Box.Box.Mistranslate(cfg);
 
                 var defaults = box.Defaults.AsDictionary();
 
@@ -232,7 +232,7 @@ namespace Elders.Pandora.UI.api
                         machine.DeleteKey(key);
                     }
 
-                    var jar = JsonConvert.SerializeObject(Elders.Pandora.Box.Box.Mistranslate(box));
+                    var jar = JsonConvert.SerializeObject(Box.Box.Mistranslate(box));
 
                     File.WriteAllText(configPath, jar);
 

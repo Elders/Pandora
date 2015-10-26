@@ -42,19 +42,10 @@ namespace Elders.Pandora.Cli
                 if (!File.Exists(jarFile)) throw new FileNotFoundException("Jar file is required.", jarFile);
 
                 var jar = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(jarFile));
-                var box = Elders.Pandora.Box.Box.Mistranslate(jar);
+                var box = Box.Box.Mistranslate(jar);
                 if (box.Name != applicationName) throw new InvalidProgramException("Invalid grant");
 
-                foreach (var reference in jar.References)
-                {
-                    var refJarFile = reference.Values.First();
-                    var referenceJar = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(refJarFile));
-                    var referenceBox = Elders.Pandora.Box.Box.Mistranslate(referenceJar);
-
-                    box.Merge(referenceBox);
-                }
-
-                var cfg = new Pandora(box).Open(cluster, machine);
+                var cfg = new Pandora(box).Open(new PandoraOptions(cluster, machine, false));
 
                 if (openOptions.Output == OpenOptions.EnvVarOutput)
                 {
