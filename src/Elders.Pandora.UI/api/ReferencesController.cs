@@ -1,47 +1,21 @@
-﻿using Elders.Pandora.Box;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Claims;
-using System.Web.Http;
 using System.Linq;
+using System.Security.Claims;
+using Elders.Pandora.Box;
+using Newtonsoft.Json;
+using System.Web.Http;
 using Elders.Pandora.UI.Common;
 
 namespace Elders.Pandora.UI.api
 {
     //[Authorize]
-    public class JarsController : ApiController
+    public class ReferencesController : ApiController
     {
         static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(JarsController));
 
-        public IEnumerable<Jar> Get(string projectName)
-        {
-            string projectPath = Path.Combine(Folders.Projects, projectName, "src", projectName + ".Configuration", "public");
-
-            var configurations = Directory.GetFiles(projectPath).Where(x => x.EndsWith(".json", StringComparison.Ordinal));
-
-            foreach (var config in configurations)
-            {
-                Jar jarObject = null;
-
-                try
-                {
-                    jarObject = JsonConvert.DeserializeObject<Jar>(System.IO.File.ReadAllText(config));
-                }
-                catch (Exception ex)
-                {
-                    log.Error(ex);
-
-                    continue;
-                }
-
-                if (config != null)
-                    yield return jarObject;
-            }
-        }
-
-        public Jar Get(string projectName, string configurationName)
+        public IEnumerable<string> Get(string projectName, string configurationName)
         {
             try
             {
@@ -49,7 +23,16 @@ namespace Elders.Pandora.UI.api
 
                 var configurationPath = GetConfigurationFile(projectName, configurationName);
 
-                return JsonConvert.DeserializeObject<Jar>(System.IO.File.ReadAllText(configurationPath));
+                var jar = JsonConvert.DeserializeObject<Jar>(System.IO.File.ReadAllText(configurationPath));
+
+                var references = new List<string>();
+
+                foreach (var reference in jar.References)
+                {
+                    references.Add(reference.Values.First());
+                }
+
+                return references;
             }
             catch (Exception ex)
             {
@@ -149,24 +132,44 @@ namespace Elders.Pandora.UI.api
             }
         }
 
-        public void Delete(string projectName, string configurationName)
+        public void Delete(string projectName, string configurationName, string referenceName)
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(projectName) || string.IsNullOrWhiteSpace(configurationName))
+                    throw new InvalidOperationException();
+
                 var projectPath = Path.Combine(Folders.Projects, projectName);
+
+                if (configurationName.EndsWith(".json", StringComparison.Ordinal) == false)
+                    configurationName += ".json";
 
                 var configurationPath = GetConfigurationFile(projectName, configurationName);
 
-                if (System.IO.File.Exists(configurationPath))
+                if (System.IO.File.Exists(configurationPath) == false)
+                    throw new InvalidOperationException("There is no configuration file: " + configurationName);
+
+                var cfg = JsonConvert.DeserializeObject<Jar>(System.IO.File.ReadAllText(configurationPath));
+
+                var box = Box.Box.Mistranslate(cfg);
+
+                var referenceForDelete = box.References.FirstOrDefault(x => x.ContainsValue(referenceName));
+
+                if (referenceForDelete != null)
                 {
+                    box.References.Remove(referenceForDelete);
+
+                    var jar = JsonConvert.SerializeObject(Box.Box.Mistranslate(box), Formatting.Indented);
+
+                    System.IO.File.WriteAllText(configurationPath, jar);
+
                     var nameClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "name");
                     var username = nameClaim != null ? nameClaim.Value : "no name claim";
                     var emailClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "email");
                     var email = emailClaim != null ? emailClaim.Value : "no email claim";
-                    var message = "Deleted configuration " + configurationName + " from " + projectName;
+                    var message = "Added new application configuration: " + cfg.Name + " in " + projectName;
 
                     var git = new Git(projectPath);
-                    git.Remove(new List<string>() { configurationPath });
                     git.Stage(new List<string>() { configurationPath });
                     git.Commit(message, username, email);
                     git.Push();
@@ -188,6 +191,9 @@ namespace Elders.Pandora.UI.api
 
             if (configurationPath.EndsWith(".json", StringComparison.Ordinal) == false)
                 configurationPath += ".json";
+
+            if (System.IO.File.Exists(configurationPath) == false)
+                throw new InvalidOperationException("There is no configuration file: " + configurationName);
 
             return configurationPath;
         }

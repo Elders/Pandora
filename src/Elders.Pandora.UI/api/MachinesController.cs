@@ -3,7 +3,6 @@ using Elders.Pandora.UI.Common;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
@@ -16,58 +15,40 @@ namespace Elders.Pandora.UI.api
     {
         static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(MachinesController));
 
-        public Machine Get(string projectName, string applicationName, string clusterName, string machineName)
+        public Machine Get(string projectName, string configurationName, string clusterName, string machineName)
         {
-            if (string.IsNullOrWhiteSpace(applicationName) || string.IsNullOrWhiteSpace(projectName) || string.IsNullOrWhiteSpace(clusterName) || string.IsNullOrWhiteSpace(machineName))
+            if (string.IsNullOrWhiteSpace(configurationName) || string.IsNullOrWhiteSpace(projectName) || string.IsNullOrWhiteSpace(clusterName) || string.IsNullOrWhiteSpace(machineName))
                 return null;
 
             var projectPath = Path.Combine(Folders.Projects, projectName);
 
-            var applicationPath = Path.Combine(projectPath, applicationName);
+            var configurationPath = GetConfigurationFile(projectName, configurationName);
 
-            var files = Directory.GetFiles(applicationPath, "*.json");
-
-            if (files.Count() == 0)
-                throw new InvalidOperationException("There is no configuration file for application: " + applicationName);
-
-            if (files.Count() > 1)
-                throw new InvalidOperationException("There are multiple configuration files for application: " + applicationName);
-
-            var configPath = files.First();
-
-            var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(configPath));
+            var cfg = JsonConvert.DeserializeObject<Jar>(System.IO.File.ReadAllText(configurationPath));
 
             var box = Box.Box.Mistranslate(cfg);
 
             return box.Machines.SingleOrDefault(x => x.Name == machineName);
         }
 
-        public void Post(string projectName, string applicationName, [FromBody]string value)
+        public void Post(string projectName, string configurationName, string machineName, [FromBody]string value)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(applicationName) || string.IsNullOrWhiteSpace(projectName))
+                if (string.IsNullOrWhiteSpace(configurationName) || string.IsNullOrWhiteSpace(projectName))
                     return;
 
                 var projectPath = Path.Combine(Folders.Projects, projectName);
 
-                var applicationPath = Path.Combine(projectPath, applicationName);
+                var configurationPath = GetConfigurationFile(projectName, configurationName);
 
-                var files = Directory.GetFiles(applicationPath, "*.json");
-
-                if (files.Count() == 0)
-                    throw new InvalidOperationException("There is no configuration file for application: " + applicationName);
-
-                if (files.Count() > 1)
-                    throw new InvalidOperationException("There are multiple configuration files for application: " + applicationName);
-
-                var configPath = files.First();
-
-                var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(configPath));
+                var cfg = JsonConvert.DeserializeObject<Jar>(System.IO.File.ReadAllText(configurationPath));
 
                 var box = Box.Box.Mistranslate(cfg);
 
-                var newMachine = JsonConvert.DeserializeObject<Machine>(value);
+                var newConfig = JsonConvert.DeserializeObject<Dictionary<string, string>>(value);
+
+                var newMachine = new Machine(machineName, newConfig);
 
                 var machines = box.Machines.ToList();
 
@@ -79,16 +60,16 @@ namespace Elders.Pandora.UI.api
 
                     var jar = JsonConvert.SerializeObject(Box.Box.Mistranslate(box), Formatting.Indented);
 
-                    File.WriteAllText(configPath, jar);
+                    System.IO.File.WriteAllText(configurationPath, jar);
 
                     var nameClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "name");
                     var username = nameClaim != null ? nameClaim.Value : "no name claim";
                     var emailClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "email");
                     var email = emailClaim != null ? emailClaim.Value : "no email claim";
-                    var message = "Added new machine " + newMachine.Name + " in " + applicationName + " in " + projectName;
+                    var message = "Added new machine " + newMachine.Name + " in " + configurationName + " in " + projectName;
 
                     var git = new Git(projectPath);
-                    git.Stage(new List<string>() { configPath });
+                    git.Stage(new List<string>() { configurationPath });
                     git.Commit(message, username, email);
                     git.Push();
                 }
@@ -100,32 +81,24 @@ namespace Elders.Pandora.UI.api
             }
         }
 
-        public void Put(string projectName, string applicationName, [FromBody]string value)
+        public void Put(string projectName, string configurationName, string machineName, [FromBody]string value)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(applicationName) || string.IsNullOrWhiteSpace(projectName))
+                if (string.IsNullOrWhiteSpace(configurationName) || string.IsNullOrWhiteSpace(projectName))
                     return;
 
                 var projectPath = Path.Combine(Folders.Projects, projectName);
 
-                var applicationPath = Path.Combine(projectPath, applicationName);
+                var configurationPath = GetConfigurationFile(projectName, configurationName);
 
-                var files = Directory.GetFiles(applicationPath, "*.json");
-
-                if (files.Count() == 0)
-                    throw new InvalidOperationException("There is no configuration file for application: " + applicationName);
-
-                if (files.Count() > 1)
-                    throw new InvalidOperationException("There are multiple configuration files for application: " + applicationName);
-
-                var configPath = files.First();
-
-                var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(configPath));
+                var cfg = JsonConvert.DeserializeObject<Jar>(System.IO.File.ReadAllText(configurationPath));
 
                 var box = Box.Box.Mistranslate(cfg);
 
-                var newMachine = JsonConvert.DeserializeObject<Machine>(value);
+                var newConfig = JsonConvert.DeserializeObject<Dictionary<string, string>>(value);
+
+                var newMachine = new Machine(machineName, newConfig);
 
                 var machines = box.Machines.ToList();
 
@@ -141,16 +114,16 @@ namespace Elders.Pandora.UI.api
 
                     var jar = JsonConvert.SerializeObject(Box.Box.Mistranslate(box), Formatting.Indented);
 
-                    File.WriteAllText(configPath, jar);
+                    System.IO.File.WriteAllText(configurationPath, jar);
 
                     var nameClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "name");
                     var username = nameClaim != null ? nameClaim.Value : "no name claim";
                     var emailClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "email");
                     var email = emailClaim != null ? emailClaim.Value : "no email claim";
-                    var message = "Updated machine " + newMachine.Name + " in " + applicationName + " in " + projectName;
+                    var message = "Updated machine " + newMachine.Name + " in " + configurationName + " in " + projectName;
 
                     var git = new Git(projectPath);
-                    git.Stage(new List<string>() { configPath });
+                    git.Stage(new List<string>() { configurationPath });
                     git.Commit(message, username, email);
                     git.Push();
                 }
@@ -162,28 +135,18 @@ namespace Elders.Pandora.UI.api
             }
         }
 
-        public void Delete(string projectName, string applicationName, string machineName)
+        public void Delete(string projectName, string configurationName, string machineName)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(applicationName) || string.IsNullOrWhiteSpace(projectName) || string.IsNullOrWhiteSpace(machineName))
+                if (string.IsNullOrWhiteSpace(configurationName) || string.IsNullOrWhiteSpace(projectName) || string.IsNullOrWhiteSpace(machineName))
                     return;
 
                 var projectPath = Path.Combine(Folders.Projects, projectName);
 
-                var applicationPath = Path.Combine(projectPath, applicationName);
+                var configurationPath = GetConfigurationFile(projectName, configurationName);
 
-                var files = Directory.GetFiles(applicationPath, "*.json");
-
-                if (files.Count() == 0)
-                    throw new InvalidOperationException("There is no configuration file for application: " + applicationName);
-
-                if (files.Count() > 1)
-                    throw new InvalidOperationException("There are multiple configuration files for application: " + applicationName);
-
-                var configPath = files.First();
-
-                var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(configPath));
+                var cfg = JsonConvert.DeserializeObject<Jar>(System.IO.File.ReadAllText(configurationPath));
 
                 var box = Box.Box.Mistranslate(cfg);
 
@@ -199,16 +162,16 @@ namespace Elders.Pandora.UI.api
 
                     var jar = JsonConvert.SerializeObject(Box.Box.Mistranslate(box));
 
-                    File.WriteAllText(configPath, jar);
+                    System.IO.File.WriteAllText(configurationPath, jar);
 
                     var nameClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "name");
                     var username = nameClaim != null ? nameClaim.Value : "no name claim";
                     var emailClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "email");
                     var email = emailClaim != null ? emailClaim.Value : "no email claim";
-                    var message = "Removed machine " + existing.Name + " from " + applicationName + " in " + projectName;
+                    var message = "Removed machine " + existing.Name + " from " + configurationName + " in " + projectName;
 
                     var git = new Git(projectPath);
-                    git.Stage(new List<string>() { configPath });
+                    git.Stage(new List<string>() { configurationPath });
                     git.Commit(message, username, email);
                     git.Push();
                 }
@@ -218,6 +181,22 @@ namespace Elders.Pandora.UI.api
                 log.Fatal(ex);
                 throw;
             }
+        }
+
+        private string GetConfigurationFile(string projectName, string configurationName)
+        {
+            if (string.IsNullOrWhiteSpace(configurationName) || string.IsNullOrWhiteSpace(projectName))
+                return null;
+
+            var configurationPath = Path.Combine(Folders.Projects, projectName, "src", projectName + ".Configuration", "public", configurationName);
+
+            if (configurationPath.EndsWith(".json", StringComparison.Ordinal) == false)
+                configurationPath += ".json";
+
+            if (System.IO.File.Exists(configurationPath) == false)
+                throw new InvalidOperationException("There is no configuration file: " + configurationName);
+
+            return configurationPath;
         }
     }
 }

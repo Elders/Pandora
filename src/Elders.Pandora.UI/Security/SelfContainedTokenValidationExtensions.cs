@@ -2,7 +2,6 @@
 using Owin;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Globalization;
 using System.IdentityModel.Tokens;
 using System.IO;
@@ -137,11 +136,16 @@ namespace Elders.Pandora.UI.Security
 
             if (emailClaim != null && !string.IsNullOrWhiteSpace(emailClaim.Value))
             {
-                var adminUsers = ConfigurationManager.AppSettings["SuperAdminUsers"].Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                var adminUsers = ApplicationConfiguration.Get("super_admin_users").Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
                 if (adminUsers.Contains(emailClaim.Value))
                 {
-                    principal.Identities.First().AddClaim(new Claim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "superAdmin"));
+                    var identity = principal.Identities.First();
+
+                    if (identity.HasClaim(x => x.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role" && x.Value == "superAdmin"))
+                        return Task.FromResult<ClaimsPrincipal>(principal);
+
+                    identity.AddClaim(new Claim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "superAdmin"));
                 }
             }
 

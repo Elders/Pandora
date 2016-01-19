@@ -1,13 +1,8 @@
-﻿using Elders.Pandora.UI.Security;
-using Elders.Pandora.UI.ViewModels;
+﻿using Elders.Pandora.UI.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Security.Claims;
 using System.Web.Mvc;
-using Thinktecture.IdentityModel.Mvc;
 
 namespace Elders.Pandora.UI.Controllers
 {
@@ -37,7 +32,7 @@ namespace Elders.Pandora.UI.Controllers
             if (config.ContainsKey("controller"))
                 return RedirectToAction("Index");
 
-            var url = hostName + "/api/Clusters?projectName=" + projectName + "&applicationName=" + applicationName;
+            var url = hostName + "/api/Clusters?projectName=" + projectName + "&configurationName=" + applicationName + "&clusterName=" + clusterName;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.PUT);
@@ -45,7 +40,7 @@ namespace Elders.Pandora.UI.Controllers
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + User.Token());
 
-            request.AddBody(JsonConvert.SerializeObject(new Elders.Pandora.Box.Cluster(clusterName, config)));
+            request.AddBody(JsonConvert.SerializeObject(config));
 
             var response = client.Execute(request);
 
@@ -61,7 +56,7 @@ namespace Elders.Pandora.UI.Controllers
         public ActionResult AddMachine(string projectName, string applicationName, string clusterName, string machineName)
         {
             var hostName = ApplicationConfiguration.Get("host_name");
-            var url = hostName + "/api/Machines?projectName=" + projectName + "&applicationName=" + applicationName;
+            var url = hostName + "/api/Machines?projectName=" + projectName + "&configurationName=" + applicationName + "&machineName=" + machineName;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.POST);
@@ -71,7 +66,7 @@ namespace Elders.Pandora.UI.Controllers
 
             var jar = GetConfig(projectName, applicationName);
 
-            request.AddBody(JsonConvert.SerializeObject(new Elders.Pandora.Box.Machine(machineName, new Dictionary<string, string>())));
+            request.AddBody(JsonConvert.SerializeObject(new Dictionary<string, string>()));
 
             var response = client.Execute(request);
 
@@ -107,7 +102,7 @@ namespace Elders.Pandora.UI.Controllers
             if (config.ContainsKey("controller"))
                 return RedirectToAction("Index");
 
-            var url = hostName + "/api/Machines?projectName=" + projectName + "&applicationName=" + applicationName;
+            var url = hostName + "/api/Machines?projectName=" + projectName + "&configurationName=" + applicationName + "&machineName=" + machineName;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.PUT);
@@ -115,7 +110,7 @@ namespace Elders.Pandora.UI.Controllers
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + User.Token());
 
-            request.AddBody(JsonConvert.SerializeObject(new Elders.Pandora.Box.Machine(machineName, config)));
+            request.AddBody(JsonConvert.SerializeObject(config));
 
             var response = client.Execute(request);
 
@@ -130,7 +125,7 @@ namespace Elders.Pandora.UI.Controllers
         private Elders.Pandora.Box.Jar GetConfig(string projectName, string applicationName)
         {
             var hostName = ApplicationConfiguration.Get("host_name");
-            var url = hostName + "/api/Jars?projectName=" + projectName + "&applicationName=" + applicationName;
+            var url = hostName + "/api/Jars?projectName=" + projectName + "&configurationName=" + applicationName;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.GET);

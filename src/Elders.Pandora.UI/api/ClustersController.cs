@@ -15,26 +15,16 @@ namespace Elders.Pandora.UI.api
     {
         static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(ClustersController));
 
-        public List<Cluster> Get(string projectName, string applicationName)
+        public List<Cluster> Get(string projectName, string configurationName)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(applicationName) || string.IsNullOrWhiteSpace(projectName))
+                if (string.IsNullOrWhiteSpace(configurationName) || string.IsNullOrWhiteSpace(projectName))
                     return new List<Cluster>();
 
-                var applicationPath = Path.Combine(Folders.Projects, projectName, applicationName);
+                var configurationPath = GetConfigurationFile(projectName, configurationName);
 
-                var files = Directory.GetFiles(applicationPath, "*.json");
-
-                if (files.Count() == 0)
-                    throw new InvalidOperationException("There is no configuration file for application: " + applicationName);
-
-                if (files.Count() > 1)
-                    throw new InvalidOperationException("There are multiple configuration files for application: " + applicationName);
-
-                var configPath = files.First();
-
-                var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(configPath));
+                var cfg = JsonConvert.DeserializeObject<Jar>(System.IO.File.ReadAllText(configurationPath));
 
                 var box = Box.Box.Mistranslate(cfg);
 
@@ -44,30 +34,20 @@ namespace Elders.Pandora.UI.api
             {
                 log.Fatal(ex);
 
-                throw ex;
+                throw;
             }
         }
 
-        public Cluster Get(string projectName, string applicationName, string clusterName)
+        public Cluster Get(string projectName, string configurationName, string clusterName)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(applicationName) || string.IsNullOrWhiteSpace(projectName) || string.IsNullOrWhiteSpace(clusterName))
+                if (string.IsNullOrWhiteSpace(configurationName) || string.IsNullOrWhiteSpace(projectName) || string.IsNullOrWhiteSpace(clusterName))
                     return null;
 
-                var applicationPath = Path.Combine(Folders.Projects, projectName, applicationName);
+                var configurationPath = GetConfigurationFile(projectName, configurationName);
 
-                var files = Directory.GetFiles(applicationPath, "*.json");
-
-                if (files.Count() == 0)
-                    throw new InvalidOperationException("There is no configuration file for application: " + applicationName);
-
-                if (files.Count() > 1)
-                    throw new InvalidOperationException("There are multiple configuration files for application: " + applicationName);
-
-                var configPath = files.First();
-
-                var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(configPath));
+                var cfg = JsonConvert.DeserializeObject<Jar>(System.IO.File.ReadAllText(configurationPath));
 
                 var box = Box.Box.Mistranslate(cfg);
 
@@ -82,36 +62,28 @@ namespace Elders.Pandora.UI.api
             {
                 log.Fatal(ex);
 
-                throw ex;
+                throw;
             }
         }
 
-        public void Post(string projectName, string applicationName, [FromBody]string value)
+        public void Post(string projectName, string configurationName, string clusterName, [FromBody]string value)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(applicationName) || string.IsNullOrWhiteSpace(projectName))
+                if (string.IsNullOrWhiteSpace(configurationName) || string.IsNullOrWhiteSpace(projectName))
                     return;
 
                 var projectPath = Path.Combine(Folders.Projects, projectName);
 
-                var applicationPath = Path.Combine(projectPath, applicationName);
+                var configurationPath = GetConfigurationFile(projectName, configurationName);
 
-                var files = Directory.GetFiles(applicationPath, "*.json");
-
-                if (files.Count() == 0)
-                    throw new InvalidOperationException("There is no configuration file for application: " + applicationName);
-
-                if (files.Count() > 1)
-                    throw new InvalidOperationException("There are multiple configuration files for application: " + applicationName);
-
-                var configPath = files.First();
-
-                var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(configPath));
+                var cfg = JsonConvert.DeserializeObject<Jar>(System.IO.File.ReadAllText(configurationPath));
 
                 var box = Box.Box.Mistranslate(cfg);
 
-                var newCluster = JsonConvert.DeserializeObject<Cluster>(value);
+                var newConfig = JsonConvert.DeserializeObject<Dictionary<string, string>>(value);
+
+                var newCluster = new Cluster(clusterName, newConfig);
 
                 var clusters = box.Clusters.ToList();
 
@@ -123,16 +95,16 @@ namespace Elders.Pandora.UI.api
 
                     var jar = JsonConvert.SerializeObject(Box.Box.Mistranslate(box));
 
-                    File.WriteAllText(configPath, jar);
+                    System.IO.File.WriteAllText(configurationPath, jar);
 
                     var nameClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "name");
                     var username = nameClaim != null ? nameClaim.Value : "no name claim";
                     var emailClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "email");
                     var email = emailClaim != null ? emailClaim.Value : "no email claim";
-                    var message = "Added cluster " + newCluster.Name + " in " + applicationName + " in project " + projectName;
+                    var message = "Added cluster " + newCluster.Name + " in " + configurationName + " in project " + projectName;
 
                     var git = new Git(projectPath);
-                    git.Stage(new List<string>() { configPath });
+                    git.Stage(new List<string>() { configurationPath });
                     git.Commit(message, username, email);
                     git.Push();
                 }
@@ -141,36 +113,28 @@ namespace Elders.Pandora.UI.api
             {
                 log.Fatal(ex);
 
-                throw ex;
+                throw;
             }
         }
 
-        public void Put(string projectName, string applicationName, [FromBody]string value)
+        public void Put(string projectName, string configurationName, string clusterName, [FromBody]string value)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(applicationName) || string.IsNullOrWhiteSpace(projectName))
+                if (string.IsNullOrWhiteSpace(configurationName) || string.IsNullOrWhiteSpace(projectName))
                     return;
 
                 var projectPath = Path.Combine(Folders.Projects, projectName);
 
-                var applicationPath = Path.Combine(projectPath, applicationName);
+                var configurationPath = GetConfigurationFile(projectName, configurationName);
 
-                var files = Directory.GetFiles(applicationPath, "*.json");
-
-                if (files.Count() == 0)
-                    throw new InvalidOperationException("There is no configuration file for application: " + applicationName);
-
-                if (files.Count() > 1)
-                    throw new InvalidOperationException("There are multiple configuration files for application: " + applicationName);
-
-                var configPath = files.First();
-
-                var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(configPath));
+                var cfg = JsonConvert.DeserializeObject<Jar>(System.IO.File.ReadAllText(configurationPath));
 
                 var box = Box.Box.Mistranslate(cfg);
 
-                var newCluster = JsonConvert.DeserializeObject<Cluster>(value);
+                var newConfigs = JsonConvert.DeserializeObject<Dictionary<string, string>>(value);
+
+                var newCluster = new Cluster(clusterName, newConfigs);
 
                 var clusters = box.Clusters.ToList();
 
@@ -186,16 +150,16 @@ namespace Elders.Pandora.UI.api
 
                     var jar = JsonConvert.SerializeObject(Box.Box.Mistranslate(box), Formatting.Indented);
 
-                    File.WriteAllText(configPath, jar);
+                    System.IO.File.WriteAllText(configurationPath, jar);
 
                     var nameClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "name");
                     var username = nameClaim != null ? nameClaim.Value : "no name claim";
                     var emailClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "email");
                     var email = emailClaim != null ? emailClaim.Value : "no email claim";
-                    var message = "Updated cluster " + newCluster.Name + " in " + applicationName + " in project " + projectName;
+                    var message = "Updated cluster " + newCluster.Name + " in " + configurationName + " in project " + projectName;
 
                     var git = new Git(projectPath);
-                    git.Stage(new List<string>() { configPath });
+                    git.Stage(new List<string>() { configurationPath });
                     git.Commit(message, username, email);
                     git.Push();
                 }
@@ -204,32 +168,22 @@ namespace Elders.Pandora.UI.api
             {
                 log.Fatal(ex);
 
-                throw ex;
+                throw;
             }
         }
 
-        public void Delete(string projectName, string applicationName, string clusterName)
+        public void Delete(string projectName, string configurationName, string clusterName)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(applicationName) || string.IsNullOrWhiteSpace(projectName) || string.IsNullOrWhiteSpace(clusterName))
+                if (string.IsNullOrWhiteSpace(configurationName) || string.IsNullOrWhiteSpace(projectName) || string.IsNullOrWhiteSpace(clusterName))
                     return;
 
                 var projectPath = Path.Combine(Folders.Projects, projectName);
 
-                var applicationPath = Path.Combine(projectPath, applicationName);
+                var configurationPath = GetConfigurationFile(projectName, configurationName);
 
-                var files = Directory.GetFiles(applicationPath, "*.json");
-
-                if (files.Count() == 0)
-                    throw new InvalidOperationException("There is no configuration file for application: " + applicationName);
-
-                if (files.Count() > 1)
-                    throw new InvalidOperationException("There are multiple configuration files for application: " + applicationName);
-
-                var configPath = files.First();
-
-                var cfg = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(configPath));
+                var cfg = JsonConvert.DeserializeObject<Jar>(System.IO.File.ReadAllText(configurationPath));
 
                 var box = Box.Box.Mistranslate(cfg);
 
@@ -245,16 +199,16 @@ namespace Elders.Pandora.UI.api
 
                     var jar = JsonConvert.SerializeObject(Box.Box.Mistranslate(box), Formatting.Indented);
 
-                    File.WriteAllText(configPath, jar);
+                    System.IO.File.WriteAllText(configurationPath, jar);
 
                     var nameClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "name");
                     var username = nameClaim != null ? nameClaim.Value : "no name claim";
                     var emailClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "email");
                     var email = emailClaim != null ? emailClaim.Value : "no email claim";
-                    var message = "Removed cluster " + clusterName + " from " + applicationName + " in " + projectName;
+                    var message = "Removed cluster " + clusterName + " from " + configurationName + " in " + projectName;
 
                     var git = new Git(projectPath);
-                    git.Stage(new List<string>() { configPath });
+                    git.Stage(new List<string>() { configurationPath });
                     git.Commit(message, username, email);
                     git.Push();
                 }
@@ -263,8 +217,24 @@ namespace Elders.Pandora.UI.api
             {
                 log.Fatal(ex);
 
-                throw ex;
+                throw;
             }
+        }
+
+        private string GetConfigurationFile(string projectName, string configurationName)
+        {
+            if (string.IsNullOrWhiteSpace(configurationName) || string.IsNullOrWhiteSpace(projectName))
+                return null;
+
+            var configurationPath = Path.Combine(Folders.Projects, projectName, "src", projectName + ".Configuration", "public", configurationName);
+
+            if (configurationPath.EndsWith(".json", StringComparison.Ordinal) == false)
+                configurationPath += ".json";
+
+            if (System.IO.File.Exists(configurationPath) == false)
+                throw new InvalidOperationException("There is no configuration file: " + configurationName);
+
+            return configurationPath;
         }
     }
 }

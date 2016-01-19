@@ -1,17 +1,10 @@
 ﻿using Elders.Pandora.Box;
-using Elders.Pandora.UI.Security;
 using Elders.Pandora.UI.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Security.Claims;
 using System.Web.Mvc;
-using Thinktecture.IdentityModel.Mvc;
-using System.Collections;
 using System.Web;
-using System.Net.Mime;
 
 namespace Elders.Pandora.UI.Controllers
 {
@@ -33,9 +26,9 @@ namespace Elders.Pandora.UI.Controllers
                 throw response.ErrorException;
             }
 
-            var projects = JsonConvert.DeserializeObject<Dictionary<string, List<Jar>>>(response.Content);
+            var projects = JsonConvert.DeserializeObject<List<string>>(response.Content);
 
-            return View(projects.Keys.ToList());
+            return View(projects);
         }
 
         [HttpPost]
@@ -92,7 +85,7 @@ namespace Elders.Pandora.UI.Controllers
         public ActionResult Applications(string projectName, string applicationName, string fileName, string config)
         {
             var hostName = ApplicationConfiguration.Get("host_name");
-            var url = hostName + "/api/Jars?projectName=" + projectName + "&applicationName=" + applicationName + "&fileName=" + fileName;
+            var url = hostName + "/api/Jars?projectName=" + projectName + "&configurationName=" + applicationName + "&fileName=" + fileName;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.POST);
@@ -157,7 +150,7 @@ namespace Elders.Pandora.UI.Controllers
         {
             var hostName = ApplicationConfiguration.Get("host_name");
 
-            var url = hostName + "/api/Jars?projectName=" + projectName + "&applicationName=" + applicationName;
+            var url = hostName + "/api/Jars?projectName=" + projectName + "&configurationName=" + applicationName;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.GET);
@@ -174,7 +167,7 @@ namespace Elders.Pandora.UI.Controllers
         {
             var hostName = ApplicationConfiguration.Get("host_name");
 
-            var url = hostName + "/api/Jars?projectName=" + projectName + "&applicationName=" + applicationName;
+            var url = hostName + "/api/Jars?projectName=" + projectName + "&configurationName=" + applicationName;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.GET);

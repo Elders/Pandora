@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Elders.Pandora.Box\Elders.Pandora.Box.csproj" />
     <ProjectReference Include="..\Elders.Pandora\Elders.Pandora.csproj" />
+    <ProjectReference Include="..\Thinktecture.IdentityModel.Oidc\Thinktecture.IdentityModel.Oidc.csproj" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\DNX\Microsoft.DNX.targets" Condition="'$(VSToolsPath)' != ''" />
 </Project>

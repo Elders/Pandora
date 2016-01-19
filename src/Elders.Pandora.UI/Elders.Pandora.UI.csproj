@@ -1995,7 +1995,6 @@
     <Content Include="assets\vendor\style-switcher\less\shared.less" />
     <Content Include="assets\vendor\style-switcher\less\skin.less" />
     <Content Include="assets\vendor\style-switcher\less\variables.less" />
-    <None Include="Properties\PublishProfiles\Production.pubxml" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
@@ -2004,6 +2003,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="api\ReferencesController.cs" />
     <Compile Include="api\ClustersController.cs" />
     <Compile Include="api\DefaultsController.cs" />
     <Compile Include="api\JarsController.cs" />

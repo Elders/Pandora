@@ -13,7 +13,7 @@ namespace Elders.Pandora.UI
     {
         public void Configuration(IAppBuilder app)
         {
-            ApplicationConfiguration.SetContext("Elders.Pandora");
+            ApplicationConfiguration.SetContext("Elders.Pandora.Api");
             JwtSecurityTokenHandler.InboundClaimTypeMap = ClaimMappings.None;
             app.UseIdentitiyServerSelfContainedToken(new SelfContainedTokenValidationOptions());
             app.UseWebApi(WebApiBuilder.Build());

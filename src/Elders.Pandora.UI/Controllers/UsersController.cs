@@ -4,9 +4,7 @@ using Elders.Pandora.UI.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Security.Claims;
 using System.Web.Mvc;
 using Thinktecture.IdentityModel.Mvc;
 
@@ -47,7 +45,16 @@ namespace Elders.Pandora.UI.Controllers
 
             var projects = GetProjects();
 
-            return View(new Tuple<User, Dictionary<string, List<Jar>>>(user, projects));
+            var allJars = new Dictionary<string, List<Jar>>();
+
+            foreach (var project in projects)
+            {
+                var jars = GetJars(project);
+
+                allJars.Add(project, jars);
+            }
+
+            return View(new Tuple<User, Dictionary<string, List<Jar>>>(user, allJars));
         }
 
         [HttpPost]
@@ -104,7 +111,7 @@ namespace Elders.Pandora.UI.Controllers
             return JsonConvert.DeserializeObject<User>(result.Content);
         }
 
-        private Dictionary<string, List<Jar>> GetProjects()
+        private List<string> GetProjects()
         {
             var hostName = ApplicationConfiguration.Get("host_name");
             var url = hostName + "/api/Projects";
@@ -121,7 +128,27 @@ namespace Elders.Pandora.UI.Controllers
                 throw response.ErrorException;
             }
 
-            return JsonConvert.DeserializeObject<Dictionary<string, List<Jar>>>(response.Content);
+            return JsonConvert.DeserializeObject<List<string>>(response.Content);
+        }
+
+        private List<Jar> GetJars(string projectName)
+        {
+            var hostName = ApplicationConfiguration.Get("host_name");
+            var url = hostName + "/api/Jars?projectName=" + projectName;
+
+            var client = new RestSharp.RestClient(url);
+            var request = new RestSharp.RestRequest(RestSharp.Method.GET);
+            request.RequestFormat = RestSharp.DataFormat.Json;
+            request.AddHeader("Content-Type", "application/json");
+            request.AddHeader("Authorization", "Bearer " + User.Token());
+            var response = client.Execute(request);
+
+            if (!string.IsNullOrWhiteSpace(response.ErrorMessage))
+            {
+                throw response.ErrorException;
+            }
+
+            return JsonConvert.DeserializeObject<List<Jar>>(response.Content);
         }
 
         private void GetUserInfo(User user)

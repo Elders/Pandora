@@ -1,10 +1,6 @@
-﻿using Elders.Pandora.Box;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Security.Claims;
 using System.Web.Http;
 using Elders.Pandora.UI.Common;
 
@@ -15,43 +11,15 @@ namespace Elders.Pandora.UI.api
     {
         static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(ProjectsController));
 
-        public Dictionary<string, List<Jar>> Get()
+        [HttpGet]
+        public IEnumerable<string> Get()
         {
             var projects = Directory.GetDirectories(Folders.Projects);
 
-            var configurations = new Dictionary<string, List<Jar>>();
-
             foreach (var project in projects)
             {
-                if (project != null)
-                {
-                    var configs = Directory.GetFiles(project, "*.json", SearchOption.AllDirectories);
-
-                    var jars = new List<Jar>();
-
-                    foreach (var jar in configs)
-                    {
-                        Jar jarObject = null;
-
-                        try
-                        {
-                            jarObject = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(jar));
-                        }
-                        catch (Exception ex)
-                        {
-                            log.Error(ex);
-
-                            continue;
-                        }
-
-                        jars.Add(jarObject);
-                    }
-
-                    configurations.Add(project.Replace(Folders.Projects + "\\", ""), jars);
-                }
+                yield return new DirectoryInfo(project).Name;
             }
-
-            return configurations;
         }
 
         public void Post(string projectName, string gitUrl)
@@ -67,20 +35,20 @@ namespace Elders.Pandora.UI.api
                 {
                     Git.Clone(gitUrl, workingDir);
 
-                    string configPath = Path.Combine(workingDir, projectName + ".config");
+                    //string configPath = Path.Combine(workingDir, projectName + ".config");
 
-                    File.WriteAllText(configPath, gitUrl);
+                    //System.IO.File.WriteAllText(configPath, gitUrl);
 
-                    var nameClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "name");
-                    var username = nameClaim != null ? nameClaim.Value : "no name claim";
-                    var emailClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "email");
-                    var email = emailClaim != null ? emailClaim.Value : "no email claim";
-                    var message = "Added project configuration file.";
+                    //var nameClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "name");
+                    //var username = nameClaim != null ? nameClaim.Value : "no name claim";
+                    //var emailClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "email");
+                    //var email = emailClaim != null ? emailClaim.Value : "no email claim";
+                    //var message = "Added project configuration file.";
 
-                    var git = new Git(workingDir);
-                    git.Stage(new List<string>() { configPath });
-                    git.Commit(message, username, email);
-                    git.Push();
+                    //var git = new Git(workingDir);
+                    //git.Stage(new List<string>() { configPath });
+                    //git.Commit(message, username, email);
+                    //git.Push();
                 }
                 catch (Exception ex)
                 {
@@ -102,7 +70,6 @@ namespace Elders.Pandora.UI.api
             }
         }
 
-        [HttpPost]
         public void Update(string projectName)
         {
             try

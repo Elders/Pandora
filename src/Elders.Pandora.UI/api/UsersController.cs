@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Web.Http;
 
 namespace Elders.Pandora.UI.api
@@ -14,6 +13,7 @@ namespace Elders.Pandora.UI.api
     {
         static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(UsersController));
 
+        [HttpGet]
         public IEnumerable<User> Get()
         {
             var users = Directory.GetFiles(Folders.Users, "*.json", SearchOption.AllDirectories);
@@ -24,7 +24,7 @@ namespace Elders.Pandora.UI.api
 
                 try
                 {
-                    userObject = JsonConvert.DeserializeObject<User>(File.ReadAllText(user));
+                    userObject = JsonConvert.DeserializeObject<User>(System.IO.File.ReadAllText(user));
                 }
                 catch (Exception ex)
                 {
@@ -42,9 +42,9 @@ namespace Elders.Pandora.UI.api
         {
             var userFilePath = Path.Combine(Folders.Users, id.ToString(), id.ToString() + ".json");
 
-            if (File.Exists(userFilePath))
+            if (System.IO.File.Exists(userFilePath))
             {
-                var user = JsonConvert.DeserializeObject<User>(File.ReadAllText(userFilePath));
+                var user = JsonConvert.DeserializeObject<User>(System.IO.File.ReadAllText(userFilePath));
 
                 return user;
             }
@@ -60,13 +60,13 @@ namespace Elders.Pandora.UI.api
 
                 var userFilePath = Path.Combine(workingDir, id.ToString() + ".json");
 
-                if (!File.Exists(userFilePath))
+                if (!System.IO.File.Exists(userFilePath))
                 {
                     Directory.CreateDirectory(Path.Combine(workingDir));
 
                     var serializedUser = JsonConvert.SerializeObject(user, Formatting.Indented);
 
-                    File.WriteAllText(userFilePath, serializedUser);
+                    System.IO.File.WriteAllText(userFilePath, serializedUser);
                 }
             }
             catch (Exception ex)
@@ -84,11 +84,11 @@ namespace Elders.Pandora.UI.api
 
                 var userFilePath = Path.Combine(workingDir, id.ToString() + ".json");
 
-                if (File.Exists(userFilePath))
+                if (System.IO.File.Exists(userFilePath))
                 {
                     var serializedUser = JsonConvert.SerializeObject(user, Formatting.Indented);
 
-                    File.WriteAllText(userFilePath, serializedUser);
+                    System.IO.File.WriteAllText(userFilePath, serializedUser);
                 }
             }
             catch (Exception ex)

@@ -1,7 +1,6 @@
-﻿using LibGit2Sharp;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
+using LibGit2Sharp;
 
 namespace Elders.Pandora.UI
 {
@@ -16,9 +15,9 @@ namespace Elders.Pandora.UI
         public Git(string workingDir)
         {
             this.workingDir = workingDir;
-            this.email = ConfigurationManager.AppSettings["GitEmail"];
-            this.username = ConfigurationManager.AppSettings["GitUsername"];
-            this.password = ConfigurationManager.AppSettings["GitPassword"];
+            this.email = ApplicationConfiguration.Get("pandora_git_email");
+            this.username = ApplicationConfiguration.Get("pandora_git_username");
+            this.password = ApplicationConfiguration.Get("pandora_git_password");
             this.repo = new Repository(workingDir);
         }
 
@@ -29,8 +28,8 @@ namespace Elders.Pandora.UI
             cloneOptions.Checkout = true;
             cloneOptions.CredentialsProvider = new LibGit2Sharp.Handlers.CredentialsHandler((a, b, c) => new UsernamePasswordCredentials()
             {
-                Username = ConfigurationManager.AppSettings["GitUsername"],
-                Password = ConfigurationManager.AppSettings["GitPassword"]
+                Username = ApplicationConfiguration.Get("pandora_git_username"),
+                Password = ApplicationConfiguration.Get("pandora_git_password")
             });
             Repository.Clone(sourceUrl, workingDir, cloneOptions);
         }
@@ -67,6 +66,8 @@ namespace Elders.Pandora.UI
         public void Pull()
         {
             var pullOptions = new PullOptions();
+
+            pullOptions.FetchOptions = new FetchOptions();
 
             pullOptions.FetchOptions.CredentialsProvider = new LibGit2Sharp.Handlers.CredentialsHandler(
                 (_url, _user, _cred) => new UsernamePasswordCredentials()
