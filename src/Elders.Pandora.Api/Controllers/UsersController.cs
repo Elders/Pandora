@@ -8,7 +8,7 @@ using Elders.Pandora.Api.ViewModels;
 
 namespace Elders.Pandora.Api.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     public class UsersController : Controller
     {

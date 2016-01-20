@@ -16,7 +16,7 @@ namespace Elders.Pandora.UI
             ApplicationConfiguration.SetContext("Elders.Pandora.Api");
             JwtSecurityTokenHandler.InboundClaimTypeMap = ClaimMappings.None;
             app.UseIdentitiyServerSelfContainedToken(new SelfContainedTokenValidationOptions());
-            app.UseWebApi(WebApiBuilder.Build());
+            //app.UseWebApi(WebApiBuilder.Build());
         }
     }
 }

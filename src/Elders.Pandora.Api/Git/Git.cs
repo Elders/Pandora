@@ -15,9 +15,9 @@ namespace Elders.Pandora.Api
         public Git(string workingDir)
         {
             this.workingDir = workingDir;
-            this.email = ApplicationConfiguration.Get("GitEmail");
-            this.username = ApplicationConfiguration.Get("GitUsername");
-            this.password = ApplicationConfiguration.Get("GitPassword");
+            this.email = ApplicationConfiguration.Get("pandora_git_email");
+            this.username = ApplicationConfiguration.Get("pandora_git_username");
+            this.password = ApplicationConfiguration.Get("pandora_git_password");
             this.repo = new Repository(workingDir);
         }
 
@@ -28,8 +28,8 @@ namespace Elders.Pandora.Api
             cloneOptions.Checkout = true;
             cloneOptions.CredentialsProvider = new LibGit2Sharp.Handlers.CredentialsHandler((a, b, c) => new UsernamePasswordCredentials()
             {
-                Username = ApplicationConfiguration.Get("GitUsername"),
-                Password = ApplicationConfiguration.Get("GitPassword")
+                Username = ApplicationConfiguration.Get("pandora_git_username"),
+                Password = ApplicationConfiguration.Get("pandora_git_password")
             });
             Repository.Clone(sourceUrl, workingDir, cloneOptions);
         }
@@ -66,6 +66,8 @@ namespace Elders.Pandora.Api
         public void Pull()
         {
             var pullOptions = new PullOptions();
+
+            pullOptions.FetchOptions = new FetchOptions();
 
             pullOptions.FetchOptions.CredentialsProvider = new LibGit2Sharp.Handlers.CredentialsHandler(
                 (_url, _user, _cred) => new UsernamePasswordCredentials()

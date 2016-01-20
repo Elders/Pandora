@@ -6,20 +6,20 @@
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\DNX\Microsoft.DNX.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>ce4b9a62-3a5e-4d5f-863c-c73df4d21f95</ProjectGuid>
+    <ProjectGuid>6b64603e-b588-45ee-bc4f-aa544994f9da</ProjectGuid>
     <RootNamespace>Elders.Pandora.Api</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">..\artifacts\obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">..\artifacts\bin\$(MSBuildProjectName)\</OutputPath>
   </PropertyGroup>
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
-    <DevelopmentServerPort>60603</DevelopmentServerPort>
-    <SSLPort>44300</SSLPort>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <ProduceOutputsOnBuild>True</ProduceOutputsOnBuild>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Elders.Pandora.Box\Elders.Pandora.Box.csproj" />
     <ProjectReference Include="..\Elders.Pandora\Elders.Pandora.csproj" />
-    <ProjectReference Include="..\Thinktecture.IdentityModel.Oidc\Thinktecture.IdentityModel.Oidc.csproj" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\DNX\Microsoft.DNX.targets" Condition="'$(VSToolsPath)' != ''" />
 </Project>

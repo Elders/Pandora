@@ -3,6 +3,8 @@ echo off
 cd /d "%~dp0"
 CALL build.cmd
 
+SET NUGET=%LocalAppData%\NuGet\NuGet.exe
+
 echo Downloading latest version of NuGet.exe...
 IF NOT EXIST %LocalAppData%\NuGet md %LocalAppData%\NuGet
 @powershell -NoProfile -ExecutionPolicy unrestricted -Command "$ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest 'https://www.nuget.org/nuget.exe' -OutFile '%NUGET%'"

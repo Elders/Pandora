@@ -1,10 +1,10 @@
 {
-    "projects": [
-        "wrap"
-    ],
-    "sdk": {
-      "version": "1.0.0-rc1-update1",
-        "runtime": "coreclr",
-        "architecture": "x64"
-    }
+  "sdk": {
+    "version": "1.0.0-rc1-final",
+    "runtime": "clr",
+    "architecture": "x86"
+  },
+  "projects": [
+    "wrap"
+  ]
 }

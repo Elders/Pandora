@@ -6,10 +6,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescriptionAttribute("Elders.Pandora")]
 [assembly: ComVisibleAttribute(false)]
 [assembly: AssemblyProductAttribute("Elders.Pandora.Configuration")]
-[assembly: AssemblyCopyrightAttribute("Copyright ©  2015")]
+[assembly: AssemblyCopyrightAttribute("Copyright ©  2016")]
 [assembly: AssemblyVersionAttribute("0.4.0.0")]
 [assembly: AssemblyFileVersionAttribute("0.4.0.0")]
-[assembly: AssemblyInformationalVersionAttribute("0.4.0-beta.1+1.Branch.release/0.4.0.Sha.d22381d1997a7a2509b882626b6ab6b176fa143b")]
+[assembly: AssemblyInformationalVersionAttribute("0.4.0-beta.1+5.Branch.release/0.4.0.Sha.c18f8d1ddbd7a4c9b6f83d7947a8d3a1b191faf4")]
 namespace System {
     internal static class AssemblyVersionInformation {
         internal const string Version = "0.4.0.0";

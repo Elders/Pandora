@@ -15,7 +15,7 @@ namespace Elders.Pandora.UI.Controllers
         [ResourceAuthorize(Resources.Actions.Read, Resources.Users)]
         public ActionResult Index(int count = 0, int start = 0, string filter = null)
         {
-            var hostName = ApplicationConfiguration.Get("host_name");
+            var hostName = ApplicationConfiguration.Get("pandora_api_url");
             var url = hostName + "/api/Users";
 
             var restClient = new RestSharp.RestClient(url);
@@ -61,7 +61,7 @@ namespace Elders.Pandora.UI.Controllers
         [ResourceAuthorize(Resources.Actions.Manage, Resources.Users)]
         public ActionResult Edit(string userId, AccessRules[] access)
         {
-            var hostName = ApplicationConfiguration.Get("host_name");
+            var hostName = ApplicationConfiguration.Get("pandora_api_url");
             var url = hostName + "/api/Users?Id=" + userId;
 
             var restClient = new RestSharp.RestClient(url);
@@ -95,7 +95,7 @@ namespace Elders.Pandora.UI.Controllers
 
         private User GetUser(string userId)
         {
-            var hostName = ApplicationConfiguration.Get("host_name");
+            var hostName = ApplicationConfiguration.Get("pandora_api_url");
             var url = hostName + "/api/Users?Id=" + userId;
 
             var restClient = new RestSharp.RestClient(url);
@@ -113,7 +113,7 @@ namespace Elders.Pandora.UI.Controllers
 
         private List<string> GetProjects()
         {
-            var hostName = ApplicationConfiguration.Get("host_name");
+            var hostName = ApplicationConfiguration.Get("pandora_api_url");
             var url = hostName + "/api/Projects";
 
             var client = new RestSharp.RestClient(url);
@@ -133,7 +133,7 @@ namespace Elders.Pandora.UI.Controllers
 
         private List<Jar> GetJars(string projectName)
         {
-            var hostName = ApplicationConfiguration.Get("host_name");
+            var hostName = ApplicationConfiguration.Get("pandora_api_url");
             var url = hostName + "/api/Jars?projectName=" + projectName;
 
             var client = new RestSharp.RestClient(url);

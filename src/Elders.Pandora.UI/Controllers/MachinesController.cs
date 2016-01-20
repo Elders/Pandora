@@ -11,7 +11,7 @@ namespace Elders.Pandora.UI.Controllers
     {
         public ActionResult Index(string projectName, string applicationName, string clusterName)
         {
-            var hostName = ApplicationConfiguration.Get("host_name");
+            var hostName = ApplicationConfiguration.Get("pandora_api_url");
             var breadcrumbs = new List<KeyValuePair<string, string>>();
             breadcrumbs.Add(new KeyValuePair<string, string>("Projects", hostName + "/Projects"));
             breadcrumbs.Add(new KeyValuePair<string, string>(projectName, hostName + "/Projects/" + projectName));
@@ -28,7 +28,7 @@ namespace Elders.Pandora.UI.Controllers
         [HttpPost]
         public ActionResult Index(string projectName, string applicationName, string clusterName, Dictionary<string, string> config)
         {
-            var hostName = ApplicationConfiguration.Get("host_name");
+            var hostName = ApplicationConfiguration.Get("pandora_api_url");
             if (config.ContainsKey("controller"))
                 return RedirectToAction("Index");
 
@@ -55,7 +55,7 @@ namespace Elders.Pandora.UI.Controllers
         [HttpPost]
         public ActionResult AddMachine(string projectName, string applicationName, string clusterName, string machineName)
         {
-            var hostName = ApplicationConfiguration.Get("host_name");
+            var hostName = ApplicationConfiguration.Get("pandora_api_url");
             var url = hostName + "/api/Machines?projectName=" + projectName + "&configurationName=" + applicationName + "&machineName=" + machineName;
 
             var client = new RestSharp.RestClient(url);
@@ -80,7 +80,7 @@ namespace Elders.Pandora.UI.Controllers
 
         public ActionResult Machine(string projectName, string applicationName, string clusterName, string machineName)
         {
-            var hostName = ApplicationConfiguration.Get("host_name");
+            var hostName = ApplicationConfiguration.Get("pandora_api_url");
             var breadcrumbs = new List<KeyValuePair<string, string>>();
             breadcrumbs.Add(new KeyValuePair<string, string>("Projects", hostName + "/Projects"));
             breadcrumbs.Add(new KeyValuePair<string, string>(projectName, hostName + "/Projects/" + projectName));
@@ -98,7 +98,7 @@ namespace Elders.Pandora.UI.Controllers
         [HttpPost]
         public ActionResult Machine(string projectName, string applicationName, string clusterName, string machineName, Dictionary<string, string> config)
         {
-            var hostName = ApplicationConfiguration.Get("host_name");
+            var hostName = ApplicationConfiguration.Get("pandora_api_url");
             if (config.ContainsKey("controller"))
                 return RedirectToAction("Index");
 
@@ -124,7 +124,7 @@ namespace Elders.Pandora.UI.Controllers
 
         private Elders.Pandora.Box.Jar GetConfig(string projectName, string applicationName)
         {
-            var hostName = ApplicationConfiguration.Get("host_name");
+            var hostName = ApplicationConfiguration.Get("pandora_api_url");
             var url = hostName + "/api/Jars?projectName=" + projectName + "&configurationName=" + applicationName;
 
             var client = new RestSharp.RestClient(url);

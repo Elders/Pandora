@@ -1,31 +1,38 @@
 ﻿{
-    "name": "Elders.Pandora.Api",
-    "references": [
-        { "jar": "Elders.Pandora.Git.json" }
-    ],
-    "defaults": {
-        "pandora_api_url" : "",
-        "pandora_folder": "",
-        "pandora_users_folder": "",
-        "pandora_projects_folder": "",
-        "super_admin_users": ""
-    },
-    "clusters": {
-        "local": {
-            "pandora_api_url" : "",
-            "pandora_folder": "",
-            "pandora_users_folder": "",
-            "pandora_projects_folder": "",
-            "super_admin_users": ""
-        }
-    },
-    "machines": {
-        "WSBPPLDSD04": {
-            "pandora_api_url": "https://pandora.api.local.com",
-            "pandora_folder": "C:/ProgramData/Elders/Pandora",
-            "pandora_users_folder": "C:/ProgramData/Elders/Pandora/Users",
-            "pandora_projects_folder": "C:/ProgramData/Elders/Pandora/Projects",
-            "super_admin_users": "blagovest.vp@gmail.com"
-        }
+  "name": "Elders.Pandora.Api",
+  "references": [
+    { "jar": "Elders.Pandora.Git.json" }
+  ],
+  "defaults": {
+    "pandora_api_url": "",
+    "pandora_folder": "",
+    "pandora_users_folder": "",
+    "pandora_projects_folder": "",
+    "super_admin_users": ""
+  },
+  "clusters": {
+    "local": {
+      "pandora_api_url": "",
+      "pandora_folder": "",
+      "pandora_users_folder": "",
+      "pandora_projects_folder": "",
+      "super_admin_users": ""
     }
+  },
+  "machines": {
+    "WSBPPLDSD04": {
+      "pandora_api_url": "http://localhost:51998/",
+      "pandora_folder": "C:/ProgramData/Elders/Pandora",
+      "pandora_users_folder": "C:/ProgramData/Elders/Pandora/Users",
+      "pandora_projects_folder": "C:/ProgramData/Elders/Pandora/Projects",
+      "super_admin_users": "blagovest.vp@gmail.com"
+    },
+    "WSBPPLDSD07": {
+        "pandora_api_url": "http://localhost:51998/",
+        "pandora_folder": "C:/ProgramData/Elders/Pandora",
+        "pandora_users_folder": "C:/ProgramData/Elders/Pandora/Users",
+        "pandora_projects_folder": "C:/ProgramData/Elders/Pandora/Projects",
+        "super_admin_users": "blagovest.vp@gmail.com,k.tenekedzhiev@gmail.com"
+    }
+  }
 }

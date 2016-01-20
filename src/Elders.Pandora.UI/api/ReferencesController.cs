@@ -10,7 +10,7 @@ using Elders.Pandora.UI.Common;
 
 namespace Elders.Pandora.UI.api
 {
-    //[Authorize]
+    [Authorize]
     public class ReferencesController : ApiController
     {
         static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(JarsController));

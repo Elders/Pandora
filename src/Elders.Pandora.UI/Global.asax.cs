@@ -59,7 +59,7 @@ namespace Elders.Pandora.UI
 
         private User GetUser(ClaimsIdentity args)
         {
-            var hostName = ApplicationConfiguration.Get("host_name");
+            var hostName = ApplicationConfiguration.Get("pandora_api_url");
             var claims = args.Claims;
 
             var userId = claims.Where(x => x.Type == "sub").FirstOrDefault().Value;
@@ -96,7 +96,7 @@ namespace Elders.Pandora.UI
 
         private void CreateUser(User user, string token)
         {
-            var hostName = ApplicationConfiguration.Get("host_name");
+            var hostName = ApplicationConfiguration.Get("pandora_api_url");
             var url = hostName + "/api/Users?Id=" + user.Id;
 
             var restClient = new RestSharp.RestClient(url);

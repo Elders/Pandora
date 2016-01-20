@@ -8,7 +8,7 @@ using System.Web.Http;
 
 namespace Elders.Pandora.UI.api
 {
-    //[Authorize]
+    [Authorize]
     public class UsersController : ApiController
     {
         static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(UsersController));
