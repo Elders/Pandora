@@ -238,5 +238,3 @@ $RECYCLE.BIN/
 
 # Directories which start with '.'
 **/.*/
-project.lock.json
-Elders.Pandora.Git.json
