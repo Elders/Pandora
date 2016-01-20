@@ -56,6 +56,10 @@ TestResult.xml
 [Rr]eleasePS/
 dlldata.c
 
+# DNX
+project.lock.json
+artifacts/
+
 *_i.c
 *_p.c
 *_i.h
@@ -96,6 +100,7 @@ ipch/
 *.psess
 *.vsp
 *.vspx
+*.sap
 
 # TFS 2012 Local Workspace
 $tf/
