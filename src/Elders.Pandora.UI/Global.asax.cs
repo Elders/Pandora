@@ -64,7 +64,7 @@ namespace Elders.Pandora.UI
 
             string token = claims.Where(x => x.Type == "id_token").FirstOrDefault().Value;
 
-            var url = hostName + "/api/Users?Id=" + userId;
+            var url = hostName + "/api/Users/" + userId;
 
             var restClient = new RestSharp.RestClient(url);
 
@@ -95,7 +95,7 @@ namespace Elders.Pandora.UI
         private void CreateUser(User user, string token)
         {
             var hostName = ApplicationConfiguration.Get("pandora_api_url");
-            var url = hostName + "/api/Users?Id=" + user.Id;
+            var url = hostName + "/api/Users/" + user.Id;
 
             var restClient = new RestSharp.RestClient(url);
 

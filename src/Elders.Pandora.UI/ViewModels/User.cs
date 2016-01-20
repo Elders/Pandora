@@ -39,7 +39,7 @@ namespace Elders.Pandora.UI.ViewModels
         private static User GetUser()
         {
             var hostName = ApplicationConfiguration.Get("pandora_api_url");
-            var url = hostName + "/api/Users?Id=" + ClaimsPrincipal.Current.Id();
+            var url = hostName + "/api/Users/" + ClaimsPrincipal.Current.Id();
 
             var restClient = new RestSharp.RestClient(url);
 
@@ -56,10 +56,16 @@ namespace Elders.Pandora.UI.ViewModels
 
         private static void UpdateUserAccess(User user, string projectName, string applicationName, string cluster, Access access)
         {
-            user.Access.AddRule(new AccessRules() { Project = projectName, Application = applicationName, Cluster = cluster, Access = access });
+            user.Access.AddRule(new AccessRules
+            {
+                Project = projectName,
+                Application = applicationName,
+                Cluster = cluster,
+                Access = access
+            });
 
             var hostName = ApplicationConfiguration.Get("pandora_api_url");
-            var url = hostName + "/api/Users?Id=" + ClaimsPrincipal.Current.Id();
+            var url = hostName + "/api/Users/" + ClaimsPrincipal.Current.Id();
 
             var restClient = new RestSharp.RestClient(url);
 

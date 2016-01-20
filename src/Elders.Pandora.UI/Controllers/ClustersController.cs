@@ -17,7 +17,7 @@ namespace Elders.Pandora.UI.Controllers
             breadcrumbs.Add(new KeyValuePair<string, string>(projectName, hostName + "/Projects/" + projectName));
             ViewBag.Breadcrumbs = breadcrumbs;
 
-            var url = hostName + "/api/Jars?projectName=" + projectName + "&configurationName=" + applicationName;
+            var url = hostName + "/api/Jars/" + projectName + "/" + applicationName;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.GET);
@@ -48,7 +48,7 @@ namespace Elders.Pandora.UI.Controllers
             var jar = GetConfig(projectName, applicationName);
             jar.Clusters.Add(newCluster.Name, newCluster.AsDictionary());
 
-            var url = hostName + "/api/Clusters?projectName=" + projectName + "&configurationName=" + applicationName + "&clusterName=" + clusterName;
+            var url = hostName + "/api/Clusters/" + projectName + "/" + applicationName + "/" + clusterName;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.POST);
@@ -78,7 +78,7 @@ namespace Elders.Pandora.UI.Controllers
             if (config.ContainsKey("controller"))
                 return RedirectToAction("Index");
 
-            var url = hostName + "/api/Defaults?projectName=" + projectName + "&configurationName=" + applicationName;
+            var url = hostName + "/api/Defaults/" + projectName + "/" + applicationName;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.PUT);
@@ -100,7 +100,7 @@ namespace Elders.Pandora.UI.Controllers
         private Elders.Pandora.Box.Jar GetConfig(string projectName, string applicationName)
         {
             var hostName = ApplicationConfiguration.Get("pandora_api_url");
-            var url = hostName + "/api/Jars?projectName=" + projectName + "&configurationName=" + applicationName;
+            var url = hostName + "/api/Jars/" + projectName + "/" + applicationName;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.GET);

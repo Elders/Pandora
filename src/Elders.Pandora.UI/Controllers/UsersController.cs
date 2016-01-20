@@ -62,7 +62,7 @@ namespace Elders.Pandora.UI.Controllers
         public ActionResult Edit(string userId, AccessRules[] access)
         {
             var hostName = ApplicationConfiguration.Get("pandora_api_url");
-            var url = hostName + "/api/Users?Id=" + userId;
+            var url = hostName + "/api/Users/" + userId;
 
             var restClient = new RestSharp.RestClient(url);
 
@@ -96,7 +96,7 @@ namespace Elders.Pandora.UI.Controllers
         private User GetUser(string userId)
         {
             var hostName = ApplicationConfiguration.Get("pandora_api_url");
-            var url = hostName + "/api/Users?Id=" + userId;
+            var url = hostName + "/api/Users/" + userId;
 
             var restClient = new RestSharp.RestClient(url);
 
@@ -134,7 +134,7 @@ namespace Elders.Pandora.UI.Controllers
         private List<Jar> GetJars(string projectName)
         {
             var hostName = ApplicationConfiguration.Get("pandora_api_url");
-            var url = hostName + "/api/Jars?projectName=" + projectName;
+            var url = hostName + "/api/Jars/" + projectName;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.GET);

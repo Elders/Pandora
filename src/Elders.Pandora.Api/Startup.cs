@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Builder;
+﻿using System.IO;
+using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,6 +35,12 @@ namespace Elders.Pandora.Api
             app.UseIISPlatformHandler();
 
             ApplicationConfiguration.SetContext("Elders.Pandora.Api");
+
+            foreach (var directory in new[] { Folders.Main, Folders.Users, Folders.Projects })
+            {
+                if (!Directory.Exists(directory))
+                    Directory.CreateDirectory(directory);
+            }
 
             // Configure the HTTP request pipeline.
             app.UseStaticFiles();

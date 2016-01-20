@@ -35,7 +35,7 @@ namespace Elders.Pandora.UI.Controllers
         public ActionResult Index(string projectName, string gitUrl)
         {
             var hostName = ApplicationConfiguration.Get("pandora_api_url");
-            var url = hostName + "/api/Projects?projectName=" + projectName + "&gitUrl=" + gitUrl;
+            var url = hostName + "/api/Projects/" + projectName + "/" + gitUrl;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.POST);
@@ -55,7 +55,7 @@ namespace Elders.Pandora.UI.Controllers
             breadcrumbs.Add(new KeyValuePair<string, string>("Projects", hostName + "/Projects"));
             ViewBag.Breadcrumbs = breadcrumbs;
 
-            var url = hostName + "/api/Jars?projectName=" + projectName;
+            var url = hostName + "/api/Jars/" + projectName;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.GET);
@@ -85,7 +85,7 @@ namespace Elders.Pandora.UI.Controllers
         public ActionResult Applications(string projectName, string applicationName, string fileName, string config)
         {
             var hostName = ApplicationConfiguration.Get("pandora_api_url");
-            var url = hostName + "/api/Jars?projectName=" + projectName + "&configurationName=" + applicationName + "&fileName=" + fileName;
+            var url = hostName + "/api/Jars/" + projectName + "/" + applicationName + "/" + fileName;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.POST);
@@ -128,7 +128,7 @@ namespace Elders.Pandora.UI.Controllers
         public ActionResult Update(string projectName)
         {
             var hostName = ApplicationConfiguration.Get("pandora_api_url");
-            var url = hostName + "/api/Projects/Update?projectName=" + projectName;
+            var url = hostName + "/api/Projects/Update/" + projectName;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.POST);
@@ -150,7 +150,7 @@ namespace Elders.Pandora.UI.Controllers
         {
             var hostName = ApplicationConfiguration.Get("pandora_api_url");
 
-            var url = hostName + "/api/Jars?projectName=" + projectName + "&configurationName=" + applicationName;
+            var url = hostName + "/api/Jars/" + projectName + "/" + applicationName;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.GET);
@@ -167,7 +167,7 @@ namespace Elders.Pandora.UI.Controllers
         {
             var hostName = ApplicationConfiguration.Get("pandora_api_url");
 
-            var url = hostName + "/api/Jars?projectName=" + projectName + "&configurationName=" + applicationName;
+            var url = hostName + "/api/Jars/" + projectName + "/" + applicationName;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.GET);
