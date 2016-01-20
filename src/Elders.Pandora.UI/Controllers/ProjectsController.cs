@@ -1,10 +1,10 @@
-﻿using Elders.Pandora.Box;
+﻿using System;
+using System.Collections.Generic;
+using System.Web;
+using System.Web.Mvc;
+using Elders.Pandora.Box;
 using Elders.Pandora.UI.ViewModels;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Web.Mvc;
-using System.Web;
 
 namespace Elders.Pandora.UI.Controllers
 {
@@ -35,7 +35,7 @@ namespace Elders.Pandora.UI.Controllers
         public ActionResult Index(string projectName, string gitUrl)
         {
             var hostName = ApplicationConfiguration.Get("pandora_api_url");
-            var url = hostName + "/api/Projects/" + projectName + "/" + gitUrl;
+            var url = hostName + "/api/Projects/" + projectName + "/" + Convert.ToBase64String(HttpUtility.UrlEncodeToBytes(gitUrl));
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.POST);

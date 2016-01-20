@@ -24,9 +24,10 @@ namespace Elders.Pandora.Api.Controllers
             return projects.Where(x => x != ".git").ToList();
         }
 
-        [HttpPost("{projectName}/{gitUrl}")]
-        public void Post(string projectName, string gitUrl)
+        [HttpPost("{projectName}/{gitUrlBlob}")]
+        public void Post(string projectName, byte[] gitUrlBlob)
         {
+            var gitUrl = RestSharp.Extensions.MonoHttp.HttpUtility.UrlDecode(gitUrlBlob, System.Text.Encoding.UTF8);
             var workingDir = Path.Combine(Folders.Projects, projectName);
 
             var project = Directory.Exists(workingDir);
