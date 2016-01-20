@@ -7,11 +7,11 @@ using System.Runtime.InteropServices;
 [assembly: ComVisibleAttribute(false)]
 [assembly: AssemblyProductAttribute("Elders.Pandora")]
 [assembly: AssemblyCopyrightAttribute("Copyright ©  2016")]
-[assembly: AssemblyVersionAttribute("0.4.0.0")]
-[assembly: AssemblyFileVersionAttribute("0.4.0.0")]
-[assembly: AssemblyInformationalVersionAttribute("0.4.0-beta.1+5.Branch.release/0.4.0.Sha.29c31210945d9334bd415fb912156eb1b7a02cb1")]
+[assembly: AssemblyVersionAttribute("0.3.1.0")]
+[assembly: AssemblyFileVersionAttribute("0.3.1.0")]
+[assembly: AssemblyInformationalVersionAttribute("0.3.1-git-username-password-email.1+10.Branch.git-username-password-email.Sha.736339ffdfad9f16c5db7f262a6444a32e725bf9")]
 namespace System {
     internal static class AssemblyVersionInformation {
-        internal const string Version = "0.4.0.0";
+        internal const string Version = "0.3.1.0";
     }
 }

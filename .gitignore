@@ -241,3 +241,5 @@ $RECYCLE.BIN/
 project.lock.json
 Elders.Pandora.Git.json
 AssemblyInfo.cs
+.vs
+*.lock.*
