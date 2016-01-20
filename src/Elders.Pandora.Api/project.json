@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
   "compilationOptions": {
     "emitEntryPoint": true
@@ -18,7 +18,7 @@
     "Newtonsoft.Json": "7.0.1",
     "LibGit2Sharp": "0.21.0.176",
     "RestSharp": "105.2.3",
-    "Microsoft.Net.Http": "2.2.22"
+    "Microsoft.Net.Http": "2.2.29"
   },
 
   "commands": {

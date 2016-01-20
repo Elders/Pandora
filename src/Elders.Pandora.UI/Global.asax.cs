@@ -10,8 +10,6 @@ using System.Web.Routing;
 using Thinktecture.IdentityModel.Oidc;
 using System.Linq;
 using System.Security.Claims;
-using System.Collections.Generic;
-using System.Configuration;
 
 namespace Elders.Pandora.UI
 {
