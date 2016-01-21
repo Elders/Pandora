@@ -2027,6 +2027,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Common\Error.cs" />
     <Compile Include="Common\Folders.cs" />
+    <Compile Include="Common\MvcRouteHelper.cs" />
     <Compile Include="Controllers\ClustersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />

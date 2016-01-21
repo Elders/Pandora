@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using Elders.Pandora.Box;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Mvc.Routing;
 using Newtonsoft.Json;
+using RestSharp.Extensions.MonoHttp;
 
 namespace Elders.Pandora.Api.Controllers
 {
@@ -24,35 +27,21 @@ namespace Elders.Pandora.Api.Controllers
             return projects.Where(x => x != ".git").ToList();
         }
 
-        [HttpPost("{projectName}/{gitUrlBlob}")]
-        public void Post(string projectName, byte[] gitUrlBlob)
+        [HttpPost("{projectName}/{gitUrlBlob}/{gitUsernameBlob}/{gitPasswordBlob}")]
+        public void Post(string projectName, byte[] gitUrlBlob, byte[] gitUsernameBlob, byte[] gitPasswordBlob)
         {
-            var gitUrl = RestSharp.Extensions.MonoHttp.HttpUtility.UrlDecode(gitUrlBlob, System.Text.Encoding.UTF8);
+            var gitUrl = HttpUtility.UrlDecode(gitUrlBlob, Encoding.UTF8);
+            var gitUsername = Encoding.UTF8.GetString(gitUsernameBlob);
+            var gitPassword = Encoding.UTF8.GetString(gitPasswordBlob);
             var workingDir = Path.Combine(Folders.Projects, projectName);
 
-            var project = Directory.Exists(workingDir);
-
-            if (!project)
+            if (Directory.Exists(workingDir) == false)
             {
                 Directory.CreateDirectory(workingDir);
+
                 try
                 {
-                    Git.Clone(gitUrl, workingDir);
-
-                    //string configPath = Path.Combine(workingDir, projectName + ".config");
-
-                    //System.IO.File.WriteAllText(configPath, gitUrl);
-
-                    //var nameClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "name");
-                    //var username = nameClaim != null ? nameClaim.Value : "no name claim";
-                    //var emailClaim = ClaimsPrincipal.Current.Identities.First().Claims.SingleOrDefault(x => x.Type == "email");
-                    //var email = emailClaim != null ? emailClaim.Value : "no email claim";
-                    //var message = "Added project configuration file.";
-
-                    //var git = new Git(workingDir);
-                    //git.Stage(new List<string>() { configPath });
-                    //git.Commit(message, username, email);
-                    //git.Push();
+                    Git.Clone(gitUrl, workingDir, gitUsername, gitPassword);
                 }
                 catch (Exception ex)
                 {
