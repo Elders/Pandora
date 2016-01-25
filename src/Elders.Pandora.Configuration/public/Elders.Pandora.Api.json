@@ -1,7 +1,8 @@
 ﻿{
   "name": "Elders.Pandora.Api",
   "references": [
-    { "jar": "Elders.Pandora.Git.json" }
+    { "jar": "Elders.Pandora.Git.json" },
+    { "jar": "Elders.Pandora.Authentication.json" }
   ],
   "defaults": {
     "pandora_api_url": "",

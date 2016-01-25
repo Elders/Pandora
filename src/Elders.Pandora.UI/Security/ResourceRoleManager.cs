@@ -1,8 +1,8 @@
-using System.Security.Claims;
-using System.Linq;
-using Thinktecture.IdentityModel.Owin.ResourceAuthorization;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using Thinktecture.IdentityModel.Owin;
+using Thinktecture.IdentityModel.Owin.ResourceAuthorization;
 
 namespace Elders.Pandora.UI.Security
 {

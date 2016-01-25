@@ -18,6 +18,5 @@ namespace Thinktecture.IdentityModel.Oidc
 
         [JsonProperty(PropertyName = "expires_in")]
         public int ExpiresIn { get; set; }
-
     }
 }

@@ -2037,13 +2037,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Security\RoClientClaimsTransformer.cs" />
     <Compile Include="ViewModels\User.cs" />
     <Compile Include="ViewModels\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\ResourceRoleManager.cs" />
     <Compile Include="Security\Resources.cs" />
-    <Compile Include="Security\SelfContainedTokenValidationExtensions.cs" />
-    <Compile Include="Security\SelfContainedTokenValidationOptions.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Tcp\TcpServer.cs" />
   </ItemGroup>

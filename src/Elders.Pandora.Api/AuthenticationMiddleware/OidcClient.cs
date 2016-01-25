@@ -14,8 +14,8 @@ namespace Elders.Pandora.Api.AuthenticationMiddleware
         public static TokenValidationParameters GetTvp()
         {
             var tvp = new TokenValidationParameters();
-            tvp.ValidAudience = "78810285735-498ef2tnne6uf9vtqmpuuejfenrcvdaq.apps.googleusercontent.com";
-            tvp.ValidIssuer = "accounts.google.com";
+            tvp.ValidAudience = ApplicationConfiguration.Get("audience");
+            tvp.ValidIssuer = ApplicationConfiguration.Get("issuer");
             tvp.ValidateIssuer = true;
             tvp.ValidateAudience = true;
             tvp.ValidateIssuerSigningKey = true;
