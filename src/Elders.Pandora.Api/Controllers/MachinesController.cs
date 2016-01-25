@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace Elders.Pandora.Api.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     public class MachinesController : Controller
     {

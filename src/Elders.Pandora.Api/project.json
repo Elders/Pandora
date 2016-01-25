@@ -1,45 +1,47 @@
 {
-  "version": "1.0.0-*",
-  "compilationOptions": {
-    "emitEntryPoint": true
-  },
+    "version": "1.0.0-*",
+    "compilationOptions": {
+        "emitEntryPoint": true
+    },
 
-  "dependencies": {
-    "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
-    "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
-    "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
-    "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Configuration.FileProviderExtensions": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
-    "log4net": "2.0.3",
-    "Newtonsoft.Json": "7.0.1",
-    "LibGit2Sharp": "0.21.0.176",
-    "RestSharp": "105.2.3",
-    "Microsoft.Net.Http": "2.2.29"
-  },
+    "dependencies": {
+        "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
+        "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
+        "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
+        "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
+        "Microsoft.Extensions.Configuration.FileProviderExtensions": "1.0.0-rc1-final",
+        "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
+        "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
+        "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
+        "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
+        "log4net": "2.0.3",
+        "Newtonsoft.Json": "7.0.1",
+        "LibGit2Sharp": "0.21.0.176",
+        "RestSharp": "105.2.3",
+        "Microsoft.Net.Http": "2.2.29",
+        "Microsoft.AspNet.Authentication.JwtBearer": "1.0.0-rc1-final",
+        "Microsoft.AspNet.Authentication": "1.0.0-rc1-final"
+    },
 
-  "commands": {
-    "web": "Microsoft.AspNet.Server.Kestrel"
-  },
+    "commands": {
+        "web": "Microsoft.AspNet.Server.Kestrel"
+    },
 
-  "frameworks": {
-    "dnx451": {
-      "dependencies": {
-        "Elders.Pandora": "1.0.0-*",
-        "Elders.Pandora.Box": "1.0.0-*"
-      }
-    }
-  },
+    "frameworks": {
+        "dnx451": {
+            "dependencies": {
+                "Elders.Pandora": "1.0.0-*",
+                "Elders.Pandora.Box": "1.0.0-*"
+            }
+        }
+    },
 
-  "exclude": [
-    "wwwroot",
-    "node_modules"
-  ],
-  "publishExclude": [
-    "**.user",
-    "**.vspscc"
-  ]
+    "exclude": [
+        "wwwroot",
+        "node_modules"
+    ],
+    "publishExclude": [
+        "**.user",
+        "**.vspscc"
+    ]
 }

@@ -1,11 +1,8 @@
 ﻿using Elders.Pandora.Box;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Security.Claims;
-using System.Web;
 
 namespace Elders.Pandora.UI.ViewModels
 {
@@ -155,10 +152,5 @@ namespace Elders.Pandora.UI.ViewModels
             else
                 return false;
         }
-    }
-
-    public class ClaimValue
-    {
-        public string Value { get; set; }
     }
 }

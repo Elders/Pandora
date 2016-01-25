@@ -1,9 +1,11 @@
 ﻿using System.IO;
+using Microsoft.AspNet.Authentication.JwtBearer;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Elders.Pandora.Api.AuthenticationMiddleware;
 
 namespace Elders.Pandora.Api
 {
@@ -45,11 +47,16 @@ namespace Elders.Pandora.Api
             // Configure the HTTP request pipeline.
             app.UseStaticFiles();
 
+            app.UseMiddleware<GoogleJwtBearerMiddleware>(new JwtBearerOptions()
+            {
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true,
+                TokenValidationParameters = OidcClient.GetTvp()
+            });
 
             // Add MVC to the request pipeline.
             app.UseMvc();
         }
-
         // Entry point for the application.
         public static void Main(string[] args) => WebApplication.Run<Startup>(args);
     }

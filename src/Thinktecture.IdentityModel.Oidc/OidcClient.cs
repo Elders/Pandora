@@ -135,7 +135,7 @@ namespace Thinktecture.IdentityModel.Oidc
                     // Set up token validation 
                     TokenValidationParameters tvp = new TokenValidationParameters();
                     tvp.ValidAudience = audience;
-                    tvp.IssuerSigningToken = certToken;
+                    //tvp.IssuerSigningToken = certToken;
                     tvp.ValidIssuer = "accounts.google.com";
                     tvp.IssuerSigningKeyResolver = (a, b, c, d) => key;
 

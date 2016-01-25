@@ -15,6 +15,7 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using Thinktecture.IdentityModel.Owin;
+using System.Web.Mvc;
 
 namespace Elders.Pandora.UI.Security
 {
@@ -104,25 +105,26 @@ namespace Elders.Pandora.UI.Security
             return certBytes;
         }
     }
-    public class ProfileAuthorizeAttribute : AuthorizeAttribute
-    {
-        public string Profile { get; private set; }
 
-        public ProfileAuthorizeAttribute(string profile)
-        {
-            Profile = profile;
-        }
+    //public class ProfileAuthorizeAttribute : AuthorizeAttribute
+    //{
+    //    public string Profile { get; private set; }
 
-        protected override bool IsAuthorized(HttpActionContext actionContext)
-        {
-            var ctx = HttpContext.Current.GetOwinContext();
-            var claim = ctx.Request.Context.Authentication.User.Claims.Where(x => x.Type == "profile").SingleOrDefault();
-            if (claim == null || String.Compare(claim.Value, Profile, true, CultureInfo.InvariantCulture) != 0)
-                return false;
+    //    public ProfileAuthorizeAttribute(string profile)
+    //    {
+    //        Profile = profile;
+    //    }
 
-            return base.IsAuthorized(actionContext);
-        }
-    }
+    //    protected override bool IsAuthorized(HttpActionContext actionContext)
+    //    {
+    //        var ctx = HttpContext.Current.GetOwinContext();
+    //        var claim = ctx.Request.Context.Authentication.User.Claims.Where(x => x.Type == "profile").SingleOrDefault();
+    //        if (claim == null || String.Compare(claim.Value, Profile, true, CultureInfo.InvariantCulture) != 0)
+    //            return false;
+
+    //        return base.IsAuthorized(actionContext);
+    //    }
+    //}
     public class RoClientClaimsTransformer : ClaimsTransformationOptions
     {
         public RoClientClaimsTransformer()

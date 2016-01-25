@@ -18,7 +18,7 @@ namespace Elders.Pandora.UI.Controllers
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.GET);
-            request.AddHeader("Authorization", "Bearer " + User.Token());
+            request.AddHeader("Authorization", "Bearer " + User.IdToken());
             var response = client.Execute(request);
 
             if (!string.IsNullOrWhiteSpace(response.ErrorMessage))
@@ -41,7 +41,7 @@ namespace Elders.Pandora.UI.Controllers
             var request = new RestSharp.RestRequest(RestSharp.Method.POST);
             request.RequestFormat = RestSharp.DataFormat.Json;
             request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("Authorization", "Bearer " + User.Token());
+            request.AddHeader("Authorization", "Bearer " + User.IdToken());
 
             var response = client.Execute(request);
 
@@ -61,7 +61,7 @@ namespace Elders.Pandora.UI.Controllers
             var request = new RestSharp.RestRequest(RestSharp.Method.GET);
             request.RequestFormat = RestSharp.DataFormat.Json;
             request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("Authorization", "Bearer " + User.Token());
+            request.AddHeader("Authorization", "Bearer " + User.IdToken());
             var response = client.Execute(request);
 
             if (!string.IsNullOrWhiteSpace(response.ErrorMessage))
@@ -91,7 +91,7 @@ namespace Elders.Pandora.UI.Controllers
             var request = new RestSharp.RestRequest(RestSharp.Method.POST);
             request.RequestFormat = RestSharp.DataFormat.Json;
             request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("Authorization", "Bearer " + User.Token());
+            request.AddHeader("Authorization", "Bearer " + User.IdToken());
 
             if (!string.IsNullOrWhiteSpace(config))
             {
@@ -134,7 +134,7 @@ namespace Elders.Pandora.UI.Controllers
             var request = new RestSharp.RestRequest(RestSharp.Method.POST);
             request.RequestFormat = RestSharp.DataFormat.Json;
             request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("Authorization", "Bearer " + User.Token());
+            request.AddHeader("Authorization", "Bearer " + User.IdToken());
 
             var response = client.Execute(request);
 
@@ -154,7 +154,7 @@ namespace Elders.Pandora.UI.Controllers
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.GET);
-            request.AddHeader("Authorization", "Bearer " + User.Token());
+            request.AddHeader("Authorization", "Bearer " + User.IdToken());
 
             var response = client.Execute(request);
 
@@ -171,7 +171,7 @@ namespace Elders.Pandora.UI.Controllers
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.GET);
-            request.AddHeader("Authorization", "Bearer " + User.Token());
+            request.AddHeader("Authorization", "Bearer " + User.IdToken());
 
             var response = client.Execute(request);
 
