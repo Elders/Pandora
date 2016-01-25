@@ -2037,6 +2037,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\RoClientClaimsTransformer.cs" />
     <Compile Include="ViewModels\User.cs" />
     <Compile Include="ViewModels\Configuration.cs" />
@@ -2071,7 +2072,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Elders.Pandora.Box\Elders.Pandora.Box.csproj">
