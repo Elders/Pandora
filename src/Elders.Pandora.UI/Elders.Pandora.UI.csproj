@@ -46,6 +46,14 @@
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="Elders.Pandora, Version=0.1.16.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Pandora.0.3.0\lib\net45-full\Elders.Pandora.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Elders.Pandora.Box, Version=1.1.38.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Pandora.0.3.0\lib\net45-full\Elders.Pandora.Box.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="LibGit2Sharp, Version=0.21.0.176, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\LibGit2Sharp.0.21.0.176\lib\net40\LibGit2Sharp.dll</HintPath>
       <Private>True</Private>
@@ -2074,14 +2082,6 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Elders.Pandora.Box\Elders.Pandora.Box.csproj">
-      <Project>{69854ea2-20dc-4a51-90f4-4710f88c930f}</Project>
-      <Name>Elders.Pandora.Box</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Elders.Pandora\Elders.Pandora.csproj">
-      <Project>{9fa368c6-5afd-4707-b6c2-50d1dc9a07aa}</Project>
-      <Name>Elders.Pandora</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Thinktecture.IdentityModel.Oidc\Thinktecture.IdentityModel.Oidc.csproj">
       <Project>{9669aed6-cc75-4da4-a639-13e084905ca7}</Project>
       <Name>Thinktecture.IdentityModel.Oidc</Name>

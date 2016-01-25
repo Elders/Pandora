@@ -1,3 +1,6 @@
+#### 0.4.0-beta0001 - 25.01.2016
+* Added PandoraOptions and exposed references in Pandora.Box
+
 #### 0.3.0 - 29.05.2015
 * Remove the Cli.
 

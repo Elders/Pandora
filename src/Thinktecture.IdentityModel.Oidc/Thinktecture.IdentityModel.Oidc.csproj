@@ -70,6 +70,14 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Elders.Pandora, Version=0.1.16.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Pandora.0.3.0\lib\net45-full\Elders.Pandora.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Elders.Pandora.Box, Version=1.1.38.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Pandora.0.3.0\lib\net45-full\Elders.Pandora.Box.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Owin">
       <HintPath>..\packages\Microsoft.Owin.3.0.0\lib\net45\Microsoft.Owin.dll</HintPath>
       <Private>True</Private>
@@ -144,12 +152,6 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Elders.Pandora\Elders.Pandora.csproj">
-      <Project>{9fa368c6-5afd-4707-b6c2-50d1dc9a07aa}</Project>
-      <Name>Elders.Pandora</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
