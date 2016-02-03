@@ -1,0 +1,26 @@
+{
+  "version": "0.4.0-beta0001",
+  "title": "Elders Pandora Box",
+  "description": "Configuration library that uses environment variables.",
+  "authors": [
+    "Nikolay Mynkow",
+    "Simeon Dimov",
+    "Blagovest Petrov"
+  ],
+  "tags": [
+    "configuration",
+    "config"
+  ],
+  "projectUrl": "https://github.com/Elders/pandora",
+  "licenseUrl": "https://github.com/Elders/Pandora/blob/master/LICENSE",
+  "iconUrl": "https://github.com/Elders/Cronus/blob/master/Cronus.png",
+  "releaseNotes": "Initial release for testing",
+  "frameworks": {
+    "dotnet5.4": {
+      "dependencies": {
+        "Microsoft.CSharp": "4.0.1-beta-23516",
+        "System.Collections": "4.0.11-beta-23516"
+      }
+    }
+  }
+}
