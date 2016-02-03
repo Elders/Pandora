@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Elders.Pandora.Box;
+using Newtonsoft.Json;
 
 namespace Elders.Pandora
 {
@@ -19,32 +21,43 @@ namespace Elders.Pandora
 
         public Pandora(Elders.Pandora.Box.Box box)
         {
-            this.box = box;
+            this.box = new Box.Box(box);
         }
 
-        public Elders.Pandora.Box.Configuration Open(string clusterName = "", string machineName = "", bool rawSettingsNames = false)
+        public Elders.Pandora.Box.Configuration Open(PandoraOptions options)
         {
-            if (String.IsNullOrEmpty(clusterName) && String.IsNullOrEmpty(machineName))
+            options = options ?? PandoraOptions.Defaults;
+
+            foreach (var reference in box.References)
+            {
+                var refJarFile = reference.Values.First();
+                var referenceJar = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(refJarFile));
+                var referenceBox = Box.Box.Mistranslate(referenceJar);
+
+                box.Merge(referenceBox);
+            }
+
+            if (String.IsNullOrEmpty(options.ClusterName) && String.IsNullOrEmpty(options.MachineName))
                 throw new ArgumentNullException("clusterName", "When getting configuraion for a machine the clusterName is required");
 
             var result = box.Defaults.AsDictionary();
 
             Cluster cluster = null;
-            if (TryFindCluster(clusterName, out cluster))
+            if (TryFindCluster(options.ClusterName, out cluster))
             {
                 result = Merge(result, cluster.AsDictionary());
             }
 
             Machine machine = null;
-            if (TryFindMachine(machineName, out machine))
+            if (TryFindMachine(options.MachineName, out machine))
             {
                 result = Merge(result, machine.AsDictionary());
             }
 
-            if (rawSettingsNames)
+            if (options.UseRawSettingsNames)
                 return new Elders.Pandora.Box.Configuration(box.Name, result);
             else
-                return new Elders.Pandora.Box.Configuration(box.Name, NamenizeConfiguration(result, clusterName, machineName));
+                return new Elders.Pandora.Box.Configuration(box.Name, NamenizeConfiguration(result, options.ClusterName, options.MachineName));
         }
 
         private Dictionary<string, string> NamenizeConfiguration(Dictionary<string, string> settings, string clusterName, string machineName)
@@ -75,6 +88,5 @@ namespace Elders.Pandora
 
             return merged;
         }
-
     }
 }

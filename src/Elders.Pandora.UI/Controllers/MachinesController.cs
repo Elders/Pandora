@@ -1,13 +1,8 @@
-﻿using Elders.Pandora.UI.Security;
-using Elders.Pandora.UI.ViewModels;
+﻿using Elders.Pandora.UI.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Security.Claims;
 using System.Web.Mvc;
-using Thinktecture.IdentityModel.Mvc;
 
 namespace Elders.Pandora.UI.Controllers
 {
@@ -16,7 +11,7 @@ namespace Elders.Pandora.UI.Controllers
     {
         public ActionResult Index(string projectName, string applicationName, string clusterName)
         {
-            var hostName = ApplicationConfiguration.Get("host_name");
+            var hostName = ApplicationConfiguration.Get("pandora_api_url");
             var breadcrumbs = new List<KeyValuePair<string, string>>();
             breadcrumbs.Add(new KeyValuePair<string, string>("Projects", hostName + "/Projects"));
             breadcrumbs.Add(new KeyValuePair<string, string>(projectName, hostName + "/Projects/" + projectName));
@@ -33,19 +28,19 @@ namespace Elders.Pandora.UI.Controllers
         [HttpPost]
         public ActionResult Index(string projectName, string applicationName, string clusterName, Dictionary<string, string> config)
         {
-            var hostName = ApplicationConfiguration.Get("host_name");
+            var hostName = ApplicationConfiguration.Get("pandora_api_url");
             if (config.ContainsKey("controller"))
                 return RedirectToAction("Index");
 
-            var url = hostName + "/api/Clusters?projectName=" + projectName + "&applicationName=" + applicationName;
+            var url = hostName + "/api/Clusters/" + projectName + "/" + applicationName + "/" + clusterName;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.PUT);
             request.RequestFormat = RestSharp.DataFormat.Json;
             request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("Authorization", "Bearer " + User.Token());
+            request.AddHeader("Authorization", "Bearer " + User.IdToken());
 
-            request.AddBody(JsonConvert.SerializeObject(new Elders.Pandora.Box.Cluster(clusterName, config)));
+            request.AddBody(JsonConvert.SerializeObject(config));
 
             var response = client.Execute(request);
 
@@ -60,18 +55,18 @@ namespace Elders.Pandora.UI.Controllers
         [HttpPost]
         public ActionResult AddMachine(string projectName, string applicationName, string clusterName, string machineName)
         {
-            var hostName = ApplicationConfiguration.Get("host_name");
-            var url = hostName + "/api/Machines?projectName=" + projectName + "&applicationName=" + applicationName;
+            var hostName = ApplicationConfiguration.Get("pandora_api_url");
+            var url = hostName + "/api/Machines/" + projectName + "/" + applicationName + "/" + machineName;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.POST);
             request.RequestFormat = RestSharp.DataFormat.Json;
             request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("Authorization", "Bearer " + User.Token());
+            request.AddHeader("Authorization", "Bearer " + User.IdToken());
 
             var jar = GetConfig(projectName, applicationName);
 
-            request.AddBody(JsonConvert.SerializeObject(new Elders.Pandora.Box.Machine(machineName, new Dictionary<string, string>())));
+            request.AddBody(JsonConvert.SerializeObject(new Dictionary<string, string>()));
 
             var response = client.Execute(request);
 
@@ -85,7 +80,7 @@ namespace Elders.Pandora.UI.Controllers
 
         public ActionResult Machine(string projectName, string applicationName, string clusterName, string machineName)
         {
-            var hostName = ApplicationConfiguration.Get("host_name");
+            var hostName = ApplicationConfiguration.Get("pandora_api_url");
             var breadcrumbs = new List<KeyValuePair<string, string>>();
             breadcrumbs.Add(new KeyValuePair<string, string>("Projects", hostName + "/Projects"));
             breadcrumbs.Add(new KeyValuePair<string, string>(projectName, hostName + "/Projects/" + projectName));
@@ -103,19 +98,19 @@ namespace Elders.Pandora.UI.Controllers
         [HttpPost]
         public ActionResult Machine(string projectName, string applicationName, string clusterName, string machineName, Dictionary<string, string> config)
         {
-            var hostName = ApplicationConfiguration.Get("host_name");
+            var hostName = ApplicationConfiguration.Get("pandora_api_url");
             if (config.ContainsKey("controller"))
                 return RedirectToAction("Index");
 
-            var url = hostName + "/api/Machines?projectName=" + projectName + "&applicationName=" + applicationName;
+            var url = hostName + "/api/Machines/" + projectName + "/" + applicationName + "/" + machineName;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.PUT);
             request.RequestFormat = RestSharp.DataFormat.Json;
             request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("Authorization", "Bearer " + User.Token());
+            request.AddHeader("Authorization", "Bearer " + User.IdToken());
 
-            request.AddBody(JsonConvert.SerializeObject(new Elders.Pandora.Box.Machine(machineName, config)));
+            request.AddBody(JsonConvert.SerializeObject(config));
 
             var response = client.Execute(request);
 
@@ -129,14 +124,14 @@ namespace Elders.Pandora.UI.Controllers
 
         private Elders.Pandora.Box.Jar GetConfig(string projectName, string applicationName)
         {
-            var hostName = ApplicationConfiguration.Get("host_name");
-            var url = hostName + "/api/Jars?projectName=" + projectName + "&applicationName=" + applicationName;
+            var hostName = ApplicationConfiguration.Get("pandora_api_url");
+            var url = hostName + "/api/Jars/" + projectName + "/" + applicationName;
 
             var client = new RestSharp.RestClient(url);
             var request = new RestSharp.RestRequest(RestSharp.Method.GET);
             request.RequestFormat = RestSharp.DataFormat.Json;
             request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("Authorization", "Bearer " + User.Token());
+            request.AddHeader("Authorization", "Bearer " + User.IdToken());
             var response = client.Execute(request);
 
             if (!string.IsNullOrWhiteSpace(response.ErrorMessage))

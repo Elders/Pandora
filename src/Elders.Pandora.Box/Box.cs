@@ -18,10 +18,21 @@ namespace Elders.Pandora.Box
         public Box(Jar jar)
         {
             Name = jar.Name;
+            References = jar.References;
             Clusters = new List<Cluster>();
             Machines = new List<Machine>();
             Defaults = new Configuration(jar.Defaults);
             reservedKeys = new List<string>() { Machine.ClusterKey };
+        }
+
+        public Box(Box box)
+        {
+            Name = box.Name;
+            References = new List<Dictionary<string, string>>(box.References.Select(x => new Dictionary<string, string>(x)));
+            Clusters = new List<Cluster>(box.Clusters);
+            Machines = new List<Machine>(box.Machines);
+            Defaults = new Configuration(box.Defaults.AsDictionary());
+            reservedKeys = new List<string>(box.reservedKeys);
         }
 
         public string Name { get; private set; }
@@ -29,6 +40,8 @@ namespace Elders.Pandora.Box
         public Configuration Defaults { get; set; }
 
         public List<Cluster> Clusters { get; set; }
+
+        public List<Dictionary<string, string>> References { get; set; }
 
         public void Merge(Box box)
         {
@@ -132,6 +145,7 @@ namespace Elders.Pandora.Box
             Jar jar = new Jar();
 
             jar.Name = box.Name;
+            jar.References = box.References;
 
             if (box.Defaults != null)
                 jar.Defaults = box.Defaults.AsDictionary();

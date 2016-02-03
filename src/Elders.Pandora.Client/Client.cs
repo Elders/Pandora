@@ -32,9 +32,10 @@ namespace Elders.Pandora.Client
 
                             var cfg = JsonConvert.DeserializeObject<Jar>(message);
 
-                            var box = Elders.Pandora.Box.Box.Mistranslate(cfg);
+                            var box = Box.Box.Mistranslate(cfg);
 
-                            var pandora = new Pandora(box).Open("local", Environment.MachineName);
+                            var options = PandoraOptions.Defaults;
+                            var pandora = new Pandora(box).Open(options);
 
                             foreach (var setting in pandora.AsDictionary())
                             {

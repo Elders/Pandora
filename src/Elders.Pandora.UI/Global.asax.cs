@@ -10,8 +10,6 @@ using System.Web.Routing;
 using Thinktecture.IdentityModel.Oidc;
 using System.Linq;
 using System.Security.Claims;
-using System.Collections.Generic;
-using System.Configuration;
 
 namespace Elders.Pandora.UI
 {
@@ -59,14 +57,14 @@ namespace Elders.Pandora.UI
 
         private User GetUser(ClaimsIdentity args)
         {
-            var hostName = ApplicationConfiguration.Get("host_name");
+            var hostName = ApplicationConfiguration.Get("pandora_api_url");
             var claims = args.Claims;
 
             var userId = claims.Where(x => x.Type == "sub").FirstOrDefault().Value;
 
             string token = claims.Where(x => x.Type == "id_token").FirstOrDefault().Value;
 
-            var url = hostName + "/api/Users?Id=" + userId;
+            var url = hostName + "/api/Users/" + userId;
 
             var restClient = new RestSharp.RestClient(url);
 
@@ -96,8 +94,8 @@ namespace Elders.Pandora.UI
 
         private void CreateUser(User user, string token)
         {
-            var hostName = ApplicationConfiguration.Get("host_name");
-            var url = hostName + "/api/Users?Id=" + user.Id;
+            var hostName = ApplicationConfiguration.Get("pandora_api_url");
+            var url = hostName + "/api/Users/" + user.Id;
 
             var restClient = new RestSharp.RestClient(url);
 

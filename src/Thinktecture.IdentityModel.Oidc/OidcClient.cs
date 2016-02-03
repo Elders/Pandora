@@ -1,22 +1,20 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.IdentityModel.Tokens;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Threading.Tasks;
+using System.Web;
+using Newtonsoft.Json.Linq;
 using Thinktecture.IdentityModel.Clients;
 using Thinktecture.IdentityModel.Web;
-using System.Web;
-using System.Text;
 using Thinktecture.IdentityModel.SystemWeb;
-using System.Net;
-using System.IO;
-using Microsoft.Owin.Security.Jwt;
-using System.ServiceModel.Security.Tokens;
 
 namespace Thinktecture.IdentityModel.Oidc
 {
@@ -115,7 +113,7 @@ namespace Thinktecture.IdentityModel.Oidc
             };
         }
 
-        public static IEnumerable<Claim> ValidateIdentityToken(string token, string issuer, string audience, X509Certificate2 signingCertificate)
+        public static IEnumerable<Claim> ValidateIdentityToken(string token)
         {
             ClaimsPrincipal cp = null;
 
@@ -134,9 +132,8 @@ namespace Thinktecture.IdentityModel.Oidc
                     var key = new X509SecurityKey(certificate);
                     // Set up token validation 
                     TokenValidationParameters tvp = new TokenValidationParameters();
-                    tvp.ValidAudience = audience;
-                    tvp.IssuerSigningToken = certToken;
-                    tvp.ValidIssuer = "accounts.google.com";
+                    tvp.ValidAudience = OidcClientConfiguration.Audience;
+                    tvp.ValidIssuer = OidcClientConfiguration.IssuerName;
                     tvp.IssuerSigningKeyResolver = (a, b, c, d) => key;
 
                     // Enable / disable tests                
@@ -234,7 +231,7 @@ namespace Thinktecture.IdentityModel.Oidc
             }
             if (!dictionary.ContainsKey("name"))
             {
-                var token = new System.IdentityModel.Tokens.JwtSecurityToken(accessToken);
+                var token = new JwtSecurityToken(accessToken);
                 var name = token.Claims.Where(x => x.Type == "name").FirstOrDefault() ?? new Claim("name", "");
                 claims.Add(name);
             }

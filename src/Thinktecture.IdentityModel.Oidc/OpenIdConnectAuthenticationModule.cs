@@ -5,14 +5,33 @@ using System.IdentityModel.Services;
 using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Web;
-using Thinktecture.IdentityModel.SystemWeb;
+using Elders.Pandora;
 using Thinktecture.IdentityModel.Web;
+using Thinktecture.IdentityModel.SystemWeb;
 
 namespace Thinktecture.IdentityModel.Oidc
 {
+    public static class OidcClientConfiguration
+    {
+        public static string AppRelativeCallbackUrl = ApplicationConfiguration.Get("app_relative_callback_url");
+        public static string AuthorizeErrorRedirectUrl = ApplicationConfiguration.Get("authorize_error_redirect_url");
+        public static string ClientId = ApplicationConfiguration.Get("client_id");
+        public static string ClientSecret = ApplicationConfiguration.Get("client_secret");
+        public static string IssuerName = ApplicationConfiguration.Get("issuer");
+        public static string Audience = ApplicationConfiguration.Get("audience");
+        public static string Scope = ApplicationConfiguration.Get("scopes");
+        public static bool CallUserInfoEndpoint = Boolean.Parse(ApplicationConfiguration.Get("call_user_info_endpoint"));
+
+        public static class Endpoints
+        {
+            public static string Authorize = ApplicationConfiguration.Get("authorize_endpoint");
+            public static string Token = ApplicationConfiguration.Get("token_endpoint");
+            public static string UserInfo = ApplicationConfiguration.Get("user_info_endpoint");
+        }
+    }
+
     public class AuthorizeResponseEventArgs : EventArgs
     {
         public OidcAuthorizeResponse Response { get; set; }
@@ -148,40 +167,20 @@ namespace Thinktecture.IdentityModel.Oidc
             }
         }
 
-        private static X509Certificate2 LoadCertificate(string certThumbprint)
-        {
-            X509Certificate2 certificate = null;
-            var store = new X509Store(StoreLocation.LocalMachine);
-            store.Open(OpenFlags.ReadOnly);
-
-            foreach (var cert in store.Certificates)
-            {
-                if (System.String.Compare(cert.Thumbprint, certThumbprint, true) == 0)
-                {
-                    certificate = cert;
-                    break;
-                }
-            }
-            store.Close();
-            return certificate;
-        }
-
         async Task AuthenticateAsync(HttpContext context)
         {
             Init();
-            var config = OidcClientConfigurationSection.Instance;
 
-            var appRelativeCallbackUrl = config.AppRelativeCallbackUrl;
+            var appRelativeCallbackUrl = OidcClientConfiguration.AppRelativeCallbackUrl;
             if (context.Request.AppRelativeCurrentExecutionFilePath.Equals(appRelativeCallbackUrl, StringComparison.OrdinalIgnoreCase))
             {
-                var authorizeErrorUrl = config.AuthorizeErrorRedirectUrl;
-                var tokenUrl = config.Endpoints.Token;
-                var userInfoUrl = config.Endpoints.UserInfo;
-                var clientId = config.ClientId;
-                var clientSecret = config.ClientSecret;
-                var issuerName = config.IssuerName;
-                var signingcert = LoadCertificate(config.SigningCertificate);
-                var callUserInfoEndpoint = config.CallUserInfoEndpoint;
+                var authorizeErrorUrl = OidcClientConfiguration.AuthorizeErrorRedirectUrl;
+                var tokenUrl = OidcClientConfiguration.Endpoints.Token;
+                var userInfoUrl = OidcClientConfiguration.Endpoints.UserInfo;
+                var clientId = OidcClientConfiguration.ClientId;
+                var clientSecret = OidcClientConfiguration.ClientSecret;
+                var issuerName = OidcClientConfiguration.IssuerName;
+                var callUserInfoEndpoint = OidcClientConfiguration.CallUserInfoEndpoint;
 
                 // parse OIDC authorize response
                 var response = OidcClient.HandleAuthorizeResponse(context.Request.QueryString);
@@ -270,11 +269,7 @@ namespace Thinktecture.IdentityModel.Oidc
                     }
 
                     // validate identity token
-                    var identityClaims = OidcClient.ValidateIdentityToken(
-                        tokenResponse.IdentityToken,
-                        issuerName,
-                        clientId,
-                        signingcert);
+                    var identityClaims = OidcClient.ValidateIdentityToken(tokenResponse.IdentityToken);
 
                     // event -- identity token validated w/ claims
                     var identityTokenValidatedEventArgs = new IdentityTokenValidatedEventArgs { Claims = identityClaims };
@@ -373,9 +368,9 @@ namespace Thinktecture.IdentityModel.Oidc
         private static Dictionary<string, string> Cookies = new Dictionary<string, string>();
 
         List<CookieTransform> _NonSecureTransforms = new List<CookieTransform>
-            { 
-                new DeflateCookieTransform(), 
-                new MachineKeyTransform(), 
+            {
+                new DeflateCookieTransform(),
+                new MachineKeyTransform(),
             };
 
 
@@ -417,15 +412,14 @@ namespace Thinktecture.IdentityModel.Oidc
         {
             var context = HttpContext.Current;
 
-            var config = OidcClientConfigurationSection.Instance;
             //  SelfProtectedCookie.Delete("tryGoOp");
-            var authorizeUrl = config.Endpoints.Authorize;
-            var clientId = config.ClientId;
-            var scopes = "openid " + config.Scope;
+            var authorizeUrl = OidcClientConfiguration.Endpoints.Authorize;
+            var clientId = OidcClientConfiguration.ClientId;
+            var scopes = "openid " + OidcClientConfiguration.Scope;
             var state = Guid.NewGuid().ToString("N");
             var returnUrl = context.Request.RawUrl;
 
-            var appRelativeCallbackUrl = config.AppRelativeCallbackUrl;
+            var appRelativeCallbackUrl = OidcClientConfiguration.AppRelativeCallbackUrl;
             if (appRelativeCallbackUrl.StartsWith("~/"))
             {
                 appRelativeCallbackUrl = appRelativeCallbackUrl.Substring(2);

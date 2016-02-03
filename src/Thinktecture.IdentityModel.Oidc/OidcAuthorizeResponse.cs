@@ -1,5 +1,4 @@
-﻿
-namespace Thinktecture.IdentityModel.Oidc
+﻿namespace Thinktecture.IdentityModel.Oidc
 {
     public class OidcAuthorizeResponse
     {

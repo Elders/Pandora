@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0-*",
+  "frameworks": {
+    "net45": {
+      "wrappedProject": "../../Elders.Pandora.Box/Elders.Pandora.Box.csproj",
+      "bin": {
+        "assembly": "../../Elders.Pandora.Box/obj/{configuration}/Elders.Pandora.Box.dll",
+        "pdb": "../../Elders.Pandora.Box/obj/{configuration}/Elders.Pandora.Box.pdb"
+      }
+    }
+  }
+}

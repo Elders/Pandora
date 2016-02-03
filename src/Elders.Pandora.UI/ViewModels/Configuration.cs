@@ -1,11 +1,8 @@
 ﻿using Elders.Pandora.Box;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Security.Claims;
-using System.Web;
 
 namespace Elders.Pandora.UI.ViewModels
 {
@@ -32,7 +29,7 @@ namespace Elders.Pandora.UI.ViewModels
             if (!this.HasAccess())
                 return new Dictionary<Cluster, Dictionary<string, string>>();
 
-            var box = Elders.Pandora.Box.Box.Mistranslate(jar);
+            var box = Box.Box.Mistranslate(jar);
 
             var pandora = new Pandora(box);
 
@@ -43,7 +40,7 @@ namespace Elders.Pandora.UI.ViewModels
             {
                 if (box.Clusters.Select(x => x.Name).Any(x => x == env.Name))
                 {
-                    clusters.Add(env, pandora.Open(env.Name, string.Empty, true).AsDictionary());
+                    clusters.Add(env, pandora.Open(new PandoraOptions(env.Name, string.Empty, true)).AsDictionary());
                 }
             }
 
@@ -55,11 +52,16 @@ namespace Elders.Pandora.UI.ViewModels
             if (!this.HasAccess(clusterName))
                 return new KeyValuePair<Cluster, Dictionary<string, string>>();
 
-            var box = Elders.Pandora.Box.Box.Mistranslate(jar);
+            var box = Box.Box.Mistranslate(jar);
 
             var pandora = new Pandora(box);
 
-            return new KeyValuePair<Cluster, Dictionary<string, string>>(SecurityAccess.Projects.SingleOrDefault(x => x.Name == this.ProjectName).Applications.SingleOrDefault(x => x.Name == this.ApplicationName).Clusters.SingleOrDefault(x => x.Name == clusterName), pandora.Open(clusterName, string.Empty, true).AsDictionary());
+            return new KeyValuePair<Cluster, Dictionary<string, string>>(SecurityAccess.Projects
+                .SingleOrDefault(x => x.Name == this.ProjectName)
+                .Applications
+                .SingleOrDefault(x => x.Name == this.ApplicationName)
+                .Clusters
+                .SingleOrDefault(x => x.Name == clusterName), pandora.Open(new PandoraOptions(clusterName, string.Empty, true)).AsDictionary());
         }
 
         public Dictionary<string, Dictionary<string, string>> GetAllMachines(string clusterName)
@@ -67,7 +69,7 @@ namespace Elders.Pandora.UI.ViewModels
             if (!this.HasAccess(clusterName))
                 return new Dictionary<string, Dictionary<string, string>>();
 
-            var box = Elders.Pandora.Box.Box.Mistranslate(jar);
+            var box = Box.Box.Mistranslate(jar);
 
             var pandora = new Pandora(box);
 
@@ -75,7 +77,7 @@ namespace Elders.Pandora.UI.ViewModels
 
             foreach (var machine in box.Machines)
             {
-                machines.Add(machine.Name, pandora.Open(clusterName, machine.Name, true).AsDictionary());
+                machines.Add(machine.Name, pandora.Open(new PandoraOptions(clusterName, machine.Name, true)).AsDictionary());
             }
 
             return machines;
@@ -86,11 +88,11 @@ namespace Elders.Pandora.UI.ViewModels
             if (!this.HasAccess(clusterName))
                 return new KeyValuePair<string, Dictionary<string, string>>();
 
-            var box = Elders.Pandora.Box.Box.Mistranslate(jar);
+            var box = Box.Box.Mistranslate(jar);
 
             var pandora = new Pandora(box);
 
-            return new KeyValuePair<string, Dictionary<string, string>>(machineName, pandora.Open(clusterName, machineName, true).AsDictionary());
+            return new KeyValuePair<string, Dictionary<string, string>>(machineName, pandora.Open(new PandoraOptions(clusterName, machineName, true)).AsDictionary());
         }
 
         public KeyValuePair<Application, Dictionary<string, string>> GetDefaults()
@@ -103,7 +105,7 @@ namespace Elders.Pandora.UI.ViewModels
             if (!app.Access.HasAccess(Access.ReadAcccess))
                 return new KeyValuePair<Application, Dictionary<string, string>>();
 
-            var box = Elders.Pandora.Box.Box.Mistranslate(jar);
+            var box = Box.Box.Mistranslate(jar);
 
             return new KeyValuePair<Application, Dictionary<string, string>>(app, box.Defaults.AsDictionary());
         }
@@ -150,10 +152,5 @@ namespace Elders.Pandora.UI.ViewModels
             else
                 return false;
         }
-    }
-
-    public class ClaimValue
-    {
-        public string Value { get; set; }
     }
 }
