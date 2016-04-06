@@ -60,7 +60,7 @@ namespace Elders.Pandora.Box
     public static class ConfigurationExtensions
     {
         /// <summary>
-        /// Joins a configuration with a collection of configurations. If the collection configurations such does NOT contain
+        /// Joins a configuration with a collection of configurations. If the collection configurations does NOT contain
         /// a set of configurations such as 'Cluster' it will NOT appear within the result set.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -73,7 +73,7 @@ namespace Elders.Pandora.Box
         }
 
         /// <summary>
-        /// Joins a configuration with a collection of configurations. If the collection configurations such does NOT contain
+        /// Joins a configuration with a collection of configurations. If the collection configurations does NOT contain
         /// a set of configurations such as 'Cluster' it will NOT appear within the result set.
         /// </summary>
         /// <typeparam name="T"></typeparam>

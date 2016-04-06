@@ -15,7 +15,7 @@ namespace Elders.Pandora.Box
     {
         private readonly List<string> reservedKeys;
 
-        public Box(Jar jar)
+        private Box(Jar jar)
         {
             Name = jar.Name;
             References = jar.References;
@@ -79,6 +79,23 @@ namespace Elders.Pandora.Box
 
             if (!Machines.Contains(machine))
                 Machines.Add(machine);
+        }
+
+        public void Override(Cluster cluster)
+        {
+            Guard_SettingMustBeDefinedInDefaults(cluster.AsDictionary());
+
+            var current = Clusters.SingleOrDefault(x => x.Name == cluster.Name);
+            if (ReferenceEquals(null, current))
+            {
+                AddCluster(cluster);
+            }
+            else
+            {
+                //Clusters = cluster.Join(Clusters);
+                var clusterAsCollection = new List<Cluster> { cluster };
+                Clusters = Clusters.Merge(clusterAsCollection).ToList();
+            }
         }
 
         private void Guard_SettingMustBeDefinedInDefaults(Dictionary<string, string> settings)

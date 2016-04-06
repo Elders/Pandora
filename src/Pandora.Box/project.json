@@ -1,5 +1,5 @@
 {
-  "version": "0.4.0-beta0001",
+  "version": "1.0.0-beta0001",
   "title": "Elders Pandora Box",
   "description": "Configuration library that uses environment variables.",
   "authors": [
@@ -14,7 +14,7 @@
   "projectUrl": "https://github.com/Elders/pandora",
   "licenseUrl": "https://github.com/Elders/Pandora/blob/master/LICENSE",
   "iconUrl": "https://github.com/Elders/Cronus/blob/master/Cronus.png",
-  "releaseNotes": "Initial release for testing",
+  "releaseNotes": "Moved Pandora to dotnet5.4",
   "frameworks": {
     "dotnet5.4": {
       "dependencies": {

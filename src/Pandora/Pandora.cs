@@ -17,14 +17,14 @@ namespace Elders.Pandora
     /// <remarks>http://en.wikipedia.org/wiki/Pandora</remarks>
     public class Pandora
     {
-        Elders.Pandora.Box.Box box;
+        Box.Box box;
 
-        public Pandora(Elders.Pandora.Box.Box box)
+        public Pandora(Box.Box box)
         {
             this.box = new Box.Box(box);
         }
 
-        public Elders.Pandora.Box.Configuration Open(PandoraOptions options)
+        public Configuration Open(PandoraOptions options)
         {
             options = options ?? PandoraOptions.Defaults;
 
@@ -37,8 +37,8 @@ namespace Elders.Pandora
                 box.Merge(referenceBox);
             }
 
-            if (String.IsNullOrEmpty(options.ClusterName) && String.IsNullOrEmpty(options.MachineName))
-                throw new ArgumentNullException("clusterName", "When getting configuraion for a machine the clusterName is required");
+            if (string.IsNullOrEmpty(options.ClusterName) && string.IsNullOrEmpty(options.MachineName))
+                throw new ArgumentNullException("options.ClusterName", "When getting configuration for a machine the clusterName is required");
 
             var result = box.Defaults.AsDictionary();
 
@@ -55,9 +55,9 @@ namespace Elders.Pandora
             }
 
             if (options.UseRawSettingsNames)
-                return new Elders.Pandora.Box.Configuration(box.Name, result);
+                return new Configuration(box.Name, result);
             else
-                return new Elders.Pandora.Box.Configuration(box.Name, NamenizeConfiguration(result, options.ClusterName, options.MachineName));
+                return new Configuration(box.Name, NamenizeConfiguration(result, options.ClusterName, options.MachineName));
         }
 
         private Dictionary<string, string> NamenizeConfiguration(Dictionary<string, string> settings, string clusterName, string machineName)
@@ -67,13 +67,13 @@ namespace Elders.Pandora
 
         private bool TryFindCluster(string clusterName, out Cluster cluster)
         {
-            cluster = box.Clusters.Where(x => x.Name == clusterName).SingleOrDefault();
+            cluster = box.Clusters.SingleOrDefault(x => x.Name == clusterName);
             return cluster != null;
         }
 
         private bool TryFindMachine(string machineName, out Machine machine)
         {
-            machine = box.Machines.Where(x => x.Name == machineName).SingleOrDefault();
+            machine = box.Machines.SingleOrDefault(x => x.Name == machineName);
             return machine != null;
         }
 
