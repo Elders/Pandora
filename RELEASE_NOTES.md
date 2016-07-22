@@ -1,3 +1,6 @@
+#### 0.4.1 - 22.07.2016
+* Update Nyx build script
+
 #### 0.4.0 - 03.02.2016
 * Added PandoraOptions and exposed references in Pandora.Box
 
