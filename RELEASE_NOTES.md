@@ -1,3 +1,6 @@
+#### 0.4.2 - 22.07.2016
+* vNext
+
 #### 0.4.1 - 22.07.2016
 * Update Nyx build script
 
