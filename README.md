@@ -67,12 +67,12 @@ This is where Pandora comes. You can configure the application using the followi
 }
 ```
 
-jar file: this is the file containing configuration. In this case `SampleConfiguration.json`
-name: The application name. The recommended approach is to name the jar file with the same name
-defaults: defines configuration keys for the current application and sets default values
-clusters: defines different environment configurations where the application will be deployed. Here `local` is the dev environment and `test` is the place for QA
-machines: defines configurations for specific machine inside a cluster. The COMPUTERNAME is the default ENV VAR in windows.
-references: merges two jar files. Same rules apply here. You are not allowed to have the duplicate keys in ref and main jars
+- jar file: this is the file containing configuration. In this case `SampleConfiguration.json`
+- name: The application name. The recommended approach is to name the jar file with the same name
+- defaults: defines configuration keys for the current application and sets default values
+- clusters: defines different environment configurations where the application will be deployed. Here `local` is the dev environment and `test` is the place for QA
+- machines: defines configurations for specific machine inside a cluster. The COMPUTERNAME is the default ENV VAR in windows.
+- references: merges two jar files. Same rules apply here. You are not allowed to have the duplicate keys in ref and main jars
 
 In order to install the configurations you will have to use Pandora.Cli. By default the configurations are applied and stored in environment variables.
 
