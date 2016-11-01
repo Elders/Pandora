@@ -1,7 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Elders.Pandora.Box;
 using Newtonsoft.Json;
 
@@ -12,81 +14,86 @@ namespace Elders.Pandora
     /// instructions of Zeus. As Hesiod related it, each god helped create her by giving her unique gifts. Zeus ordered Hephaestus to 
     /// mold her out of earth as part of the punishment of humanity for Prometheus' theft of the secret of fire, and all the gods joined in 
     /// offering her "seductive gifts". Her other name—inscribed against her figure on a white-ground kylix in the British Museum—is Anesidora, 
-    /// "she who sends up gifts" (up implying "from below" within the earth)
+    /// "she who sends up gifts" (up implying "from below" within the earth) 
     /// </summary>
-    /// <remarks>http://en.wikipedia.org/wiki/Pandora</remarks>
+    /// <remarks>
+    /// http://en.wikipedia.org/wiki/Pandora
+    /// </remarks>
     public class Pandora
     {
-        Elders.Pandora.Box.Box box;
+        readonly IConfigurationRepository cfgRepo;
+        readonly ApplicationContext context;
 
-        public Pandora(Elders.Pandora.Box.Box box)
+        public Pandora(ApplicationContext applicationContext, IConfigurationRepository configurationRepository)
         {
-            this.box = new Box.Box(box);
+            this.context = applicationContext;
+            this.cfgRepo = configurationRepository;
         }
 
-        public Elders.Pandora.Box.Configuration Open(PandoraOptions options)
+        public string Get(string key)
         {
-            options = options ?? PandoraOptions.Defaults;
+            return Get(key, context);
+        }
 
-            foreach (var reference in box.References)
+        public string Get(string key, ApplicationContext applicationContext)
+        {
+            if (string.IsNullOrEmpty(key)) throw new ArgumentNullException(nameof(key));
+            if (ReferenceEquals(null, applicationContext)) throw new ArgumentNullException(nameof(applicationContext));
+
+            var sanitizedKey = key.ToLower();
+            string longKey = NameBuilder.GetSettingName(applicationContext.ApplicationName, applicationContext.Cluster, applicationContext.Machine, sanitizedKey);
+            var setting = cfgRepo.Get(longKey);
+            return setting;
+        }
+
+        public T Get<T>(string key)
+        {
+            return Get<T>(key, context);
+        }
+
+        public T Get<T>(string key, ApplicationContext context)
+        {
+            var json = Get(key, context);
+            if (json == null)
+                return default(T);
+            var result = JsonConvert.DeserializeObject<T>(json);
+            return result;
+        }
+
+        public IEnumerable<DeployedSetting> GetAll()
+        {
+            return GetAll(context);
+        }
+
+        public IEnumerable<DeployedSetting> GetAll(ApplicationContext applicationContext)
+        {
+            return from setting in GetAllOnMachine()
+                   where setting.Cluster == applicationContext.Cluster &&
+                         setting.Machine == applicationContext.Machine &&
+                         setting.ApplicationName == applicationContext.ApplicationName
+                   select setting;
+        }
+
+        public IEnumerable<DeployedSetting> GetAllOnMachine()
+        {
+            var regex = new Regex(@"([^@]+)@@([^\^]+)\^([^~]+)~~(.+)");
+
+            var all = Environment.GetEnvironmentVariables(EnvironmentVariableTarget.Machine);
+
+            foreach (DictionaryEntry item in all)
             {
-                var refJarFile = reference.Values.First();
-                var referenceJar = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(refJarFile));
-                var referenceBox = Box.Box.Mistranslate(referenceJar);
-
-                box.Merge(referenceBox);
+                var result = regex.Match(item.Key.ToString());
+                if (result.Success)
+                {
+                    yield return new DeployedSetting(
+                        raw: result.Groups[0].Value,
+                        applicationName: result.Groups[1].Value,
+                        cluster: result.Groups[2].Value,
+                        machine: result.Groups[3].Value,
+                        key: result.Groups[4].Value,
+                        value: Environment.GetEnvironmentVariable(result.Groups[0].Value, EnvironmentVariableTarget.Machine));
+                }
             }
-
-            if (String.IsNullOrEmpty(options.ClusterName) && String.IsNullOrEmpty(options.MachineName))
-                throw new ArgumentNullException("clusterName", "When getting configuraion for a machine the clusterName is required");
-
-            var result = box.Defaults.AsDictionary();
-
-            Cluster cluster = null;
-            if (TryFindCluster(options.ClusterName, out cluster))
-            {
-                result = Merge(result, cluster.AsDictionary());
-            }
-
-            Machine machine = null;
-            if (TryFindMachine(options.MachineName, out machine))
-            {
-                result = Merge(result, machine.AsDictionary());
-            }
-
-            if (options.UseRawSettingsNames)
-                return new Elders.Pandora.Box.Configuration(box.Name, result);
-            else
-                return new Elders.Pandora.Box.Configuration(box.Name, NamenizeConfiguration(result, options.ClusterName, options.MachineName));
-        }
-
-        private Dictionary<string, string> NamenizeConfiguration(Dictionary<string, string> settings, string clusterName, string machineName)
-        {
-            return settings.ToDictionary(x => NameBuilder.GetSettingName(box.Name, clusterName, machineName, x.Key), y => y.Value);
-        }
-
-        private bool TryFindCluster(string clusterName, out Cluster cluster)
-        {
-            cluster = box.Clusters.Where(x => x.Name == clusterName).SingleOrDefault();
-            return cluster != null;
-        }
-
-        private bool TryFindMachine(string machineName, out Machine machine)
-        {
-            machine = box.Machines.Where(x => x.Name == machineName).SingleOrDefault();
-            return machine != null;
-        }
-
-        private Dictionary<T1, T2> Merge<T1, T2>(Dictionary<T1, T2> first, Dictionary<T1, T2> second)
-        {
-            if (first == null) throw new ArgumentNullException("first");
-            if (second == null) throw new ArgumentNullException("second");
-
-            var merged = new Dictionary<T1, T2>();
-            first.ToList().ForEach(kv => merged[kv.Key] = kv.Value);
-            second.ToList().ForEach(kv => merged[kv.Key] = kv.Value);
-
-            return merged;
         }
     }
 }
