@@ -1,5 +1,5 @@
 #### 0.5.0-beta0001 - 01.11.2016
-* Updates Nyx build script
+* Adds IConfigurationRepository to abstract the configuration storage. By default WindowsEnvironmentVariables repository is used
 
 #### 0.4.2 - 22.07.2016
 * vNext

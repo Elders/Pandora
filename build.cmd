@@ -45,4 +45,4 @@ IF NOT [%2]==[] (set RELEASE_TARGETSOURCE="%2")
 SET SUMMARY="Pandora aims to externalize the application configuration."
 SET DESCRIPTION="Pandora aims to externalize the application configuration."
 
-%FAKE% %NYX% appName=Elders.Pandora appSummary=%SUMMARY% appDescription=%DESCRIPTION% nugetPackageName=Pandora
+%FAKE% %NYX% appName=Elders.Pandora appSummary=%SUMMARY% appDescription=%DESCRIPTION% nugetPackageName=Pandora nugetserver=%RELEASE_TARGETSOURCE% nugetkey=%RELEASE_NUGETKEY%

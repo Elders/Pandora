@@ -11,6 +11,12 @@ namespace Elders.Pandora
     public static class ApplicationConfiguration
     {
         static ApplicationContext context = null;
+        static IConfigurationRepository cfgRepo = null;
+
+        static IConfigurationRepository GetRepository()
+        {
+            return cfgRepo ?? new WindowsEnvironmentVariables();
+        }
 
         public static void SetContext(string applicationName, string cluster = null, string machine = null)
         {
@@ -20,6 +26,11 @@ namespace Elders.Pandora
         public static void SetContext(ApplicationContext applicationContext)
         {
             context = applicationContext;
+        }
+
+        public static void SetRepository(IConfigurationRepository configurationRepository)
+        {
+            cfgRepo = configurationRepository ?? new WindowsEnvironmentVariables();
         }
 
         public static ApplicationContext CreateContext(string applicationName)
@@ -35,11 +46,9 @@ namespace Elders.Pandora
 
         public static string Get(string key, ApplicationContext context)
         {
-            var sanitizedKey = key.ToLowerInvariant();
+            var sanitizedKey = key.ToLower();
             string longKey = NameBuilder.GetSettingName(context.ApplicationName, context.Cluster, context.Machine, sanitizedKey);
-            var setting = Environment.GetEnvironmentVariable(longKey, EnvironmentVariableTarget.Machine);
-            if (setting == null)
-                throw new KeyNotFoundException("Unable to find environment variable " + longKey);
+            var setting = GetRepository().Get(longKey);
             return setting;
         }
 
@@ -97,7 +106,7 @@ namespace Elders.Pandora
         private static void Guard_ValidPandoraContext()
         {
             if (context == null)
-                throw new ArgumentNullException("Please use 'SetContext' method first.");
+                throw new ArgumentNullException(nameof(context), "Please use 'SetContext' method first.");
         }
     }
 

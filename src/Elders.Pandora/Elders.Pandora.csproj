@@ -45,9 +45,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationContext.cs" />
+    <Compile Include="IConfigurationRepository.cs" />
     <Compile Include="Pandora.cs" />
     <Compile Include="ApplicationConfiguration.cs" />
     <Compile Include="PandoraOptions.cs" />
+    <Compile Include="WindowsEnvironmentVariables.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
