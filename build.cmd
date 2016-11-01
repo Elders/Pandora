@@ -4,7 +4,7 @@ SETLOCAL
 
 SET NUGET=%LocalAppData%\NuGet\NuGet.exe
 SET FAKE=%LocalAppData%\FAKE\tools\Fake.exe
-SET NYX=%LocalAppData%\Nyx\tools\build.fsx
+SET NYX=%LocalAppData%\Nyx\tools\build_next.fsx
 SET GITVERSION=%LocalAppData%\GitVersion.CommandLine\tools\GitVersion.exe
 SET MSBUILD14_TOOLS_PATH="%ProgramFiles(x86)%\MSBuild\14.0\bin\MSBuild.exe"
 
@@ -36,20 +36,13 @@ echo Downloading Nyx...
 
 %FAKE% %NYX% "target=clean" -st
 
-SET NUGET_SOURCES=https://www.myget.org/F/one-big-splash/api/v2
 %FAKE% %NYX% "target=RestoreNugetPackages" -st
 %FAKE% %NYX% "target=RestoreBowerPackages" -st
 
 IF NOT [%1]==[] (set RELEASE_NUGETKEY="%1")
 IF NOT [%2]==[] (set RELEASE_TARGETSOURCE="%2")
 
-SET RELEASE_NOTES=RELEASE_NOTES.md
+SET SUMMARY="Pandora aims to externalize the application configuration."
+SET DESCRIPTION="Pandora aims to externalize the application configuration."
 
-SET SUMMARY="Elders.Pandora"
-SET DESCRIPTION="Elders.Pandora"
-
-%FAKE% %NYX% appName=Elders.Pandora	              appReleaseNotes=%RELEASE_NOTES% appSummary=%SUMMARY% appDescription=%DESCRIPTION% nugetPackageName=Pandora
-%FAKE% %NYX% appName=Elders.Pandora.Cli	       	  appReleaseNotes=%RELEASE_NOTES% appSummary=%SUMMARY% appDescription=%DESCRIPTION% nugetPackageName=Pandora.Cli
-%FAKE% %NYX% appName=Elders.Pandora.Configuration	appReleaseNotes=%RELEASE_NOTES% appSummary=%SUMMARY% appDescription=%DESCRIPTION% nugetPackageName=Pandora.Configuration
-
-IF NOT [%1]==[] (%FAKE% %NYX% "target=Release" -st appReleaseNotes=%RELEASE_NOTES%)
+%FAKE% %NYX% appName=Elders.Pandora appSummary=%SUMMARY% appDescription=%DESCRIPTION% nugetPackageName=Pandora nugetserver=%RELEASE_TARGETSOURCE% nugetkey=%RELEASE_NUGETKEY%
