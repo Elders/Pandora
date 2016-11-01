@@ -67,33 +67,11 @@ namespace Elders.Pandora
 
         public IEnumerable<DeployedSetting> GetAll(ApplicationContext applicationContext)
         {
-            return from setting in GetAllOnMachine()
+            return from setting in cfgRepo.GetAll()
                    where setting.Cluster == applicationContext.Cluster &&
                          setting.Machine == applicationContext.Machine &&
                          setting.ApplicationName == applicationContext.ApplicationName
                    select setting;
-        }
-
-        public IEnumerable<DeployedSetting> GetAllOnMachine()
-        {
-            var regex = new Regex(@"([^@]+)@@([^\^]+)\^([^~]+)~~(.+)");
-
-            var all = Environment.GetEnvironmentVariables(EnvironmentVariableTarget.Machine);
-
-            foreach (DictionaryEntry item in all)
-            {
-                var result = regex.Match(item.Key.ToString());
-                if (result.Success)
-                {
-                    yield return new DeployedSetting(
-                        raw: result.Groups[0].Value,
-                        applicationName: result.Groups[1].Value,
-                        cluster: result.Groups[2].Value,
-                        machine: result.Groups[3].Value,
-                        key: result.Groups[4].Value,
-                        value: Environment.GetEnvironmentVariable(result.Groups[0].Value, EnvironmentVariableTarget.Machine));
-                }
-            }
         }
     }
 }
