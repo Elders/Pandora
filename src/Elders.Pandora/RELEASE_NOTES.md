@@ -1,3 +1,6 @@
+#### 0.5.1 - 02.11.2016
+* Exposes current ApplicationContext for Pandora
+
 #### 0.5.0 - 01.11.2016
 * Pandora.Open(...) is moved as an extention method
 * Adds IConfigurationRepository to abstract the configuration storage. By default WindowsEnvironmentVariables repository is used

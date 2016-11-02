@@ -30,6 +30,8 @@ namespace Elders.Pandora
             this.cfgRepo = configurationRepository;
         }
 
+        public ApplicationContext ApplicationContext { get { return context; } }
+
         public string Get(string key)
         {
             return Get(key, context);
