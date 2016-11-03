@@ -12,6 +12,12 @@ namespace Elders.Pandora
             throw new NotSupportedException($"This operation is not supported for {nameof(WindowsEnvironmentVariables)}");
         }
 
+        public bool Exists(string key)
+        {
+            var setting = Environment.GetEnvironmentVariable(key, EnvironmentVariableTarget.Machine);
+            return ReferenceEquals(null, setting) == false;
+        }
+
         public string Get(string key)
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentException(nameof(key));

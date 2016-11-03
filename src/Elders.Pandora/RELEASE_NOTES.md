@@ -1,3 +1,6 @@
+#### 0.5.2 - 03.11.2016
+* Adds Exists(...) method for IConfigurationRepository
+
 #### 0.5.1 - 02.11.2016
 * Exposes current ApplicationContext for Pandora
 

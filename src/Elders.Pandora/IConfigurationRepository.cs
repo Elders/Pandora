@@ -8,5 +8,6 @@ namespace Elders.Pandora
         void Set(string key, string value);
         void Delete(string key);
         IEnumerable<DeployedSetting> GetAll();
+        bool Exists(string key);
     }
 }
