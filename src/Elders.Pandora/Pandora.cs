@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Elders.Pandora.Box;
 using Newtonsoft.Json;
 
@@ -74,6 +71,12 @@ namespace Elders.Pandora
                          setting.Machine == applicationContext.Machine &&
                          setting.ApplicationName == applicationContext.ApplicationName
                    select setting;
+        }
+
+        public void Set(string key, string value)
+        {
+            var settingName = NameBuilder.GetSettingName(context.ApplicationName, context.Cluster, context.Machine, key);
+            cfgRepo.Set(settingName, value);
         }
     }
 }

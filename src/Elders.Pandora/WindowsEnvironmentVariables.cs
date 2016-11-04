@@ -54,9 +54,9 @@ namespace Elders.Pandora
         public void Set(string key, string value)
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentException(nameof(key));
-            if (string.IsNullOrEmpty(value)) throw new ArgumentException(nameof(value));
 
-            Environment.SetEnvironmentVariable(key, value, EnvironmentVariableTarget.Machine);
+            if (string.IsNullOrEmpty(value) == false)
+                Environment.SetEnvironmentVariable(key, value, EnvironmentVariableTarget.Machine);
         }
     }
 }

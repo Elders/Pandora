@@ -1,3 +1,6 @@
+#### 0.5.3 - 04.11.2016
+* Adds the ability to set settings using Pandora.Set(...)
+
 #### 0.5.2 - 03.11.2016
 * Adds Exists(...) method for IConfigurationRepository
 
