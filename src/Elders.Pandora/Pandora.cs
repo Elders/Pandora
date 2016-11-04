@@ -75,7 +75,12 @@ namespace Elders.Pandora
 
         public void Set(string key, string value)
         {
-            var settingName = NameBuilder.GetSettingName(context.ApplicationName, context.Cluster, context.Machine, key);
+            Set(key, value, context);
+        }
+
+        public void Set(string key, string value, ApplicationContext applicationContex)
+        {
+            var settingName = NameBuilder.GetSettingName(applicationContex.ApplicationName, applicationContex.Cluster, applicationContex.Machine, key);
             cfgRepo.Set(settingName, value);
         }
     }
