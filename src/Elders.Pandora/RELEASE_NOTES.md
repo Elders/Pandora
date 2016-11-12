@@ -1,3 +1,6 @@
+#### 0.6.0-beta0002 - 12.11.2016
+* Removes `UserRawSetting` option
+
 #### 0.6.0-beta0001 - 12.11.2016
 * Adds support for Uniquie Cluster Keys
 

@@ -9,14 +9,14 @@ namespace Elders.Pandora
 {
     public class PandoraBoxOpener
     {
-        Elders.Pandora.Box.Box box;
+        Box.Box box;
 
-        public PandoraBoxOpener(Elders.Pandora.Box.Box box)
+        public PandoraBoxOpener(Box.Box box)
         {
             this.box = new Box.Box(box);
         }
 
-        public Elders.Pandora.Box.Configuration Open(PandoraOptions options)
+        public Configuration Open(PandoraOptions options)
         {
             options = options ?? PandoraOptions.Defaults;
 
@@ -29,37 +29,39 @@ namespace Elders.Pandora
                 box.Merge(referenceBox);
             }
 
-            if (String.IsNullOrEmpty(options.ClusterName) && String.IsNullOrEmpty(options.MachineName))
+            if (String.IsNullOrEmpty(options.ClusterName) && string.IsNullOrEmpty(options.MachineName))
                 throw new ArgumentNullException("clusterName", "When getting configuraion for a machine the clusterName is required");
 
-            Dictionary<string, string> result = new Dictionary<string, string>();
-            var confDefault = box.Defaults.AsDictionary();
+            Dictionary<string, string> confDefaults = box.Defaults.AsDictionary();
+            Dictionary<string, string> confCluster = GetClusterConfiguration(options.ClusterName);
+            Dictionary<string, string> confMachine = GetMachineConfiguration(options.MachineName);
 
-            Cluster cluster = null;
-            Dictionary<string, string> confCluster = new Dictionary<string, string>();
-            if (TryFindCluster(options.ClusterName, out cluster))
-            {
-                confCluster = cluster.AsDictionary();
-            }
+            Dictionary<string, string> namanizedDefaltConfigs = NamenizeClusterConfiguration(confDefaults, options.ClusterName);
+            Dictionary<string, string> namanizedClusterConfigs = NamenizeClusterConfiguration(confCluster, options.ClusterName);
+            Dictionary<string, string> namanizedMachineConfigs = NamenizeMachineConfiguration(confMachine, options.ClusterName, options.MachineName);
 
+
+            return new Elders.Pandora.Box.Configuration(box.Name, Merge(namanizedDefaltConfigs, Merge(namanizedMachineConfigs, namanizedClusterConfigs)));
+        }
+
+        Dictionary<string, string> GetMachineConfiguration(string machineName)
+        {
             Machine machine = null;
             Dictionary<string, string> confMachine = new Dictionary<string, string>();
-            if (TryFindMachine(options.MachineName, out machine))
-            {
+            if (TryFindMachine(machineName, out machine))
                 confMachine = machine.AsDictionary();
-            }
 
-            if (options.UseRawSettingsNames)
-                return new Elders.Pandora.Box.Configuration(box.Name, Merge(confDefault, Merge(confCluster, confMachine)));
-            else
-            {
-                var namanizedDefaltConfigs = NamenizeClusterConfiguration(confDefault, options.ClusterName);
-                var namanizedMachineConfigs = NamenizeMachineConfiguration(confMachine, options.ClusterName, options.MachineName);
-                var namanizedClusterConfigs = NamenizeClusterConfiguration(confCluster, options.ClusterName);
+            return confMachine;
+        }
 
-                return new Elders.Pandora.Box.Configuration(box.Name, Merge(namanizedDefaltConfigs, Merge(namanizedMachineConfigs, namanizedClusterConfigs)));
-            }
+        Dictionary<string, string> GetClusterConfiguration(string clusterName)
+        {
+            Cluster cluster = null;
+            Dictionary<string, string> confCluster = new Dictionary<string, string>();
+            if (TryFindCluster(clusterName, out cluster))
+                confCluster = cluster.AsDictionary();
 
+            return confCluster;
         }
 
         Dictionary<string, string> NamenizeClusterConfiguration(Dictionary<string, string> settings, string clusterName)

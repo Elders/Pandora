@@ -40,18 +40,16 @@ namespace Elders.Pandora
             if (ReferenceEquals(null, applicationContext)) throw new ArgumentNullException(nameof(applicationContext));
 
             var sanitizedKey = key.ToLower();
-            string longKeyMachine = NameBuilder.GetSettingName(applicationContext.ApplicationName, applicationContext.Cluster, applicationContext.Machine, sanitizedKey);
+            string keyForMachine = NameBuilder.GetSettingName(applicationContext.ApplicationName, applicationContext.Cluster, applicationContext.Machine, sanitizedKey);
 
-            try
+            if (cfgRepo.Exists(keyForMachine))
             {
-                var setting = cfgRepo.Get(longKeyMachine);
-                return setting;
+                return cfgRepo.Get(keyForMachine);
             }
-            catch (KeyNotFoundException ex)
+            else
             {
-                string longKeyCluster = NameBuilder.GetSettingClusterName(applicationContext.ApplicationName, applicationContext.Cluster, sanitizedKey);
-                var setting = cfgRepo.Get(longKeyCluster);
-                return setting;
+                string keyForCluster = NameBuilder.GetSettingClusterName(applicationContext.ApplicationName, applicationContext.Cluster, sanitizedKey);
+                return cfgRepo.Get(keyForCluster);
             }
         }
 
