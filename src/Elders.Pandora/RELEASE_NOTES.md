@@ -1,4 +1,4 @@
-#### 0.6.0 - 12.11.2016
+#### 0.6.0-beta0001 - 12.11.2016
 * Adds support for Uniquie Cluster Keys
 
 #### 0.5.4 - 04.11.2016
