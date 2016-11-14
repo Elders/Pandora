@@ -1,3 +1,6 @@
+#### 0.6.0-beta0003 - 12.11.2016
+* Changed Get<T> and added GetAll() for getting all keys in the storage
+
 #### 0.6.0-beta0002 - 12.11.2016
 * Removes `UserRawSetting` option
 

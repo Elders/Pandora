@@ -9,7 +9,7 @@ namespace Elders.Pandora
 {
     public class PandoraBoxOpener
     {
-        Box.Box box;
+        Elders.Pandora.Box.Box box;
 
         public PandoraBoxOpener(Box.Box box)
         {
@@ -63,7 +63,7 @@ namespace Elders.Pandora
 
             return confCluster;
         }
-
+            //var settingName = NameBuilder.GetSettingName(applicationContex.ApplicationName, applicationContex.Cluster, applicationContex.Machine, key);
         Dictionary<string, string> NamenizeClusterConfiguration(Dictionary<string, string> settings, string clusterName)
         {
             return settings.ToDictionary(x => NameBuilder.GetSettingClusterName(box.Name, clusterName, x.Key), y => y.Value);
