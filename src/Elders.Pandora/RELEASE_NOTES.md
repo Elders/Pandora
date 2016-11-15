@@ -1,3 +1,8 @@
+#### 0.6.0 - 15.11.2016
+* Changed Get<T> and added GetAll() for getting all keys in the storage
+* Removes `UserRawSetting` option
+* Adds support for Uniquie Cluster Keys
+
 #### 0.5.4 - 04.11.2016
 * Adds the ability to set settings for other contexts using Pandora.Set(...)
 

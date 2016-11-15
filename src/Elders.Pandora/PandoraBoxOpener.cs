@@ -11,12 +11,12 @@ namespace Elders.Pandora
     {
         Elders.Pandora.Box.Box box;
 
-        public PandoraBoxOpener(Elders.Pandora.Box.Box box)
+        public PandoraBoxOpener(Box.Box box)
         {
             this.box = new Box.Box(box);
         }
 
-        public Elders.Pandora.Box.Configuration Open(PandoraOptions options)
+        public Configuration Open(PandoraOptions options)
         {
             options = options ?? PandoraOptions.Defaults;
 
@@ -29,30 +29,47 @@ namespace Elders.Pandora
                 box.Merge(referenceBox);
             }
 
-            if (String.IsNullOrEmpty(options.ClusterName) && String.IsNullOrEmpty(options.MachineName))
+            if (String.IsNullOrEmpty(options.ClusterName) && string.IsNullOrEmpty(options.MachineName))
                 throw new ArgumentNullException("clusterName", "When getting configuraion for a machine the clusterName is required");
 
-            var result = box.Defaults.AsDictionary();
+            Dictionary<string, string> confDefaults = box.Defaults.AsDictionary();
+            Dictionary<string, string> confCluster = GetClusterConfiguration(options.ClusterName);
+            Dictionary<string, string> confMachine = GetMachineConfiguration(options.MachineName);
 
-            Cluster cluster = null;
-            if (TryFindCluster(options.ClusterName, out cluster))
-            {
-                result = Merge(result, cluster.AsDictionary());
-            }
+            Dictionary<string, string> namanizedDefaltConfigs = NamenizeClusterConfiguration(confDefaults, options.ClusterName);
+            Dictionary<string, string> namanizedClusterConfigs = NamenizeClusterConfiguration(confCluster, options.ClusterName);
+            Dictionary<string, string> namanizedMachineConfigs = NamenizeMachineConfiguration(confMachine, options.ClusterName, options.MachineName);
 
-            Machine machine = null;
-            if (TryFindMachine(options.MachineName, out machine))
-            {
-                result = Merge(result, machine.AsDictionary());
-            }
 
-            if (options.UseRawSettingsNames)
-                return new Elders.Pandora.Box.Configuration(box.Name, result);
-            else
-                return new Elders.Pandora.Box.Configuration(box.Name, NamenizeConfiguration(result, options.ClusterName, options.MachineName));
+            return new Elders.Pandora.Box.Configuration(box.Name, Merge(namanizedDefaltConfigs, Merge(namanizedMachineConfigs, namanizedClusterConfigs)));
         }
 
-        Dictionary<string, string> NamenizeConfiguration(Dictionary<string, string> settings, string clusterName, string machineName)
+        Dictionary<string, string> GetMachineConfiguration(string machineName)
+        {
+            Machine machine = null;
+            Dictionary<string, string> confMachine = new Dictionary<string, string>();
+            if (TryFindMachine(machineName, out machine))
+                confMachine = machine.AsDictionary();
+
+            return confMachine;
+        }
+
+        Dictionary<string, string> GetClusterConfiguration(string clusterName)
+        {
+            Cluster cluster = null;
+            Dictionary<string, string> confCluster = new Dictionary<string, string>();
+            if (TryFindCluster(clusterName, out cluster))
+                confCluster = cluster.AsDictionary();
+
+            return confCluster;
+        }
+            //var settingName = NameBuilder.GetSettingName(applicationContex.ApplicationName, applicationContex.Cluster, applicationContex.Machine, key);
+        Dictionary<string, string> NamenizeClusterConfiguration(Dictionary<string, string> settings, string clusterName)
+        {
+            return settings.ToDictionary(x => NameBuilder.GetSettingClusterName(box.Name, clusterName, x.Key), y => y.Value);
+        }
+
+        Dictionary<string, string> NamenizeMachineConfiguration(Dictionary<string, string> settings, string clusterName, string machineName)
         {
             return settings.ToDictionary(x => NameBuilder.GetSettingName(box.Name, clusterName, machineName, x.Key), y => y.Value);
         }
