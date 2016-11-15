@@ -1,10 +1,6 @@
-#### 0.6.0-beta0003 - 12.11.2016
+#### 0.6.0 - 15.11.2016
 * Changed Get<T> and added GetAll() for getting all keys in the storage
-
-#### 0.6.0-beta0002 - 12.11.2016
 * Removes `UserRawSetting` option
-
-#### 0.6.0-beta0001 - 12.11.2016
 * Adds support for Uniquie Cluster Keys
 
 #### 0.5.4 - 04.11.2016
