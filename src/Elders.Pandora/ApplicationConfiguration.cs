@@ -31,7 +31,7 @@ namespace Elders.Pandora
             cfgRepo = configurationRepository ?? new WindowsEnvironmentVariables();
         }
 
-        public static ApplicationContext CreateContext(string applicationName)
+        public static ApplicationContext CreateContext(string applicationName,string cluster = null, string machine = null)
         {
             return new ApplicationContext(applicationName);
         }

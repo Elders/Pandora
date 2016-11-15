@@ -1,4 +1,7 @@
-#### 0.6.0 - 15.11.2016
+#### 0.6.1 - 16.11.2016
+* Added optional params for ApplicationContext.CreateContext: machine and cluster
+
+#### 0.6.0 - 16.11.2016
 * Changed Get<T> and added GetAll() for getting all keys in the storage
 * Removes `UserRawSetting` option
 * Adds support for Uniquie Cluster Keys
