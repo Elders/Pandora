@@ -1,3 +1,6 @@
+#### 0.6.2 - 16.11.2016
+* Fixed ApplicationContext.CreateContext: machine and cluster to transform to lower on context create
+
 #### 0.6.1 - 16.11.2016
 * Added optional params for ApplicationContext.CreateContext: machine and cluster
 

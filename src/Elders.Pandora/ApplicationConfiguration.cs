@@ -33,7 +33,7 @@ namespace Elders.Pandora
 
         public static ApplicationContext CreateContext(string applicationName,string cluster = null, string machine = null)
         {
-            return new ApplicationContext(applicationName);
+            return new ApplicationContext(applicationName.ToLower(), cluster.ToLower(), machine.ToLower());
         }
 
         public static string Get(string key)
