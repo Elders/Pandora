@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Elders.Pandora.Box;
 using Newtonsoft.Json;
@@ -31,7 +32,7 @@ namespace Elders.Pandora
             cfgRepo = configurationRepository ?? new WindowsEnvironmentVariables();
         }
 
-        public static ApplicationContext CreateContext(string applicationName,string cluster = null, string machine = null)
+        public static ApplicationContext CreateContext(string applicationName, string cluster = null, string machine = null)
         {
             return new ApplicationContext(applicationName.ToLower(), cluster.ToLower(), machine.ToLower());
         }
@@ -47,9 +48,16 @@ namespace Elders.Pandora
             if (ReferenceEquals(null, applicationContext)) throw new ArgumentNullException(nameof(applicationContext));
 
             var sanitizedKey = key.ToLower();
-            string longKey = NameBuilder.GetSettingName(applicationContext.ApplicationName, applicationContext.Cluster, applicationContext.Machine, sanitizedKey);
-            var setting = GetRepository().Get(longKey);
-            return setting;
+            string keyForMachine = NameBuilder.GetSettingName(applicationContext.ApplicationName, applicationContext.Cluster, applicationContext.Machine, sanitizedKey);
+            if (GetRepository().Exists(keyForMachine))
+            {
+                return GetRepository().Get(keyForMachine);
+            }
+            else
+            {
+                string keyForCluster = NameBuilder.GetSettingClusterName(applicationContext.ApplicationName, applicationContext.Cluster, sanitizedKey);
+                return GetRepository().Get(keyForCluster);
+            }
         }
 
         public static T Get<T>(string key)
@@ -59,11 +67,21 @@ namespace Elders.Pandora
 
         public static T Get<T>(string key, ApplicationContext context)
         {
-            var json = Get(key, context);
-            if (json == null)
+            var value = Get(key, context);
+            if (value == null)
                 return default(T);
-            var result = JsonConvert.DeserializeObject<T>(json);
-            return result;
+
+            var converter = TypeDescriptor.GetConverter(typeof(T));
+            if (converter.IsValid(value))
+            {
+                T converted = (T)converter.ConvertFrom(value);
+                return converted;
+            }
+            else
+            {
+                var result = JsonConvert.DeserializeObject<T>(value);
+                return result;
+            }
         }
 
         public static IEnumerable<DeployedSetting> GetAll()

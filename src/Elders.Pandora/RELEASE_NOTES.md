@@ -1,3 +1,6 @@
+#### 0.6.3 - 16.11.2016
+* Fixes backwards compatibility issues
+
 #### 0.6.2 - 16.11.2016
 * Fixed ApplicationContext.CreateContext: machine and cluster to transform to lower on context create
 
