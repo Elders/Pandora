@@ -1,3 +1,6 @@
+#### 0.6.4 - 16.11.2016
+* Fixes runtime error when building ApplicationContext
+
 #### 0.6.3 - 16.11.2016
 * Fixes backwards compatibility issues
 
