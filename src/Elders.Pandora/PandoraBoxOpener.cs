@@ -36,9 +36,9 @@ namespace Elders.Pandora
             Dictionary<string, string> confCluster = GetClusterConfiguration(options.ClusterName);
             Dictionary<string, string> confMachine = GetMachineConfiguration(options.MachineName);
 
-            Dictionary<string, string> namanizedDefaltConfigs = NamenizeClusterConfiguration(confDefaults, options.ClusterName);
-            Dictionary<string, string> namanizedClusterConfigs = NamenizeClusterConfiguration(confCluster, options.ClusterName);
-            Dictionary<string, string> namanizedMachineConfigs = NamenizeMachineConfiguration(confMachine, options.ClusterName, options.MachineName);
+            Dictionary<string, string> namanizedDefaltConfigs = NamenizeConfiguration(confDefaults, options.ClusterName, Machine.NotSpecified);
+            Dictionary<string, string> namanizedClusterConfigs = NamenizeConfiguration(confCluster, options.ClusterName, Machine.NotSpecified);
+            Dictionary<string, string> namanizedMachineConfigs = NamenizeConfiguration(confMachine, options.ClusterName, options.MachineName);
 
 
             return new Elders.Pandora.Box.Configuration(box.Name, Merge(namanizedDefaltConfigs, Merge(namanizedMachineConfigs, namanizedClusterConfigs)));
@@ -63,13 +63,8 @@ namespace Elders.Pandora
 
             return confCluster;
         }
-            //var settingName = NameBuilder.GetSettingName(applicationContex.ApplicationName, applicationContex.Cluster, applicationContex.Machine, key);
-        Dictionary<string, string> NamenizeClusterConfiguration(Dictionary<string, string> settings, string clusterName)
-        {
-            return settings.ToDictionary(x => NameBuilder.GetSettingClusterName(box.Name, clusterName, x.Key), y => y.Value);
-        }
 
-        Dictionary<string, string> NamenizeMachineConfiguration(Dictionary<string, string> settings, string clusterName, string machineName)
+        Dictionary<string, string> NamenizeConfiguration(Dictionary<string, string> settings, string clusterName, string machineName)
         {
             return settings.ToDictionary(x => NameBuilder.GetSettingName(box.Name, clusterName, machineName, x.Key), y => y.Value);
         }

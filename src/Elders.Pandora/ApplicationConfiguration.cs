@@ -9,7 +9,7 @@ namespace Elders.Pandora
 {
     public static class ApplicationConfiguration
     {
-        static ApplicationContext context = null;
+        static IPandoraContext context = null;
         static IConfigurationRepository cfgRepo = null;
 
         static IConfigurationRepository GetRepository()
@@ -22,7 +22,7 @@ namespace Elders.Pandora
             SetContext(new ApplicationContext(applicationName, cluster, machine));
         }
 
-        public static void SetContext(ApplicationContext applicationContext)
+        public static void SetContext(IPandoraContext applicationContext)
         {
             context = applicationContext;
         }
@@ -32,7 +32,7 @@ namespace Elders.Pandora
             cfgRepo = configurationRepository ?? new WindowsEnvironmentVariables();
         }
 
-        public static ApplicationContext CreateContext(string applicationName, string cluster = null, string machine = null)
+        public static IPandoraContext CreateContext(string applicationName, string cluster = null, string machine = null)
         {
             return new ApplicationContext(applicationName.ToLower(), cluster?.ToLower(), machine?.ToLower());
         }
@@ -42,7 +42,7 @@ namespace Elders.Pandora
             return Get(key, context);
         }
 
-        public static string Get(string key, ApplicationContext applicationContext)
+        public static string Get(string key, IPandoraContext applicationContext)
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentNullException(nameof(key));
             if (ReferenceEquals(null, applicationContext)) throw new ArgumentNullException(nameof(applicationContext));
@@ -55,7 +55,7 @@ namespace Elders.Pandora
             }
             else
             {
-                string keyForCluster = NameBuilder.GetSettingClusterName(applicationContext.ApplicationName, applicationContext.Cluster, sanitizedKey);
+                string keyForCluster = NameBuilder.GetSettingName(applicationContext.ApplicationName, applicationContext.Cluster, Machine.NotSpecified, sanitizedKey);
                 return GetRepository().Get(keyForCluster);
             }
         }
@@ -65,7 +65,7 @@ namespace Elders.Pandora
             return Get<T>(key, context);
         }
 
-        public static T Get<T>(string key, ApplicationContext context)
+        public static T Get<T>(string key, IPandoraContext context)
         {
             var value = Get(key, context);
             if (value == null)
@@ -89,7 +89,7 @@ namespace Elders.Pandora
             return GetAll(context);
         }
 
-        public static IEnumerable<DeployedSetting> GetAll(ApplicationContext applicationContext)
+        public static IEnumerable<DeployedSetting> GetAll(IPandoraContext applicationContext)
         {
             return from setting in GetRepository().GetAll()
                    where setting.Cluster == applicationContext.Cluster &&

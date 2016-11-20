@@ -10,16 +10,13 @@
 
         public static string GetSettingName(string applicationName, string clusterName, string machineName, string settingKeyName)
         {
-            string theName = (applicationName + "@@" + clusterName + "^" + machineName + "~~" + settingKeyName);
+            bool isClusterKey = machineName.Equals(Machine.NotSpecified);
+
+            string theName = isClusterKey
+                ? (applicationName + "@@" + clusterName + "~~" + settingKeyName)
+                : (applicationName + "@@" + clusterName + "^" + machineName + "~~" + settingKeyName);
+
             return theName;
         }
-
-        public static string GetSettingClusterName(string applicationName, string clusterName, string settingKeyName)
-        {
-            string theName = (applicationName + "@@" + clusterName + "~~" + settingKeyName);
-            return theName;
-        }
-
-        
     }
 }

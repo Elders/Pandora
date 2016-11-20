@@ -1,3 +1,6 @@
+#### 0.6.5 - 20.11.2016
+* Introduces IPAndoraContext
+
 #### 0.6.4 - 16.11.2016
 * Fixes runtime error when building ApplicationContext
 

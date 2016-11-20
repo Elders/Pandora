@@ -8,11 +8,11 @@ using System.ComponentModel;
 namespace Elders.Pandora
 {
     /// <summary>
-    /// In Greek mythology, Pandora was the first human woman created by the gods, specifically by Hephaestus and Athena on the 
-    /// instructions of Zeus. As Hesiod related it, each god helped create her by giving her unique gifts. Zeus ordered Hephaestus to 
-    /// mold her out of earth as part of the punishment of humanity for Prometheus' theft of the secret of fire, and all the gods joined in 
-    /// offering her "seductive gifts". Her other name—inscribed against her figure on a white-ground kylix in the British Museum—is Anesidora, 
-    /// "she who sends up gifts" (up implying "from below" within the earth) 
+    /// In Greek mythology, Pandora was the first human woman created by the gods, specifically by Hephaestus and Athena on the
+    /// instructions of Zeus. As Hesiod related it, each god helped create her by giving her unique gifts. Zeus ordered Hephaestus to
+    /// mold her out of earth as part of the punishment of humanity for Prometheus' theft of the secret of fire, and all the gods joined in
+    /// offering her "seductive gifts". Her other name—inscribed against her figure on a white-ground kylix in the British Museum—is Anesidora,
+    /// "she who sends up gifts" (up implying "from below" within the earth)
     /// </summary>
     /// <remarks>
     /// http://en.wikipedia.org/wiki/Pandora
@@ -20,22 +20,22 @@ namespace Elders.Pandora
     public class Pandora
     {
         readonly IConfigurationRepository cfgRepo;
-        readonly ApplicationContext context;
+        readonly IPandoraContext context;
 
-        public Pandora(ApplicationContext applicationContext, IConfigurationRepository configurationRepository)
+        public Pandora(IPandoraContext context, IConfigurationRepository configurationRepository)
         {
-            this.context = applicationContext;
+            this.context = context;
             this.cfgRepo = configurationRepository;
         }
 
-        public ApplicationContext ApplicationContext { get { return context; } }
+        public IPandoraContext ApplicationContext { get { return context; } }
 
         public string Get(string key)
         {
             return Get(key, context);
         }
 
-        public string Get(string key, ApplicationContext applicationContext)
+        public string Get(string key, IPandoraContext applicationContext)
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentNullException(nameof(key));
             if (ReferenceEquals(null, applicationContext)) throw new ArgumentNullException(nameof(applicationContext));
@@ -49,7 +49,7 @@ namespace Elders.Pandora
             }
             else
             {
-                string keyForCluster = NameBuilder.GetSettingClusterName(applicationContext.ApplicationName, applicationContext.Cluster, sanitizedKey);
+                string keyForCluster = NameBuilder.GetSettingName(applicationContext.ApplicationName, applicationContext.Cluster, Machine.NotSpecified, sanitizedKey);
                 return cfgRepo.Get(keyForCluster);
             }
         }
@@ -59,7 +59,7 @@ namespace Elders.Pandora
             return Get<T>(key, context);
         }
 
-        public T Get<T>(string key, ApplicationContext context)
+        public T Get<T>(string key, IPandoraContext context)
         {
             var value = Get(key, context);
             if (value == null)
@@ -97,10 +97,21 @@ namespace Elders.Pandora
             Set(key, value, context);
         }
 
-        public void Set(string key, string value, ApplicationContext applicationContex)
+        public void Set(string key, string value, IPandoraContext applicationContex)
         {
             var settingName = NameBuilder.GetSettingName(applicationContex.ApplicationName, applicationContex.Cluster, applicationContex.Machine, key);
             cfgRepo.Set(settingName, value);
+        }
+
+        public void Delete(string key)
+        {
+            Delete(key, context);
+        }
+
+        public void Delete(string key, IPandoraContext applicationContex)
+        {
+            var settingName = NameBuilder.GetSettingName(applicationContex.ApplicationName, applicationContex.Cluster, applicationContex.Machine, key);
+            cfgRepo.Delete(settingName);
         }
     }
 }
