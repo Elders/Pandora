@@ -7,6 +7,7 @@
     <authors>@authors@</authors>
     <language>en-US</language>
     <summary>@summary@</summary>
+    <iconUrl>https://raw.githubusercontent.com/Elders/logo/master/pandora/black.png</iconUrl>
     <licenseUrl>https://github.com/Elders/Pandora/blob/master/LICENSE</licenseUrl>
     <projectUrl>http://Elders.github.io/Pandora</projectUrl>
     <releaseNotes>@releaseNotes@</releaseNotes>
