@@ -1,3 +1,6 @@
+#### 0.6.6 - 21.11.2016
+* Versioned Pandora
+
 #### 0.6.5 - 20.11.2016
 * Introduces IPAndoraContext
 
