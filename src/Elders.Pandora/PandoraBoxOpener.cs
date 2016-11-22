@@ -71,13 +71,13 @@ namespace Elders.Pandora
 
         bool TryFindCluster(string clusterName, out Cluster cluster)
         {
-            cluster = box.Clusters.Where(x => x.Name == clusterName).SingleOrDefault();
+            cluster = box.Clusters.Where(x => x.Name.Equals(clusterName, StringComparison.OrdinalIgnoreCase)).SingleOrDefault();
             return cluster != null;
         }
 
         bool TryFindMachine(string machineName, out Machine machine)
         {
-            machine = box.Machines.Where(x => x.Name == machineName).SingleOrDefault();
+            machine = box.Machines.Where(x => x.Name.Equals(machineName, StringComparison.OrdinalIgnoreCase)).SingleOrDefault();
             return machine != null;
         }
 

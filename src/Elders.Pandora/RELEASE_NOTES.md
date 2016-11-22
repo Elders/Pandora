@@ -1,3 +1,6 @@
+#### 0.6.9 - 21.11.2016
+* Makes cluster and machine case insensitive while opening the jar
+
 #### 0.6.8 - 21.11.2016
 * New logo
 
