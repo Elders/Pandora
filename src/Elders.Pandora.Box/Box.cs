@@ -5,9 +5,9 @@ using System.Linq;
 namespace Elders.Pandora.Box
 {
     /// <summary>
-    /// Pandora's box is an artifact in Greek mythology, taken from the myth of Pandora's creation in Hesiod's Works and Days. 
-    /// The "box" was actually a large jar given to Pandora, which contained all the evils of the world. Today the phrase 
-    /// "to open Pandora's box" means to perform an action that may seem small or innocent, but that turns out to have severely 
+    /// Pandora's box is an artifact in Greek mythology, taken from the myth of Pandora's creation in Hesiod's Works and Days.
+    /// The "box" was actually a large jar given to Pandora, which contained all the evils of the world. Today the phrase
+    /// "to open Pandora's box" means to perform an action that may seem small or innocent, but that turns out to have severely
     /// detrimental and far-reaching consequences.
     /// </summary>
     /// <remarks>http://en.wikipedia.org/wiki/Pandora%27s_box</remarks>
@@ -50,7 +50,7 @@ namespace Elders.Pandora.Box
             Machines = Machines.Merge(box.Machines).ToList();
         }
 
-        public void AddCluster(string name, Dictionary<string, string> settings)
+        public void AddCluster(string name, Dictionary<string, object> settings)
         {
             var cluster = new Cluster(name, settings);
             AddCluster(cluster);
@@ -66,7 +66,7 @@ namespace Elders.Pandora.Box
 
         public List<Machine> Machines { get; set; }
 
-        public void AddMachine(string name, Dictionary<string, string> settings)
+        public void AddMachine(string name, Dictionary<string, object> settings)
         {
             var machine = new Machine(name, settings);
             AddMachine(machine);
@@ -81,7 +81,7 @@ namespace Elders.Pandora.Box
                 Machines.Add(machine);
         }
 
-        private void Guard_SettingMustBeDefinedInDefaults(Dictionary<string, string> settings)
+        private void Guard_SettingMustBeDefinedInDefaults(Dictionary<string, object> settings)
         {
             foreach (var setting in settings)
             {
@@ -110,8 +110,8 @@ namespace Elders.Pandora.Box
         }
 
         /// <summary>
-        /// According to the myth, Pandora opened a jar (pithos), in modern accounts sometimes mistranslated as "Pandora's box" (see below), 
-        /// releasing all the evils of humanity—although the particular evils, aside from plagues and diseases, are not specified in detail 
+        /// According to the myth, Pandora opened a jar (pithos), in modern accounts sometimes mistranslated as "Pandora's box" (see below),
+        /// releasing all the evils of humanity—although the particular evils, aside from plagues and diseases, are not specified in detail
         /// by Hesiod—leaving only Hope inside once she had closed it again. She opened the jar out of simple curiosity and not as a malicious act.
         /// </summary>
         /// <remarks>http://en.wikipedia.org/wiki/Pandora</remarks>

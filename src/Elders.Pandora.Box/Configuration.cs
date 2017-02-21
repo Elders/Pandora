@@ -6,43 +6,43 @@ namespace Elders.Pandora.Box
 {
     public class Configuration : ValueObject<Configuration>
     {
-        private readonly Dictionary<string, string> settings;
+        private readonly Dictionary<string, object> settings;
 
-        public Configuration(Dictionary<string, string> settings) : this("defaults", settings) { }
+        public Configuration(Dictionary<string, object> settings) : this("defaults", settings) { }
 
-        public Configuration(string name, Dictionary<string, string> settings)
+        public Configuration(string name, Dictionary<string, object> settings)
         {
             if (String.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
 
             if (settings != null)
                 this.settings = settings.ToDictionary(key => key.Key.ToLowerInvariant(), val => val.Value);
             else
-                this.settings = new Dictionary<string, string>();
+                this.settings = new Dictionary<string, object>();
 
             this.Name = name;
         }
 
         public string Name { get; private set; }
 
-        public string this[string settingName]
+        public object this[string settingName]
         {
             get
             {
-                string value = String.Empty;
+                object value = null;
                 if (settings.TryGetValue(settingName.ToLowerInvariant(), out value))
                 {
                     return value;
                 }
                 else
                 {
-                    throw new System.Collections.Generic.KeyNotFoundException("SettingName does not exist in the collection");
+                    throw new KeyNotFoundException("SettingName does not exist in the collection");
                 }
             }
         }
 
-        public Dictionary<string, string> AsDictionary()
+        public Dictionary<string, object> AsDictionary()
         {
-            return new Dictionary<string, string>(settings);
+            return new Dictionary<string, object>(settings);
         }
 
         public bool ContainsKey(string key)
@@ -95,7 +95,7 @@ namespace Elders.Pandora.Box
 
         /// <summary>
         /// Merges two collections of configurations. If one set of configurations such as 'Cluster' does NOT exists within
-        /// one of the collections it WILL appear with the result set. 
+        /// one of the collections it WILL appear with the result set.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="self">The self.</param>
