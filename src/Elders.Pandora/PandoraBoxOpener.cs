@@ -23,7 +23,7 @@ namespace Elders.Pandora
             foreach (var reference in box.References)
             {
                 var refJarFile = reference.Values.First();
-                var referenceJar = JsonConvert.DeserializeObject<Jar>(File.ReadAllText("D:\\Projects\\MarketVision\\qore.configuration\\src\\qore.contacts.configuration\\public\\" + refJarFile));
+                var referenceJar = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(refJarFile));
                 var referenceBox = Box.Box.Mistranslate(referenceJar);
 
                 box.Merge(referenceBox);

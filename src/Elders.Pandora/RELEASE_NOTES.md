@@ -1,3 +1,6 @@
+#### 0.7.1 - 22.02.2017
+* Remove forgotten hard coded path
+
 #### 0.7.0 - 22.02.2017
 * Add support for complex values
 
