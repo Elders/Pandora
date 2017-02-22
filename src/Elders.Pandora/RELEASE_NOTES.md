@@ -1,3 +1,9 @@
+#### 0.7.0 - 22.02.2017
+* Add support for complex values
+
+#### 0.7.0-beta0001 - 21.02.2017
+* Add support for complex values
+
 #### 0.6.9 - 21.11.2016
 * Makes cluster and machine case insensitive while opening the jar
 
