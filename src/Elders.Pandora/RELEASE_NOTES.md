@@ -1,3 +1,6 @@
+#### 0.7.2 - 23.02.2017
+* Fix cluster comparison
+
 #### 0.7.1 - 22.02.2017
 * Remove forgotten hard coded path
 

@@ -12,7 +12,7 @@ namespace Elders.Pandora.Box
 
         public Configuration(string name, Dictionary<string, object> settings)
         {
-            if (String.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
+            if (String.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
 
             if (settings != null)
                 this.settings = settings.ToDictionary(key => key.Key.ToLowerInvariant(), val => val.Value);
