@@ -15,7 +15,7 @@ namespace Elders.Pandora.Box
             if (String.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
 
             if (settings != null)
-                this.settings = settings.ToDictionary(key => key.Key.ToLowerInvariant(), val => val.Value);
+                this.settings = settings.ToDictionary(key => key.Key.ToLower(), val => val.Value);
             else
                 this.settings = new Dictionary<string, object>();
 
@@ -29,7 +29,7 @@ namespace Elders.Pandora.Box
             get
             {
                 object value = null;
-                if (settings.TryGetValue(settingName.ToLowerInvariant(), out value))
+                if (settings.TryGetValue(settingName.ToLower(), out value))
                 {
                     return value;
                 }
@@ -47,13 +47,13 @@ namespace Elders.Pandora.Box
 
         public bool ContainsKey(string key)
         {
-            return settings.ContainsKey(key.ToLowerInvariant());
+            return settings.ContainsKey(key.ToLower());
         }
 
         public void DeleteKey(string key)
         {
-            if (settings.ContainsKey(key.ToLowerInvariant()))
-                settings.Remove(key.ToLowerInvariant());
+            if (settings.ContainsKey(key.ToLower()))
+                settings.Remove(key.ToLower());
         }
     }
 

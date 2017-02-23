@@ -94,7 +94,7 @@ namespace Elders.Pandora.Box
             if (machine.ContainsKey(Machine.ClusterKey))
             {
                 var clusterName = machine[Machine.ClusterKey];
-                var isValid = Clusters.Any(x => x.Name == clusterName.ToString());
+                var isValid = Clusters.Any(x => x.Name.Equals(clusterName.ToString(), StringComparison.OrdinalIgnoreCase));
                 if (isValid == false)
                     throw new ArgumentException(string.Format("Invalid machine configuration. The machine '{0}' is explicitly configured in cluster '{1}' but cluster configuration with that name does not exist.", machine.Name, clusterName));
             }
