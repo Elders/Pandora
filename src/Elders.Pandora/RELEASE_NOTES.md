@@ -1,3 +1,6 @@
+#### 0.8.0-beta0001 - 05.07.2017
+* Adds a parser for a DeployedSetting
+
 #### 0.7.2 - 23.02.2017
 * Fix cluster comparison
 
