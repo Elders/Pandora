@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Elders.Pandora.Box;
-using Newtonsoft.Json;
-
-namespace Elders.Pandora
+﻿namespace Elders.Pandora
 {
     public static class PandoraBoxExtensions
     {

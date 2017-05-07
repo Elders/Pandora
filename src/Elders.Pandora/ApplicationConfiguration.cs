@@ -92,9 +92,9 @@ namespace Elders.Pandora
         public static IEnumerable<DeployedSetting> GetAll(IPandoraContext applicationContext)
         {
             return from setting in GetRepository().GetAll()
-                   where setting.Cluster == applicationContext.Cluster &&
-                         setting.Machine == applicationContext.Machine &&
-                         setting.ApplicationName == applicationContext.ApplicationName
+                   where setting.Key.Cluster == applicationContext.Cluster &&
+                         setting.Key.Machine == applicationContext.Machine &&
+                         setting.Key.ApplicationName == applicationContext.ApplicationName
                    select setting;
         }
     }
