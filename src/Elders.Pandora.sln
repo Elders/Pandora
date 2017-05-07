@@ -9,8 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elders.Pandora", "Elders.Pa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{9B98927F-2F3A-4F37-B97C-FE67EA98473D}"
 	ProjectSection(SolutionItems) = preProject
+		..\build-configuration.cmd = ..\build-configuration.cmd
 		..\build.cmd = ..\build.cmd
 		Elders.Pandora\Pandora.nuspec = Elders.Pandora\Pandora.nuspec
+		Elders.Pandora\RELEASE_NOTES.md = Elders.Pandora\RELEASE_NOTES.md
 	EndProjectSection
 EndProject
 Global
