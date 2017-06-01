@@ -30,17 +30,17 @@ namespace Elders.Pandora
 
         public IPandoraContext ApplicationContext { get { return context; } }
 
-        public string Get(string key)
+        public string Get(string settingKey)
         {
-            return Get(key, context);
+            return Get(settingKey, context);
         }
 
-        public string Get(string key, IPandoraContext applicationContext)
+        public string Get(string settingKey, IPandoraContext applicationContext)
         {
-            if (string.IsNullOrEmpty(key)) throw new ArgumentNullException(nameof(key));
+            if (string.IsNullOrEmpty(settingKey)) throw new ArgumentNullException(nameof(settingKey));
             if (ReferenceEquals(null, applicationContext)) throw new ArgumentNullException(nameof(applicationContext));
 
-            var sanitizedKey = key.ToLower();
+            var sanitizedKey = settingKey.ToLower();
             string keyForMachine = NameBuilder.GetSettingName(applicationContext.ApplicationName, applicationContext.Cluster, applicationContext.Machine, sanitizedKey);
 
             if (cfgRepo.Exists(keyForMachine))
@@ -54,14 +54,14 @@ namespace Elders.Pandora
             }
         }
 
-        public T Get<T>(string key)
+        public T Get<T>(string settingKey)
         {
-            return Get<T>(key, context);
+            return Get<T>(settingKey, context);
         }
 
-        public T Get<T>(string key, IPandoraContext context)
+        public T Get<T>(string settingKey, IPandoraContext context)
         {
-            var value = Get(key, context);
+            var value = Get(settingKey, context);
             if (value == null)
                 return default(T);
 
@@ -86,31 +86,31 @@ namespace Elders.Pandora
         public IEnumerable<DeployedSetting> GetAll(ApplicationContext applicationContext)
         {
             return from setting in cfgRepo.GetAll()
-                   where setting.Cluster == applicationContext.Cluster &&
-                         setting.Machine == applicationContext.Machine &&
-                         setting.ApplicationName == applicationContext.ApplicationName
+                   where setting.Key.Cluster == applicationContext.Cluster &&
+                         setting.Key.Machine == applicationContext.Machine &&
+                         setting.Key.ApplicationName == applicationContext.ApplicationName
                    select setting;
         }
 
-        public void Set(string key, string value)
+        public void Set(string settingKey, string value)
         {
-            Set(key, value, context);
+            Set(settingKey, value, context);
         }
 
-        public void Set(string key, string value, IPandoraContext applicationContex)
+        public void Set(string settingKey, string value, IPandoraContext applicationContex)
         {
-            var settingName = NameBuilder.GetSettingName(applicationContex.ApplicationName, applicationContex.Cluster, applicationContex.Machine, key);
+            var settingName = NameBuilder.GetSettingName(applicationContex.ApplicationName, applicationContex.Cluster, applicationContex.Machine, settingKey);
             cfgRepo.Set(settingName, value);
         }
 
-        public void Delete(string key)
+        public void Delete(string settingKey)
         {
-            Delete(key, context);
+            Delete(settingKey, context);
         }
 
-        public void Delete(string key, IPandoraContext applicationContex)
+        public void Delete(string settingKey, IPandoraContext applicationContex)
         {
-            var settingName = NameBuilder.GetSettingName(applicationContex.ApplicationName, applicationContex.Cluster, applicationContex.Machine, key);
+            var settingName = NameBuilder.GetSettingName(applicationContex.ApplicationName, applicationContex.Cluster, applicationContex.Machine, settingKey);
             cfgRepo.Delete(settingName);
         }
     }

@@ -45,7 +45,7 @@ namespace Elders.Pandora
                         applicationName: result.Groups[1].Value,
                         cluster: result.Groups[2].Value,
                         machine: result.Groups[3].Value,
-                        key: result.Groups[4].Value,
+                        settingKey: result.Groups[4].Value,
                         value: Environment.GetEnvironmentVariable(result.Groups[0].Value, EnvironmentVariableTarget.Machine));
                 }
             }

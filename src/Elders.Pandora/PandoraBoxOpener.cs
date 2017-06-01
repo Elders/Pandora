@@ -29,7 +29,7 @@ namespace Elders.Pandora
                 box.Merge(referenceBox);
             }
 
-            if (String.IsNullOrEmpty(options.ClusterName) && string.IsNullOrEmpty(options.MachineName))
+            if (string.IsNullOrEmpty(options.ClusterName) && string.IsNullOrEmpty(options.MachineName))
                 throw new ArgumentNullException("clusterName", "When getting configuraion for a machine the clusterName is required");
 
             Dictionary<string, object> confDefaults = box.Defaults.AsDictionary();
