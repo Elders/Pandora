@@ -1,8 +1,5 @@
-#### 0.8.0-beta0002 - 05.07.2017
+#### 0.8.0 - 01.06.2017
 * Pandora raw keys will always have a machine name. If it is a cluster key the machine name is '*'
-* Introduce Key
-
-#### 0.8.0-beta0001 - 05.07.2017
 * Adds a parser for a DeployedSetting
 
 #### 0.7.2 - 23.02.2017
