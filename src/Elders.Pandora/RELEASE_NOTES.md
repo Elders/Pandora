@@ -1,3 +1,6 @@
+#### 0.8.1 - 05.06.2017
+* Downgrades Newtonsoft to 9.0.1
+
 #### 0.8.0 - 01.06.2017
 * Pandora raw keys will always have a machine name. If it is a cluster key the machine name is '*'
 * Adds a parser for a DeployedSetting
