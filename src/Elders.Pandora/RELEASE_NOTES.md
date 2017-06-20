@@ -1,3 +1,7 @@
+#### 0.8.2 - 20.06.2017
+* Fix configuration merging
+* Update Newtonsoft to 10.0.3
+
 #### 0.8.1 - 05.06.2017
 * Downgrades Newtonsoft to 9.0.1
 
