@@ -103,12 +103,18 @@ namespace Elders.Pandora.Box
         /// <returns></returns>
         public static IEnumerable<T> Merge<T>(this IEnumerable<T> self, IEnumerable<T> other) where T : Configuration
         {
-            var firstSet = self.Count() >= other.Count() ? self : other;
-            var secondSet = self.Count() < other.Count() ? self : other;
+            var tracker = new HashSet<string>();
 
-            foreach (var cfg in firstSet)
+            foreach (var cfg in self)
             {
-                yield return cfg.Join(secondSet);
+                tracker.Add(cfg.Name);
+                yield return cfg.Join(other);
+            }
+
+            foreach (var cfg in other)
+            {
+                if (tracker.Contains(cfg.Name) == false)
+                    yield return cfg.Join(self);
             }
         }
     }
