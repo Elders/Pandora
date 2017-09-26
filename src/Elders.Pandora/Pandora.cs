@@ -78,6 +78,62 @@ namespace Elders.Pandora
             }
         }
 
+        public bool TryGet(string settingKey, out string value)
+        {
+            return TryGet(settingKey, context, out value);
+        }
+
+        public bool TryGet(string settingKey, IPandoraContext applicationContext, out string value)
+        {
+            var sanitizedKey = settingKey.ToLower();
+            var keyForMachine = NameBuilder.GetSettingName(applicationContext.ApplicationName, applicationContext.Cluster, applicationContext.Machine, sanitizedKey);
+
+            if (cfgRepo.Exists(keyForMachine))
+            {
+                value = cfgRepo.Get(keyForMachine);
+                return true;
+            }
+
+            string keyForCluster = NameBuilder.GetSettingName(applicationContext.ApplicationName, applicationContext.Cluster, Machine.NotSpecified, sanitizedKey);
+
+            if (cfgRepo.Exists(keyForCluster))
+            {
+                value = cfgRepo.Get(keyForCluster);
+                return true;
+            }
+
+            value = null;
+            return false;
+        }
+
+        public bool TryGet<T>(string settingKey, out T value)
+        {
+            return TryGet<T>(settingKey, context, out value);
+        }
+
+        public bool TryGet<T>(string settingKey, IPandoraContext applicationContext, out T value)
+        {
+            string rawValue;
+
+            if (TryGet(settingKey, applicationContext, out rawValue) == false)
+            {
+                value = default(T);
+                return false;
+            }
+
+            var converter = TypeDescriptor.GetConverter(typeof(T));
+            if (converter.IsValid(rawValue))
+            {
+                value = (T)converter.ConvertFrom(rawValue);
+                return true;
+            }
+            else
+            {
+                value = JsonConvert.DeserializeObject<T>(rawValue);
+                return true;
+            }
+        }
+
         public IEnumerable<DeployedSetting> GetAll()
         {
             return cfgRepo.GetAll();
