@@ -1,3 +1,6 @@
+#### 0.9.0 - 26.09.2017
+* Added TryGet method
+
 #### 0.8.2 - 20.06.2017
 * Fix configuration merging
 * Update Newtonsoft to 10.0.3

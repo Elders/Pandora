@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elders.Pandora.Box", "Elders.Pandora.Box\Elders.Pandora.Box.csproj", "{69854EA2-20DC-4A51-90F4-4710F88C930F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elders.Pandora", "Elders.Pandora\Elders.Pandora.csproj", "{9FA368C6-5AFD-4707-B6C2-50D1DC9A07AA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elders.Pandora", "Elders.Pandora\Elders.Pandora.csproj", "{BF512BEE-F748-456E-80AE-237F338AC13F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{9B98927F-2F3A-4F37-B97C-FE67EA98473D}"
 	ProjectSection(SolutionItems) = preProject
@@ -37,20 +37,23 @@ Global
 		{69854EA2-20DC-4A51-90F4-4710F88C930F}.Stage|Any CPU.Build.0 = Release|Any CPU
 		{69854EA2-20DC-4A51-90F4-4710F88C930F}.Test|Any CPU.ActiveCfg = Release|Any CPU
 		{69854EA2-20DC-4A51-90F4-4710F88C930F}.Test|Any CPU.Build.0 = Release|Any CPU
-		{9FA368C6-5AFD-4707-B6C2-50D1DC9A07AA}.Azure|Any CPU.ActiveCfg = Release|Any CPU
-		{9FA368C6-5AFD-4707-B6C2-50D1DC9A07AA}.Azure|Any CPU.Build.0 = Release|Any CPU
-		{9FA368C6-5AFD-4707-B6C2-50D1DC9A07AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9FA368C6-5AFD-4707-B6C2-50D1DC9A07AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9FA368C6-5AFD-4707-B6C2-50D1DC9A07AA}.Int|Any CPU.ActiveCfg = Release|Any CPU
-		{9FA368C6-5AFD-4707-B6C2-50D1DC9A07AA}.Int|Any CPU.Build.0 = Release|Any CPU
-		{9FA368C6-5AFD-4707-B6C2-50D1DC9A07AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9FA368C6-5AFD-4707-B6C2-50D1DC9A07AA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9FA368C6-5AFD-4707-B6C2-50D1DC9A07AA}.Stage|Any CPU.ActiveCfg = Release|Any CPU
-		{9FA368C6-5AFD-4707-B6C2-50D1DC9A07AA}.Stage|Any CPU.Build.0 = Release|Any CPU
-		{9FA368C6-5AFD-4707-B6C2-50D1DC9A07AA}.Test|Any CPU.ActiveCfg = Release|Any CPU
-		{9FA368C6-5AFD-4707-B6C2-50D1DC9A07AA}.Test|Any CPU.Build.0 = Release|Any CPU
+		{BF512BEE-F748-456E-80AE-237F338AC13F}.Azure|Any CPU.ActiveCfg = Release|Any CPU
+		{BF512BEE-F748-456E-80AE-237F338AC13F}.Azure|Any CPU.Build.0 = Release|Any CPU
+		{BF512BEE-F748-456E-80AE-237F338AC13F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF512BEE-F748-456E-80AE-237F338AC13F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF512BEE-F748-456E-80AE-237F338AC13F}.Int|Any CPU.ActiveCfg = Release|Any CPU
+		{BF512BEE-F748-456E-80AE-237F338AC13F}.Int|Any CPU.Build.0 = Release|Any CPU
+		{BF512BEE-F748-456E-80AE-237F338AC13F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF512BEE-F748-456E-80AE-237F338AC13F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF512BEE-F748-456E-80AE-237F338AC13F}.Stage|Any CPU.ActiveCfg = Release|Any CPU
+		{BF512BEE-F748-456E-80AE-237F338AC13F}.Stage|Any CPU.Build.0 = Release|Any CPU
+		{BF512BEE-F748-456E-80AE-237F338AC13F}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{BF512BEE-F748-456E-80AE-237F338AC13F}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {076C7573-6DFB-486E-BC07-5C8DD84B038B}
 	EndGlobalSection
 EndGlobal
