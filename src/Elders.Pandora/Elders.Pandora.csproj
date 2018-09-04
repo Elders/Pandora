@@ -1,78 +1,56 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BF512BEE-F748-456E-80AE-237F338AC13F}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Elders.Pandora</RootNamespace>
+    <TargetFrameworks>netstandard2.0;net45;net451;net452;net46;net461;net462</TargetFrameworks>
+  </PropertyGroup>
+
+  <!--Nuget-->
+  <PropertyGroup>
+    <PackageId>Pandora</PackageId>
+    <Product>Pandora</Product>
+    <Title>Pandora</Title>
+    <Authors>Elders OSS</Authors>
+    <Copyright>Copyright © Elders OSS 2013</Copyright>
+    <Description>Pandora allows external configuration for your projects</Description>
+    <PackageTags>Configuration Json Environment Environments Staging Production Dev Local</PackageTags>
+    <PackageLicenseUrl>https://github.com/Elders/Pandora/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>http://Elders.github.io/Pandora</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Elders/Pandora.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageIconUrl>https://raw.githubusercontent.com/Elders/logo/master/pandora/picasa.png</PackageIconUrl>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AssemblyName>Elders.Pandora</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <PropertyGroup>
-    <StartupObject />
+    <DefineConstants>TRACE;DEBUG;NETSTANDARD2_0;</DefineConstants>
   </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <EmbedSources>true</EmbedSources>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <EmbedSources>true</EmbedSources>
+  </PropertyGroup>
+
   <ItemGroup>
-    <Compile Include="ApplicationContext.cs" />
-    <Compile Include="DeployedSetting.cs" />
-    <Compile Include="IConfigurationRepository.cs" />
-    <Compile Include="Key.cs" />
-    <Compile Include="Pandora.cs" />
-    <Compile Include="ApplicationConfiguration.cs" />
-    <Compile Include="PandoraBoxExtensions.cs" />
-    <Compile Include="PandoraBoxOpener.cs" />
-    <Compile Include="PandoraOptions.cs" />
-    <Compile Include="WindowsEnvironmentVariables.cs" />
+    <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-    <None Include="RELEASE_NOTES.md" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Elders.Pandora.Box\Elders.Pandora.Box.csproj">
-      <Project>{69854ea2-20dc-4a51-90f4-4710f88c930f}</Project>
-      <Name>Elders.Pandora.Box</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
+
 </Project>
+
+
+
+
+
+
