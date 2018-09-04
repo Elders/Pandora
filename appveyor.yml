@@ -5,6 +5,8 @@ image: Visual Studio 2017
 build: off
 deploy: off
 skip_tags: true
+platform: Any CPU
+configuration: Release
 build_script:
   - git config --global credential.helper store
   - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:ghtoken):x-oauth-basic@github.com`n"
