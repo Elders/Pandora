@@ -1,3 +1,6 @@
+#### 1.0.0-beta0002 - 04.09.2018
+* Adds appveyor file
+
 #### 1.0.0-beta0001 - 04.09.2018
 * Starts targeting NetStandard2.0
 
