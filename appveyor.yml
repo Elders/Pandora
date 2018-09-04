@@ -1,0 +1,13 @@
+environment:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+image: Visual Studio 2017
+build: off
+deploy: off
+skip_tags: true
+build_script:
+  - git config --global credential.helper store
+  - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:ghtoken):x-oauth-basic@github.com`n"
+  - git config --global user.email "mynkow@gmail.com"
+  - git config --global user.name "mynkow"
+  - build.cmd %nuget_key%
