@@ -1,3 +1,6 @@
+#### 1.0.0-beta0001 - 04.09.2018
+* Starts targeting NetStandard2.0
+
 #### 0.9.0 - 26.09.2017
 * Added TryGet method
 
