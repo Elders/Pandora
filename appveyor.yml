@@ -1,5 +1,7 @@
 environment:
+  # The.NET Core CLI tries to add the default locations to the PATH environmentvariable on its first usage. Set to true to skip caching
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  # Specifies whether data about the.NET Coretools usageis collected and sent to Microsoft. Set to true to opt-out of thetelemetry feature
   DOTNET_CLI_TELEMETRY_OPTOUT: true
 image: Visual Studio 2017
 build: off
