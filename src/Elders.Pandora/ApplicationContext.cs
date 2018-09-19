@@ -19,8 +19,6 @@ namespace Elders.Pandora
 
     public class ApplicationContext : IPandoraContext
     {
-
-
         public ApplicationContext(string applicationName, string cluster = null, string machine = null)
         {
             this.ApplicationName = applicationName;
