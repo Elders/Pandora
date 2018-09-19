@@ -1,3 +1,6 @@
+#### 1.0.0-beta0003 - 19.09.2018
+* Ability to instanciate Pandora via IPandoraFactory
+
 #### 1.0.0-beta0002 - 04.09.2018
 * Adds appveyor file
 
