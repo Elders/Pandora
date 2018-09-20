@@ -22,8 +22,8 @@ namespace Elders.Pandora
         public ApplicationContext(string applicationName, string cluster = null, string machine = null)
         {
             this.ApplicationName = applicationName;
-            this.Cluster = cluster ?? Environment.GetEnvironmentVariable(EnvVar.ClusterKey, EnvironmentVariableTarget.Machine) ?? Environment.GetEnvironmentVariable(EnvVar.ClusterKey);
-            this.Machine = machine ?? Environment.GetEnvironmentVariable(EnvVar.MachineKey);
+            this.Cluster = cluster ?? Environment.GetEnvironmentVariable(EnvVar.ClusterKey) ?? Environment.GetEnvironmentVariable(EnvVar.ClusterKey, EnvironmentVariableTarget.Machine);
+            this.Machine = machine ?? Environment.GetEnvironmentVariable(EnvVar.MachineKey) ?? Environment.GetEnvironmentVariable(EnvVar.MachineKey, EnvironmentVariableTarget.Machine);
         }
 
         public string ApplicationName { get; private set; }
@@ -38,7 +38,7 @@ namespace Elders.Pandora
         public ClusterContext(string applicationName, string cluster = null)
         {
             this.ApplicationName = applicationName;
-            this.Cluster = cluster ?? Environment.GetEnvironmentVariable(EnvVar.ClusterKey, EnvironmentVariableTarget.Machine) ?? Environment.GetEnvironmentVariable(EnvVar.ClusterKey);
+            this.Cluster = cluster ?? Environment.GetEnvironmentVariable(EnvVar.ClusterKey) ?? Environment.GetEnvironmentVariable(EnvVar.ClusterKey, EnvironmentVariableTarget.Machine);
             this.Machine = Box.Machine.NotSpecified;
         }
 
