@@ -1,3 +1,6 @@
+#### 1.0.0-beta0004 - 20.09.2018
+* Adds ability to get cluster key from configuration
+
 #### 1.0.0-beta0003 - 19.09.2018
 * Ability to instanciate Pandora via IPandoraFactory
 
