@@ -1,3 +1,6 @@
+#### 1.0.0-beta0005 - 20.09.2018
+* Fixes to the Environment variables calls
+
 #### 1.0.0-beta0004 - 20.09.2018
 * Adds ability to get cluster key from configuration
 
