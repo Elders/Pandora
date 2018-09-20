@@ -7,6 +7,13 @@ namespace Elders.Pandora
 {
     public class WindowsEnvironmentVariables : IConfigurationRepository
     {
+        private readonly EnvironmentVariableTarget target;
+
+        public WindowsEnvironmentVariables(EnvironmentVariableTarget target = EnvironmentVariableTarget.Machine)
+        {
+            this.target = target;
+        }
+
         public void Delete(string key)
         {
             throw new NotSupportedException($"This operation is not supported for {nameof(WindowsEnvironmentVariables)}");
@@ -14,7 +21,7 @@ namespace Elders.Pandora
 
         public bool Exists(string key)
         {
-            var setting = Environment.GetEnvironmentVariable(key) ?? Environment.GetEnvironmentVariable(key, EnvironmentVariableTarget.Machine);
+            var setting = Environment.GetEnvironmentVariable(key) ?? Environment.GetEnvironmentVariable(key, target);
             return ReferenceEquals(null, setting) == false;
         }
 
@@ -22,14 +29,14 @@ namespace Elders.Pandora
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentException(nameof(key));
 
-            var setting = Environment.GetEnvironmentVariable(key) ?? Environment.GetEnvironmentVariable(key, EnvironmentVariableTarget.Machine);
+            var setting = Environment.GetEnvironmentVariable(key) ?? Environment.GetEnvironmentVariable(key, target);
             if (setting == null)
                 throw new KeyNotFoundException("Unable to find environment variable " + key);
 
             return setting;
         }
 
-        public IEnumerable<DeployedSetting> GetAll(EnvironmentVariableTarget target = EnvironmentVariableTarget.Machine)
+        public IEnumerable<DeployedSetting> GetAll()
         {
             var regex = new Regex(@"([^@]+)@@([^\^]+)\^([^~]+)~~(.+)");
 
@@ -51,7 +58,7 @@ namespace Elders.Pandora
             }
         }
 
-        public void Set(string key, string value, EnvironmentVariableTarget target = EnvironmentVariableTarget.Machine)
+        public void Set(string key, string value)
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentException(nameof(key));
 
