@@ -55,10 +55,10 @@ This is where Pandora comes. You can configure the application using the followi
             "setting1": "test_setting1",
             "setting2": "test_setting2"
         }
-    }
+    },
     "machines": {
         "COMPUTERNAME": {
-            "cluster": "local"
+            "cluster": "local",
             "setting0": "int_setting0",
             "setting1": "int_setting1",
             "setting2": "int_setting2"

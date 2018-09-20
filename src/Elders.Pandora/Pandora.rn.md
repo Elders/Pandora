@@ -1,3 +1,15 @@
+#### 1.0.0-beta0004 - 20.09.2018
+* Adds ability to get cluster key from configuration
+
+#### 1.0.0-beta0003 - 19.09.2018
+* Ability to instanciate Pandora via IPandoraFactory
+
+#### 1.0.0-beta0002 - 04.09.2018
+* Adds appveyor file
+
+#### 1.0.0-beta0001 - 04.09.2018
+* Starts targeting NetStandard2.0
+
 #### 0.9.0 - 26.09.2017
 * Added TryGet method
 

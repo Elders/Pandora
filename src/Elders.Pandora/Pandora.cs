@@ -28,6 +28,8 @@ namespace Elders.Pandora
             this.cfgRepo = configurationRepository;
         }
 
+        public Pandora(IPandoraFactory factory) : this(factory.GetContext(), factory.GetConfiguration()) { }
+
         public IPandoraContext ApplicationContext { get { return context; } }
 
         public string Get(string settingKey)
