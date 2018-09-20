@@ -14,7 +14,7 @@ namespace Elders.Pandora
 
         public bool Exists(string key)
         {
-            var setting = Environment.GetEnvironmentVariable(key, EnvironmentVariableTarget.Machine);
+            var setting = Environment.GetEnvironmentVariable(key) ?? Environment.GetEnvironmentVariable(key, EnvironmentVariableTarget.Machine);
             return ReferenceEquals(null, setting) == false;
         }
 
@@ -22,18 +22,18 @@ namespace Elders.Pandora
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentException(nameof(key));
 
-            var setting = Environment.GetEnvironmentVariable(key, EnvironmentVariableTarget.Machine);
+            var setting = Environment.GetEnvironmentVariable(key) ?? Environment.GetEnvironmentVariable(key, EnvironmentVariableTarget.Machine);
             if (setting == null)
                 throw new KeyNotFoundException("Unable to find environment variable " + key);
 
             return setting;
         }
 
-        public IEnumerable<DeployedSetting> GetAll()
+        public IEnumerable<DeployedSetting> GetAll(EnvironmentVariableTarget target = EnvironmentVariableTarget.Machine)
         {
             var regex = new Regex(@"([^@]+)@@([^\^]+)\^([^~]+)~~(.+)");
 
-            var all = Environment.GetEnvironmentVariables(EnvironmentVariableTarget.Machine);
+            var all = Environment.GetEnvironmentVariables(target);
 
             foreach (DictionaryEntry item in all)
             {
@@ -46,17 +46,17 @@ namespace Elders.Pandora
                         cluster: result.Groups[2].Value,
                         machine: result.Groups[3].Value,
                         settingKey: result.Groups[4].Value,
-                        value: Environment.GetEnvironmentVariable(result.Groups[0].Value, EnvironmentVariableTarget.Machine));
+                        value: Environment.GetEnvironmentVariable(result.Groups[0].Value, target));
                 }
             }
         }
 
-        public void Set(string key, string value)
+        public void Set(string key, string value, EnvironmentVariableTarget target = EnvironmentVariableTarget.Machine)
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentException(nameof(key));
 
             if (string.IsNullOrEmpty(value) == false)
-                Environment.SetEnvironmentVariable(key, value, EnvironmentVariableTarget.Machine);
+                Environment.SetEnvironmentVariable(key, value, target);
         }
     }
 }
