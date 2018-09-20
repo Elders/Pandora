@@ -6,9 +6,9 @@ namespace Elders.Pandora
     public interface IConfigurationRepository
     {
         string Get(string key);
-        void Set(string key, string value, EnvironmentVariableTarget target = EnvironmentVariableTarget.Machine);
+        void Set(string key, string value);
         void Delete(string key);
-        IEnumerable<DeployedSetting> GetAll(EnvironmentVariableTarget target = EnvironmentVariableTarget.Machine);
+        IEnumerable<DeployedSetting> GetAll();
         bool Exists(string key);
     }
 }
