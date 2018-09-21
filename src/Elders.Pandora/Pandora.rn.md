@@ -1,3 +1,6 @@
+#### 1.0.0-beta0006 - 21.09.2018
+* Adds PandoraConfigurationProvider
+
 #### 1.0.0-beta0005 - 20.09.2018
 * Fixes to the Environment variables calls
 
