@@ -1,3 +1,7 @@
+#### 1.0.0-beta0007 - 02.10.2018
+* Introduces new environment variables: `pandora_cluster`, `pandora_application`, `pandora_machine`. The old environment variables `CLUSTER_NAME` and `COMPUTERNAME` are still valid
+* PandoraConfigurationProvider now loads only the settings relevant to the provided context instead of all settings because you may have multiple application running side by side
+
 #### 1.0.0-beta0006 - 21.09.2018
 * Adds PandoraConfigurationProvider
 
