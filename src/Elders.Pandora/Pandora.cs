@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Elders.Pandora.Box;
 using Newtonsoft.Json;
-using System.ComponentModel;
 
 namespace Elders.Pandora
 {
@@ -141,12 +141,12 @@ namespace Elders.Pandora
             return cfgRepo.GetAll();
         }
 
-        public IEnumerable<DeployedSetting> GetAll(ApplicationContext applicationContext)
+        public IEnumerable<DeployedSetting> GetAll(IPandoraContext context)
         {
             return from setting in cfgRepo.GetAll()
-                   where setting.Key.Cluster == applicationContext.Cluster &&
-                         setting.Key.Machine == applicationContext.Machine &&
-                         setting.Key.ApplicationName == applicationContext.ApplicationName
+                   where setting.Key.Cluster == context.Cluster &&
+                         setting.Key.Machine == context.Machine &&
+                         setting.Key.ApplicationName == context.ApplicationName
                    select setting;
         }
 
@@ -155,9 +155,9 @@ namespace Elders.Pandora
             Set(settingKey, value, context);
         }
 
-        public void Set(string settingKey, string value, IPandoraContext applicationContex)
+        public void Set(string settingKey, string value, IPandoraContext context)
         {
-            var settingName = NameBuilder.GetSettingName(applicationContex.ApplicationName, applicationContex.Cluster, applicationContex.Machine, settingKey);
+            var settingName = NameBuilder.GetSettingName(context.ApplicationName, context.Cluster, context.Machine, settingKey);
             cfgRepo.Set(settingName, value);
         }
 
@@ -166,9 +166,9 @@ namespace Elders.Pandora
             Delete(settingKey, context);
         }
 
-        public void Delete(string settingKey, IPandoraContext applicationContex)
+        public void Delete(string settingKey, IPandoraContext context)
         {
-            var settingName = NameBuilder.GetSettingName(applicationContex.ApplicationName, applicationContex.Cluster, applicationContex.Machine, settingKey);
+            var settingName = NameBuilder.GetSettingName(context.ApplicationName, context.Cluster, context.Machine, settingKey);
             cfgRepo.Delete(settingName);
         }
     }
