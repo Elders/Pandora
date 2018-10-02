@@ -14,7 +14,7 @@ namespace Elders.Pandora
 
         public override void Load()
         {
-            Data = pandora.GetAll().ToDictionary(key => key.Key.SettingKey, value => value.Value);
+            Data = pandora.GetAll(pandora.ApplicationContext).ToDictionary(key => key.Key.SettingKey, value => value.Value);
         }
     }
 }
