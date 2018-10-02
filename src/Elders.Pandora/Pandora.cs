@@ -144,9 +144,9 @@ namespace Elders.Pandora
         public IEnumerable<DeployedSetting> GetAll(IPandoraContext context)
         {
             return from setting in cfgRepo.GetAll()
-                   where setting.Key.Cluster == context.Cluster &&
-                         setting.Key.Machine == context.Machine &&
-                         setting.Key.ApplicationName == context.ApplicationName
+                   where setting.Key.Cluster.Equals(context.Cluster, StringComparison.OrdinalIgnoreCase) &&
+                         setting.Key.Machine.Equals(context.Machine, StringComparison.OrdinalIgnoreCase) &&
+                         setting.Key.ApplicationName.Equals(context.ApplicationName, StringComparison.OrdinalIgnoreCase)
                    select setting;
         }
 
