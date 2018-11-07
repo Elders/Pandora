@@ -15,6 +15,10 @@ namespace Elders.Pandora
         public override void Load()
         {
             Data = pandora.GetAll(pandora.ApplicationContext).ToDictionary(key => key.Key.SettingKey, value => value.Value);
+
+            Data.Add(EnvVar.ApplicationKey, pandora.ApplicationContext.ApplicationName);
+            Data.Add(EnvVar.MachineKey, pandora.ApplicationContext.Machine);
+            Data.Add(EnvVar.ClusterKey, pandora.ApplicationContext.Cluster);
         }
     }
 }
