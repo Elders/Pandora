@@ -143,11 +143,21 @@ namespace Elders.Pandora
 
         public IEnumerable<DeployedSetting> GetAll(IPandoraContext context)
         {
-            return from setting in cfgRepo.GetAll()
-                   where setting.Key.Cluster.Equals(context.Cluster, StringComparison.OrdinalIgnoreCase) &&
-                         setting.Key.Machine.Equals(context.Machine, StringComparison.OrdinalIgnoreCase) &&
-                         setting.Key.ApplicationName.Equals(context.ApplicationName, StringComparison.OrdinalIgnoreCase)
-                   select setting;
+            IEnumerable<DeployedSetting> allKeys = cfgRepo.GetAll();
+
+            IEnumerable<DeployedSetting> clusterKeys = from setting in allKeys
+                                                       where setting.Key.Cluster.Equals(context.Cluster, StringComparison.OrdinalIgnoreCase) &&
+                                                             setting.Key.Machine.Equals(Box.Machine.NotSpecified, StringComparison.OrdinalIgnoreCase) &&
+                                                             setting.Key.ApplicationName.Equals(context.ApplicationName, StringComparison.OrdinalIgnoreCase)
+                                                       select setting;
+
+            IEnumerable<DeployedSetting> machineKeys = from setting in allKeys
+                                                       where setting.Key.Cluster.Equals(context.Cluster, StringComparison.OrdinalIgnoreCase) &&
+                                                             setting.Key.Machine.Equals(context.Machine, StringComparison.OrdinalIgnoreCase) &&
+                                                             setting.Key.ApplicationName.Equals(context.ApplicationName, StringComparison.OrdinalIgnoreCase)
+                                                       select setting;
+
+            return clusterKeys.Select(item => machineKeys.SingleOrDefault(x => x.Key.SettingKey.Equals(item.Key.SettingKey, StringComparison.OrdinalIgnoreCase)) ?? item);
         }
 
         public void Set(string settingKey, string value)
