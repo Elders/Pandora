@@ -18,7 +18,7 @@ namespace Elders.Pandora
         {
             this.ApplicationName = applicationName ?? EnvVar.GetApplication();
             this.Cluster = cluster ?? EnvVar.GetCluster();
-            this.Machine = machine ?? EnvVar.GetMachine();
+            this.Machine = machine ?? EnvVar.GetMachine() ?? Box.Machine.NotSpecified;
         }
 
         public string ApplicationName { get; private set; }
