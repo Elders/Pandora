@@ -1,3 +1,6 @@
+#### 1.0.0-beta0010 - 13.11.2018
+* Properly gets all pandora DeployedSettings based on context
+
 #### 1.0.0-beta0009 - 13.11.2018
 * Properly builds ApplicationContext
 
