@@ -6,6 +6,7 @@ namespace Elders.Pandora
     {
         public const string ClusterOldKey = "CLUSTER_NAME";
         public const string MachineOldKey = "COMPUTERNAME";
+        public const string ApplicationOldKey = "APPLICATION_NAME";
 
         public const string ClusterKey = "pandora_cluster";
         public const string ApplicationKey = "pandora_application";
@@ -18,7 +19,7 @@ namespace Elders.Pandora
         /// <returns>Returns the application name</returns>
         public static string GetApplication()
         {
-            return GetEnvironmentVariable(ApplicationKey);
+            return GetEnvironmentVariable(ApplicationKey, ApplicationOldKey);
         }
 
         /// <summary>
