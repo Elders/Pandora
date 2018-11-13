@@ -1,3 +1,6 @@
+#### 1.0.0-beta0009 - 13.11.2018
+* Properly builds ApplicationContext
+
 #### 1.0.0-beta0008 - 07.11.2018
 * Registers EnvVars for Application, Cluster and Machine name
 
