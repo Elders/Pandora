@@ -1,32 +1,11 @@
-#### 1.0.0-beta0010 - 13.11.2018
-* Properly gets all pandora DeployedSettings based on context
-
-#### 1.0.0-beta0009 - 13.11.2018
-* Properly builds ApplicationContext
-
-#### 1.0.0-beta0008 - 07.11.2018
+#### 1.0.0 - 14.11.2018
 * Registers EnvVars for Application, Cluster and Machine name
-
-#### 1.0.0-beta0007 - 02.10.2018
 * Introduces new environment variables: `pandora_cluster`, `pandora_application`, `pandora_machine`. The old environment variables `CLUSTER_NAME` and `COMPUTERNAME` are still valid
 * PandoraConfigurationProvider now loads only the settings relevant to the provided context instead of all settings because you may have multiple application running side by side
-
-#### 1.0.0-beta0006 - 21.09.2018
-* Adds PandoraConfigurationProvider
-
-#### 1.0.0-beta0005 - 20.09.2018
+* Adds support for dotnet core configuration provider/source
 * Fixes to the Environment variables calls
-
-#### 1.0.0-beta0004 - 20.09.2018
 * Adds ability to get cluster key from configuration
-
-#### 1.0.0-beta0003 - 19.09.2018
 * Ability to instanciate Pandora via IPandoraFactory
-
-#### 1.0.0-beta0002 - 04.09.2018
-* Adds appveyor file
-
-#### 1.0.0-beta0001 - 04.09.2018
 * Starts targeting NetStandard2.0
 
 #### 0.9.0 - 26.09.2017
