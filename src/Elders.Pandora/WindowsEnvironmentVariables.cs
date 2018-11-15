@@ -7,6 +7,13 @@ namespace Elders.Pandora
 {
     public class WindowsEnvironmentVariables : IConfigurationRepository
     {
+        private readonly EnvironmentVariableTarget target;
+
+        public WindowsEnvironmentVariables(EnvironmentVariableTarget target = EnvironmentVariableTarget.Machine)
+        {
+            this.target = target;
+        }
+
         public void Delete(string key)
         {
             throw new NotSupportedException($"This operation is not supported for {nameof(WindowsEnvironmentVariables)}");
@@ -14,7 +21,7 @@ namespace Elders.Pandora
 
         public bool Exists(string key)
         {
-            var setting = Environment.GetEnvironmentVariable(key, EnvironmentVariableTarget.Machine);
+            var setting = Environment.GetEnvironmentVariable(key) ?? Environment.GetEnvironmentVariable(key, target);
             return ReferenceEquals(null, setting) == false;
         }
 
@@ -22,7 +29,7 @@ namespace Elders.Pandora
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentException(nameof(key));
 
-            var setting = Environment.GetEnvironmentVariable(key, EnvironmentVariableTarget.Machine);
+            var setting = Environment.GetEnvironmentVariable(key) ?? Environment.GetEnvironmentVariable(key, target);
             if (setting == null)
                 throw new KeyNotFoundException("Unable to find environment variable " + key);
 
@@ -33,7 +40,7 @@ namespace Elders.Pandora
         {
             var regex = new Regex(@"([^@]+)@@([^\^]+)\^([^~]+)~~(.+)");
 
-            var all = Environment.GetEnvironmentVariables(EnvironmentVariableTarget.Machine);
+            var all = Environment.GetEnvironmentVariables(target);
 
             foreach (DictionaryEntry item in all)
             {
@@ -46,7 +53,7 @@ namespace Elders.Pandora
                         cluster: result.Groups[2].Value,
                         machine: result.Groups[3].Value,
                         settingKey: result.Groups[4].Value,
-                        value: Environment.GetEnvironmentVariable(result.Groups[0].Value, EnvironmentVariableTarget.Machine));
+                        value: Environment.GetEnvironmentVariable(result.Groups[0].Value, target));
                 }
             }
         }
@@ -56,7 +63,7 @@ namespace Elders.Pandora
             if (string.IsNullOrEmpty(key)) throw new ArgumentException(nameof(key));
 
             if (string.IsNullOrEmpty(value) == false)
-                Environment.SetEnvironmentVariable(key, value, EnvironmentVariableTarget.Machine);
+                Environment.SetEnvironmentVariable(key, value, target);
         }
     }
 }

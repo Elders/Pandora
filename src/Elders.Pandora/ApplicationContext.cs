@@ -2,6 +2,7 @@ using System;
 
 namespace Elders.Pandora
 {
+
     public interface IPandoraContext
     {
         string ApplicationName { get; }
@@ -13,11 +14,11 @@ namespace Elders.Pandora
 
     public class ApplicationContext : IPandoraContext
     {
-        public ApplicationContext(string applicationName, string cluster = null, string machine = null)
+        public ApplicationContext(string applicationName = null, string cluster = null, string machine = null)
         {
-            this.ApplicationName = applicationName;
-            this.Cluster = cluster ?? Environment.GetEnvironmentVariable("CLUSTER_NAME", EnvironmentVariableTarget.Machine);
-            this.Machine = machine ?? Environment.GetEnvironmentVariable("COMPUTERNAME");
+            this.ApplicationName = applicationName ?? EnvVar.GetApplication();
+            this.Cluster = cluster ?? EnvVar.GetCluster();
+            this.Machine = machine ?? EnvVar.GetMachine() ?? Box.Machine.NotSpecified;
         }
 
         public string ApplicationName { get; private set; }
@@ -29,10 +30,10 @@ namespace Elders.Pandora
 
     public class ClusterContext : IPandoraContext
     {
-        public ClusterContext(string applicationName, string cluster = null)
+        public ClusterContext(string applicationName = null, string cluster = null)
         {
-            this.ApplicationName = applicationName;
-            this.Cluster = cluster ?? Environment.GetEnvironmentVariable("CLUSTER_NAME", EnvironmentVariableTarget.Machine);
+            this.ApplicationName = applicationName ?? EnvVar.GetApplication();
+            this.Cluster = cluster ?? EnvVar.GetCluster();
             this.Machine = Box.Machine.NotSpecified;
         }
 

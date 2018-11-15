@@ -1,3 +1,13 @@
+#### 1.0.0 - 14.11.2018
+* Registers EnvVars for Application, Cluster and Machine name
+* Introduces new environment variables: `pandora_cluster`, `pandora_application`, `pandora_machine`. The old environment variables `CLUSTER_NAME` and `COMPUTERNAME` are still valid
+* PandoraConfigurationProvider now loads only the settings relevant to the provided context instead of all settings because you may have multiple application running side by side
+* Adds support for dotnet core configuration provider/source
+* Fixes to the Environment variables calls
+* Adds ability to get cluster key from configuration
+* Ability to instanciate Pandora via IPandoraFactory
+* Starts targeting NetStandard2.0
+
 #### 0.9.0 - 26.09.2017
 * Added TryGet method
 

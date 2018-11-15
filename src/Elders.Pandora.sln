@@ -3,17 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elders.Pandora.Box", "Elders.Pandora.Box\Elders.Pandora.Box.csproj", "{69854EA2-20DC-4A51-90F4-4710F88C930F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elders.Pandora", "Elders.Pandora\Elders.Pandora.csproj", "{BF512BEE-F748-456E-80AE-237F338AC13F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Elders.Pandora", "Elders.Pandora\Elders.Pandora.csproj", "{BF512BEE-F748-456E-80AE-237F338AC13F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{9B98927F-2F3A-4F37-B97C-FE67EA98473D}"
 	ProjectSection(SolutionItems) = preProject
 		..\build-configuration.cmd = ..\build-configuration.cmd
 		..\build.cmd = ..\build.cmd
-		Elders.Pandora\Pandora.nuspec = Elders.Pandora\Pandora.nuspec
-		Elders.Pandora\RELEASE_NOTES.md = Elders.Pandora\RELEASE_NOTES.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elders.Pandora.Tests", "Elders.Pandora.Tests\Elders.Pandora.Tests.csproj", "{16E79F8E-65F0-45E4-BB9C-63A9718C5604}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,18 +23,6 @@ Global
 		Test|Any CPU = Test|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{69854EA2-20DC-4A51-90F4-4710F88C930F}.Azure|Any CPU.ActiveCfg = Release|Any CPU
-		{69854EA2-20DC-4A51-90F4-4710F88C930F}.Azure|Any CPU.Build.0 = Release|Any CPU
-		{69854EA2-20DC-4A51-90F4-4710F88C930F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{69854EA2-20DC-4A51-90F4-4710F88C930F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{69854EA2-20DC-4A51-90F4-4710F88C930F}.Int|Any CPU.ActiveCfg = Release|Any CPU
-		{69854EA2-20DC-4A51-90F4-4710F88C930F}.Int|Any CPU.Build.0 = Release|Any CPU
-		{69854EA2-20DC-4A51-90F4-4710F88C930F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{69854EA2-20DC-4A51-90F4-4710F88C930F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{69854EA2-20DC-4A51-90F4-4710F88C930F}.Stage|Any CPU.ActiveCfg = Release|Any CPU
-		{69854EA2-20DC-4A51-90F4-4710F88C930F}.Stage|Any CPU.Build.0 = Release|Any CPU
-		{69854EA2-20DC-4A51-90F4-4710F88C930F}.Test|Any CPU.ActiveCfg = Release|Any CPU
-		{69854EA2-20DC-4A51-90F4-4710F88C930F}.Test|Any CPU.Build.0 = Release|Any CPU
 		{BF512BEE-F748-456E-80AE-237F338AC13F}.Azure|Any CPU.ActiveCfg = Release|Any CPU
 		{BF512BEE-F748-456E-80AE-237F338AC13F}.Azure|Any CPU.Build.0 = Release|Any CPU
 		{BF512BEE-F748-456E-80AE-237F338AC13F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -49,6 +35,18 @@ Global
 		{BF512BEE-F748-456E-80AE-237F338AC13F}.Stage|Any CPU.Build.0 = Release|Any CPU
 		{BF512BEE-F748-456E-80AE-237F338AC13F}.Test|Any CPU.ActiveCfg = Release|Any CPU
 		{BF512BEE-F748-456E-80AE-237F338AC13F}.Test|Any CPU.Build.0 = Release|Any CPU
+		{16E79F8E-65F0-45E4-BB9C-63A9718C5604}.Azure|Any CPU.ActiveCfg = Debug|Any CPU
+		{16E79F8E-65F0-45E4-BB9C-63A9718C5604}.Azure|Any CPU.Build.0 = Debug|Any CPU
+		{16E79F8E-65F0-45E4-BB9C-63A9718C5604}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16E79F8E-65F0-45E4-BB9C-63A9718C5604}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16E79F8E-65F0-45E4-BB9C-63A9718C5604}.Int|Any CPU.ActiveCfg = Debug|Any CPU
+		{16E79F8E-65F0-45E4-BB9C-63A9718C5604}.Int|Any CPU.Build.0 = Debug|Any CPU
+		{16E79F8E-65F0-45E4-BB9C-63A9718C5604}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16E79F8E-65F0-45E4-BB9C-63A9718C5604}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16E79F8E-65F0-45E4-BB9C-63A9718C5604}.Stage|Any CPU.ActiveCfg = Debug|Any CPU
+		{16E79F8E-65F0-45E4-BB9C-63A9718C5604}.Stage|Any CPU.Build.0 = Debug|Any CPU
+		{16E79F8E-65F0-45E4-BB9C-63A9718C5604}.Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{16E79F8E-65F0-45E4-BB9C-63A9718C5604}.Test|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Elders.Pandora.Box;
 using Newtonsoft.Json;
-using System.ComponentModel;
 
 namespace Elders.Pandora
 {
@@ -27,6 +27,8 @@ namespace Elders.Pandora
             this.context = context;
             this.cfgRepo = configurationRepository;
         }
+
+        public Pandora(IPandoraFactory factory) : this(factory.GetContext(), factory.GetConfiguration()) { }
 
         public IPandoraContext ApplicationContext { get { return context; } }
 
@@ -139,13 +141,23 @@ namespace Elders.Pandora
             return cfgRepo.GetAll();
         }
 
-        public IEnumerable<DeployedSetting> GetAll(ApplicationContext applicationContext)
+        public IEnumerable<DeployedSetting> GetAll(IPandoraContext context)
         {
-            return from setting in cfgRepo.GetAll()
-                   where setting.Key.Cluster == applicationContext.Cluster &&
-                         setting.Key.Machine == applicationContext.Machine &&
-                         setting.Key.ApplicationName == applicationContext.ApplicationName
-                   select setting;
+            IEnumerable<DeployedSetting> allKeys = cfgRepo.GetAll();
+
+            IEnumerable<DeployedSetting> clusterKeys = from setting in allKeys
+                                                       where setting.Key.Cluster.Equals(context.Cluster, StringComparison.OrdinalIgnoreCase) &&
+                                                             setting.Key.Machine.Equals(Box.Machine.NotSpecified, StringComparison.OrdinalIgnoreCase) &&
+                                                             setting.Key.ApplicationName.Equals(context.ApplicationName, StringComparison.OrdinalIgnoreCase)
+                                                       select setting;
+
+            IEnumerable<DeployedSetting> machineKeys = from setting in allKeys
+                                                       where setting.Key.Cluster.Equals(context.Cluster, StringComparison.OrdinalIgnoreCase) &&
+                                                             setting.Key.Machine.Equals(context.Machine, StringComparison.OrdinalIgnoreCase) &&
+                                                             setting.Key.ApplicationName.Equals(context.ApplicationName, StringComparison.OrdinalIgnoreCase)
+                                                       select setting;
+
+            return clusterKeys.Select(item => machineKeys.SingleOrDefault(x => x.Key.SettingKey.Equals(item.Key.SettingKey, StringComparison.OrdinalIgnoreCase)) ?? item);
         }
 
         public void Set(string settingKey, string value)
@@ -153,9 +165,9 @@ namespace Elders.Pandora
             Set(settingKey, value, context);
         }
 
-        public void Set(string settingKey, string value, IPandoraContext applicationContex)
+        public void Set(string settingKey, string value, IPandoraContext context)
         {
-            var settingName = NameBuilder.GetSettingName(applicationContex.ApplicationName, applicationContex.Cluster, applicationContex.Machine, settingKey);
+            var settingName = NameBuilder.GetSettingName(context.ApplicationName, context.Cluster, context.Machine, settingKey);
             cfgRepo.Set(settingName, value);
         }
 
@@ -164,9 +176,9 @@ namespace Elders.Pandora
             Delete(settingKey, context);
         }
 
-        public void Delete(string settingKey, IPandoraContext applicationContex)
+        public void Delete(string settingKey, IPandoraContext context)
         {
-            var settingName = NameBuilder.GetSettingName(applicationContex.ApplicationName, applicationContex.Cluster, applicationContex.Machine, settingKey);
+            var settingName = NameBuilder.GetSettingName(context.ApplicationName, context.Cluster, context.Machine, settingKey);
             cfgRepo.Delete(settingName);
         }
     }
