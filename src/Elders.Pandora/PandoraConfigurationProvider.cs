@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Elders.Pandora.Logging;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,8 @@ namespace Elders.Pandora
 {
     public class PandoraConfigurationProvider : ConfigurationProvider
     {
+        private static readonly ILog log = LogProvider.GetLogger(typeof(PandoraConfigurationProvider));
+
         private readonly IPandoraConfigurationSource pandoraConfigurationSource;
         private readonly Pandora pandora;
 
@@ -48,11 +51,8 @@ namespace Elders.Pandora
         {
             if (reload || currentState is null || currentState.Any() == false)
             {
+                log.Debug(() => $"Reloading Pandora configuration source {pandoraConfigurationSource.GetType().Name} | Reload: {reload} | CurrentStateCount: {currentState?.Count()}");
                 currentState = pandora.GetAll(pandora.ApplicationContext);
-                if (reload)
-                {
-                    Data = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-                }
             }
             Data = currentState.ToDictionary(key => key.Key.SettingKey, value => value.Value);
             Data.Add(EnvVar.ApplicationKey, pandora.ApplicationContext.ApplicationName);
