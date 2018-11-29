@@ -26,6 +26,11 @@ namespace Elders.Pandora
         public string Cluster { get; private set; }
 
         public string Machine { get; private set; }
+
+        public override string ToString()
+        {
+            return $"Pandora context: Cluster: {Cluster} | Machine: {Machine} | Application: {ApplicationName}";
+        }
     }
 
     public class ClusterContext : IPandoraContext
@@ -42,5 +47,10 @@ namespace Elders.Pandora
         public string Cluster { get; private set; }
 
         public string Machine { get; private set; }
+
+        public override string ToString()
+        {
+            return $"Pandora context: Cluster: {Cluster} | Machine: {Machine} | Application: {ApplicationName}";
+        }
     }
 }
