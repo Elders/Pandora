@@ -1,3 +1,6 @@
+#### 1.0.1 - 29.11.2018
+* Adds logging
+
 #### 1.0.0 - 14.11.2018
 * Registers EnvVars for Application, Cluster and Machine name
 * Introduces new environment variables: `pandora_cluster`, `pandora_application`, `pandora_machine`. The old environment variables `CLUSTER_NAME` and `COMPUTERNAME` are still valid
