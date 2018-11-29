@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Elders.Pandora.Box;
+using Elders.Pandora.Logging;
 using Newtonsoft.Json;
 
 namespace Elders.Pandora
@@ -138,26 +139,44 @@ namespace Elders.Pandora
 
         public IEnumerable<DeployedSetting> GetAll()
         {
-            return cfgRepo.GetAll();
+            try
+            {
+                return cfgRepo.GetAll();
+            }
+            catch (Exception ex)
+            {
+                LogProvider.GetLogger(typeof(Pandora)).FatalException($"Failed to load pandora settings for {context.ToString()}. Empty setting collection is returned without crashing badly!", ex);
+
+                return Enumerable.Empty<DeployedSetting>();
+            }
         }
 
         public IEnumerable<DeployedSetting> GetAll(IPandoraContext context)
         {
-            IEnumerable<DeployedSetting> allKeys = cfgRepo.GetAll();
+            try
+            {
+                IEnumerable<DeployedSetting> allKeys = cfgRepo.GetAll();
 
-            IEnumerable<DeployedSetting> clusterKeys = from setting in allKeys
-                                                       where setting.Key.Cluster.Equals(context.Cluster, StringComparison.OrdinalIgnoreCase) &&
-                                                             setting.Key.Machine.Equals(Box.Machine.NotSpecified, StringComparison.OrdinalIgnoreCase) &&
-                                                             setting.Key.ApplicationName.Equals(context.ApplicationName, StringComparison.OrdinalIgnoreCase)
-                                                       select setting;
+                IEnumerable<DeployedSetting> clusterKeys = from setting in allKeys
+                                                           where setting.Key.Cluster.Equals(context.Cluster, StringComparison.OrdinalIgnoreCase) &&
+                                                                 setting.Key.Machine.Equals(Box.Machine.NotSpecified, StringComparison.OrdinalIgnoreCase) &&
+                                                                 setting.Key.ApplicationName.Equals(context.ApplicationName, StringComparison.OrdinalIgnoreCase)
+                                                           select setting;
 
-            IEnumerable<DeployedSetting> machineKeys = from setting in allKeys
-                                                       where setting.Key.Cluster.Equals(context.Cluster, StringComparison.OrdinalIgnoreCase) &&
-                                                             setting.Key.Machine.Equals(context.Machine, StringComparison.OrdinalIgnoreCase) &&
-                                                             setting.Key.ApplicationName.Equals(context.ApplicationName, StringComparison.OrdinalIgnoreCase)
-                                                       select setting;
+                IEnumerable<DeployedSetting> machineKeys = from setting in allKeys
+                                                           where setting.Key.Cluster.Equals(context.Cluster, StringComparison.OrdinalIgnoreCase) &&
+                                                                 setting.Key.Machine.Equals(context.Machine, StringComparison.OrdinalIgnoreCase) &&
+                                                                 setting.Key.ApplicationName.Equals(context.ApplicationName, StringComparison.OrdinalIgnoreCase)
+                                                           select setting;
 
-            return clusterKeys.Select(item => machineKeys.SingleOrDefault(x => x.Key.SettingKey.Equals(item.Key.SettingKey, StringComparison.OrdinalIgnoreCase)) ?? item);
+                return clusterKeys.Select(item => machineKeys.SingleOrDefault(x => x.Key.SettingKey.Equals(item.Key.SettingKey, StringComparison.OrdinalIgnoreCase)) ?? item);
+            }
+            catch (Exception ex)
+            {
+                LogProvider.GetLogger(typeof(Pandora)).FatalException($"Failed to load pandora settings for {context.ToString()}. Empty setting collection is returned without crashing badly!", ex);
+
+                return Enumerable.Empty<DeployedSetting>();
+            }
         }
 
         public void Set(string settingKey, string value)

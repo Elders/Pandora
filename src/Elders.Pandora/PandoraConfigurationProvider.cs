@@ -1,7 +1,6 @@
 ﻿using Elders.Pandora.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -10,8 +9,6 @@ namespace Elders.Pandora
 {
     public class PandoraConfigurationProvider : ConfigurationProvider
     {
-        private static readonly ILog log = LogProvider.GetLogger(typeof(PandoraConfigurationProvider));
-
         private readonly IPandoraConfigurationSource pandoraConfigurationSource;
         private readonly Pandora pandora;
 
@@ -39,20 +36,21 @@ namespace Elders.Pandora
             }
         }
 
-
         public override void Load()
         {
             Load(reload: false);
         }
 
-        IEnumerable<DeployedSetting> currentState = null;
+        List<DeployedSetting> currentState = new List<DeployedSetting>();
 
         public void Load(bool reload)
         {
             if (reload || currentState is null || currentState.Any() == false)
             {
-                log.Debug(() => $"Reloading Pandora configuration source {pandoraConfigurationSource.GetType().Name} | Reload: {reload} | CurrentStateCount: {currentState?.Count()}");
-                currentState = pandora.GetAll(pandora.ApplicationContext);
+                List<DeployedSetting> newState = pandora.GetAll(pandora.ApplicationContext).ToList();
+                LogProvider.GetLogger(typeof(PandoraConfigurationProvider)).Info(() => $"Reloaded Pandora configuration source {pandoraConfigurationSource.GetType().Name} | Reload: {reload} | CurrentStateCount: {newState?.Count}");
+                if (newState.Any())
+                    currentState = newState;
             }
             Data = currentState.ToDictionary(key => key.Key.SettingKey, value => value.Value);
             Data.Add(EnvVar.ApplicationKey, pandora.ApplicationContext.ApplicationName);
