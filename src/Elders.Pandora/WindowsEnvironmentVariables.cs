@@ -36,7 +36,7 @@ namespace Elders.Pandora
             return setting;
         }
 
-        public IEnumerable<DeployedSetting> GetAll()
+        public IEnumerable<DeployedSetting> GetAll(IPandoraContext context)
         {
             var regex = new Regex(@"([^@]+)@@([^\^]+)\^([^~]+)~~(.+)");
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Elders.Pandora
 {
@@ -8,7 +7,7 @@ namespace Elders.Pandora
         string Get(string key);
         void Set(string key, string value);
         void Delete(string key);
-        IEnumerable<DeployedSetting> GetAll();
+        IEnumerable<DeployedSetting> GetAll(IPandoraContext context);
         bool Exists(string key);
     }
 }

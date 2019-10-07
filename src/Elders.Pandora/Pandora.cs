@@ -138,25 +138,11 @@ namespace Elders.Pandora
             }
         }
 
-        public IEnumerable<DeployedSetting> GetAll()
-        {
-            try
-            {
-                return cfgRepo.GetAll();
-            }
-            catch (Exception ex)
-            {
-                LogProvider.GetLogger(typeof(Pandora)).FatalException($"Failed to load pandora settings for {context.ToString()}. Empty setting collection is returned without crashing badly!", ex);
-
-                return Enumerable.Empty<DeployedSetting>();
-            }
-        }
-
         public IEnumerable<DeployedSetting> GetAll(IPandoraContext context)
         {
             try
             {
-                IEnumerable<DeployedSetting> allKeys = cfgRepo.GetAll();
+                IEnumerable<DeployedSetting> allKeys = cfgRepo.GetAll(context);
 
                 IEnumerable<DeployedSetting> clusterKeys = from setting in allKeys
                                                            where setting.Key.Cluster.Equals(context.Cluster, StringComparison.OrdinalIgnoreCase) &&
