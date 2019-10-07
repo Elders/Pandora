@@ -1,3 +1,7 @@
+#### 2.0.0-beta0001 - 07.10.2019
+* Upgrades to netcore3.0 and removes Newtonsoft.Json
+* The Pandora context is now required when getting the entire configuration from a configuration repository
+
 #### 1.0.2 - 30.11.2018
 * Logs a FATAL instead of crashing badly when the configuration source which provides the settings crashes
 
