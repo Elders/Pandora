@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Elders.Pandora.Box;
 using Elders.Pandora.Logging;
-using Newtonsoft.Json;
 
 namespace Elders.Pandora
 {
@@ -76,7 +77,7 @@ namespace Elders.Pandora
             }
             else
             {
-                var result = JsonConvert.DeserializeObject<T>(value);
+                var result = JsonSerializer.Deserialize<T>(value);
                 return result;
             }
         }
@@ -132,7 +133,7 @@ namespace Elders.Pandora
             }
             else
             {
-                value = JsonConvert.DeserializeObject<T>(rawValue);
+                value = JsonSerializer.Deserialize<T>(rawValue);
                 return true;
             }
         }
