@@ -16,7 +16,7 @@
     <RepositoryUrl>https://github.com/Elders/Pandora.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageIconUrl>https://raw.githubusercontent.com/Elders/logo/master/pandora/picasa.png</PackageIconUrl>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <AssemblyName>Elders.Pandora</AssemblyName>
     <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
