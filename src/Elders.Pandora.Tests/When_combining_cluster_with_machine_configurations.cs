@@ -51,7 +51,7 @@ namespace Elders.Pandora.Tests
 
         public string Get(string key) { throw new NotImplementedException(); }
 
-        public IEnumerable<DeployedSetting> GetAll()
+        public IEnumerable<DeployedSetting> GetAll(IPandoraContext context)
         {
             return keys;
         }

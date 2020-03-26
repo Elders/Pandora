@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text.Json;
 using Elders.Pandora.Box;
-using Elders.Pandora.Logging;
-using Newtonsoft.Json;
 
 namespace Elders.Pandora
 {
@@ -76,7 +75,7 @@ namespace Elders.Pandora
             }
             else
             {
-                var result = JsonConvert.DeserializeObject<T>(value);
+                var result = JsonSerializer.Deserialize<T>(value);
                 return result;
             }
         }
@@ -132,22 +131,8 @@ namespace Elders.Pandora
             }
             else
             {
-                value = JsonConvert.DeserializeObject<T>(rawValue);
+                value = JsonSerializer.Deserialize<T>(rawValue);
                 return true;
-            }
-        }
-
-        public IEnumerable<DeployedSetting> GetAll()
-        {
-            try
-            {
-                return cfgRepo.GetAll();
-            }
-            catch (Exception ex)
-            {
-                LogProvider.GetLogger(typeof(Pandora)).FatalException($"Failed to load pandora settings for {context.ToString()}. Empty setting collection is returned without crashing badly!", ex);
-
-                return Enumerable.Empty<DeployedSetting>();
             }
         }
 
@@ -155,7 +140,7 @@ namespace Elders.Pandora
         {
             try
             {
-                IEnumerable<DeployedSetting> allKeys = cfgRepo.GetAll();
+                IEnumerable<DeployedSetting> allKeys = cfgRepo.GetAll(context);
 
                 IEnumerable<DeployedSetting> clusterKeys = from setting in allKeys
                                                            where setting.Key.Cluster.Equals(context.Cluster, StringComparison.OrdinalIgnoreCase) &&
@@ -171,10 +156,8 @@ namespace Elders.Pandora
 
                 return clusterKeys.Select(item => machineKeys.SingleOrDefault(x => x.Key.SettingKey.Equals(item.Key.SettingKey, StringComparison.OrdinalIgnoreCase)) ?? item);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                LogProvider.GetLogger(typeof(Pandora)).FatalException($"Failed to load pandora settings for {context.ToString()}. Empty setting collection is returned without crashing badly!", ex);
-
                 return Enumerable.Empty<DeployedSetting>();
             }
         }
