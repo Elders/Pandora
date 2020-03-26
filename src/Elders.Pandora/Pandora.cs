@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Elders.Pandora.Box;
-using Elders.Pandora.Logging;
 
 namespace Elders.Pandora
 {
@@ -158,10 +156,8 @@ namespace Elders.Pandora
 
                 return clusterKeys.Select(item => machineKeys.SingleOrDefault(x => x.Key.SettingKey.Equals(item.Key.SettingKey, StringComparison.OrdinalIgnoreCase)) ?? item);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                LogProvider.GetLogger(typeof(Pandora)).FatalException($"Failed to load pandora settings for {context.ToString()}. Empty setting collection is returned without crashing badly!", ex);
-
                 return Enumerable.Empty<DeployedSetting>();
             }
         }
