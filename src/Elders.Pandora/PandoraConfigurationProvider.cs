@@ -48,7 +48,6 @@ namespace Elders.Pandora
             if (reload || currentState is null || currentState.Any() == false)
             {
                 List<DeployedSetting> newState = pandora.GetAll(pandora.ApplicationContext).ToList();
-                LogProvider.GetLogger(typeof(PandoraConfigurationProvider)).Info(() => $"Reloaded Pandora configuration source {pandoraConfigurationSource.GetType().Name} | Reload: {reload} | CurrentStateCount: {newState?.Count}");
                 if (newState.Any())
                     currentState = newState;
             }
