@@ -9,6 +9,11 @@ namespace Elders.Pandora
 {
     public class PandoraBoxOpener
     {
+        static JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions()
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
         Elders.Pandora.Box.Box box;
 
         public PandoraBoxOpener(Box.Box box)
@@ -23,7 +28,7 @@ namespace Elders.Pandora
             foreach (var reference in box.References)
             {
                 var refJarFile = reference.Values.First();
-                var referenceJar = JsonSerializer.Deserialize<Jar>(File.ReadAllText(refJarFile));
+                var referenceJar = JsonSerializer.Deserialize<Jar>(File.ReadAllText(refJarFile), jsonSerializerOptions);
                 var referenceBox = Box.Box.Mistranslate(referenceJar);
 
                 box.Merge(referenceBox);
