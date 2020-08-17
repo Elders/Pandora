@@ -1,3 +1,6 @@
+#### 2.0.1 - 17.08.2020
+* Fixes a deserialization error
+
 #### 2.0.0 - 26.03.2020
 * Upgrades to netcore3.1
 * Removes LibLog
