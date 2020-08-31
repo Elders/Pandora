@@ -2,17 +2,22 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
+//using System.Text.Json.Serialization;
+//using System.Text.Json; // Check if deserialization of dictionaries is fixed => https://github.com/dotnet/runtime/issues/30524
 using Elders.Pandora.Box;
+using Newtonsoft.Json;
 
 namespace Elders.Pandora
 {
     public class PandoraBoxOpener
     {
-        static JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions()
-        {
-            PropertyNameCaseInsensitive = true
-        };
+        // Check if deserialization of dictionaries is fixed => https://github.com/dotnet/runtime/issues/30524
+        //static JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions()
+        //{
+        //    PropertyNameCaseInsensitive = true,
+        //    ReadCommentHandling = JsonCommentHandling.Skip,
+        //    AllowTrailingCommas = true
+        //};
 
         Elders.Pandora.Box.Box box;
 
@@ -28,7 +33,7 @@ namespace Elders.Pandora
             foreach (var reference in box.References)
             {
                 var refJarFile = reference.Values.First();
-                var referenceJar = JsonSerializer.Deserialize<Jar>(File.ReadAllText(refJarFile), jsonSerializerOptions);
+                var referenceJar = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(refJarFile));
                 var referenceBox = Box.Box.Mistranslate(referenceJar);
 
                 box.Merge(referenceBox);
