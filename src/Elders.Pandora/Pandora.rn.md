@@ -1,3 +1,6 @@
+#### 2.0.2 - 31.08.2020
+* Rolls back to Newtonsoft.Json because System.Text.Json dictionary support is not on a professional level
+
 #### 2.0.1 - 17.08.2020
 * Fixes a deserialization error
 
