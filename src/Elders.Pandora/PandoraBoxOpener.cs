@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
 //using System.Text.Json.Serialization;
 //using System.Text.Json; // Check if deserialization of dictionaries is fixed => https://github.com/dotnet/runtime/issues/30524
+// December 2021 => These from Microsoft are soooo...
 using Elders.Pandora.Box;
+using Newtonsoft.Json;
 
 namespace Elders.Pandora
 {
@@ -33,7 +34,7 @@ namespace Elders.Pandora
             foreach (var reference in box.References)
             {
                 var refJarFile = reference.Values.First();
-                var referenceJar = JsonSerializer.Deserialize<Jar>(File.ReadAllText(refJarFile));
+                var referenceJar = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(refJarFile));
                 var referenceBox = Box.Box.Mistranslate(referenceJar);
 
                 box.Merge(referenceBox);
