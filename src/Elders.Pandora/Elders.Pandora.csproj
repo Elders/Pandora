@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -8,7 +8,7 @@
     <Product>Pandora</Product>
     <Title>Pandora</Title>
     <Authors>Elders OSS</Authors>
-    <Copyright>Copyright ©Elders OSS 2013-2020</Copyright>
+    <Copyright>Copyright ©Elders OSS 2013-2022</Copyright>
     <Description>Pandora allows external configuration for your projects</Description>
     <PackageTags>Configuration Json Environment Environments Staging Production Dev Local</PackageTags>
     <PackageLicenseUrl>https://github.com/Elders/Pandora/blob/master/LICENSE</PackageLicenseUrl>
@@ -19,11 +19,11 @@
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <AssemblyName>Elders.Pandora</AssemblyName>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <AssemblyVersion>2.0.0</AssemblyVersion>
+    <AssemblyVersion>3.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -32,10 +32,5 @@
     <EmbedSources>true</EmbedSources>
     <AutoGenerateBindingRedirects>False</AutoGenerateBindingRedirects>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All" />
-  </ItemGroup>
 
 </Project>
