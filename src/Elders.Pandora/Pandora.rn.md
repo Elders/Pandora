@@ -1,3 +1,6 @@
+#### 3.0.0 - 03.12.2021
+* Updates to dotnet 6
+
 #### 2.0.2 - 31.08.2020
 * Rolls back to Newtonsoft.Json because System.Text.Json dictionary support is not on a professional level
 
