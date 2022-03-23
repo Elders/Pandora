@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/Elders/Pandora/compare/v3.0.1...v3.1.0) (2022-03-23)
+
+
+### Features
+
+* Allows pandora configurations to control when a reload should occur using the IPandoraWatcher ([c8ee685](https://github.com/Elders/Pandora/commit/c8ee68576472fccaf3c5bd7b9a286a5a8ba0ad66))
+
 ## [3.0.1](https://github.com/Elders/Pandora/compare/v3.0.0...v3.0.1) (2021-12-09)
 
 
