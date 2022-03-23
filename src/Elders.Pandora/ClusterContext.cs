@@ -1,12 +1,12 @@
-namespace Elders.Pandora
+﻿namespace Elders.Pandora
 {
-    public class ApplicationContext : IPandoraContext
+    public class ClusterContext : IPandoraContext
     {
-        public ApplicationContext(string applicationName = null, string cluster = null, string machine = null)
+        public ClusterContext(string applicationName = null, string cluster = null)
         {
             this.ApplicationName = applicationName ?? EnvVar.GetApplication();
             this.Cluster = cluster ?? EnvVar.GetCluster();
-            this.Machine = machine ?? EnvVar.GetMachine() ?? Box.Machine.NotSpecified;
+            this.Machine = Box.Machine.NotSpecified;
         }
 
         public string ApplicationName { get; private set; }

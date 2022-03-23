@@ -20,6 +20,7 @@ namespace Elders.Pandora
         }
 
         public Key Key { get; private set; }
+
         public string Value { get; private set; }
     }
 }

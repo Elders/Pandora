@@ -1,17 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26730.15
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Elders.Pandora", "Elders.Pandora\Elders.Pandora.csproj", "{BF512BEE-F748-456E-80AE-237F338AC13F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{9B98927F-2F3A-4F37-B97C-FE67EA98473D}"
-	ProjectSection(SolutionItems) = preProject
-		..\build-configuration.cmd = ..\build-configuration.cmd
-		..\build.cmd = ..\build.cmd
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elders.Pandora.Tests", "Elders.Pandora.Tests\Elders.Pandora.Tests.csproj", "{16E79F8E-65F0-45E4-BB9C-63A9718C5604}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Elders.Pandora.Tests", "Elders.Pandora.Tests\Elders.Pandora.Tests.csproj", "{16E79F8E-65F0-45E4-BB9C-63A9718C5604}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
