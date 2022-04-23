@@ -1,3 +1,10 @@
+## [3.1.1](https://github.com/Elders/Pandora/compare/v3.1.0...v3.1.1) (2022-04-23)
+
+
+### Bug Fixes
+
+* Notifies the change to the ConfigurationProvider. This will trigger the reload of the ConfigurationProvider. ([7fde3d3](https://github.com/Elders/Pandora/commit/7fde3d3f60c349235d52c879a8ade4dc00113a2b))
+
 # [3.1.0](https://github.com/Elders/Pandora/compare/v3.0.1...v3.1.0) (2022-03-23)
 
 
