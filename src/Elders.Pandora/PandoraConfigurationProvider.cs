@@ -28,6 +28,8 @@ namespace Elders.Pandora
             Data.Add(EnvVar.ApplicationKey, pandora.ApplicationContext.ApplicationName);
             Data.Add(EnvVar.MachineKey, pandora.ApplicationContext.Machine);
             Data.Add(EnvVar.ClusterKey, pandora.ApplicationContext.Cluster);
+
+            OnReload();  // Notifies the change to the ConfigurationProvider. This will trigger the reload of the ConfigurationProvider.
         }
     }
 }
