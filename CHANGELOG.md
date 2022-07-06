@@ -1,3 +1,10 @@
+# [3.2.0](https://github.com/Elders/Pandora/compare/v3.1.1...v3.2.0) (2022-07-06)
+
+
+### Features
+
+* Support for JSON array setting values ([8e70c02](https://github.com/Elders/Pandora/commit/8e70c0294ef03e626dc8f34a755366ea3bfde496))
+
 ## [3.1.1](https://github.com/Elders/Pandora/compare/v3.1.0...v3.1.1) (2022-04-23)
 
 
