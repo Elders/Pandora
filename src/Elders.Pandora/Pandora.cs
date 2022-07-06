@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
 using System.Text.Json;
 using Elders.Pandora.Box;
 
@@ -154,7 +155,36 @@ namespace Elders.Pandora
                                                                  setting.Key.ApplicationName.Equals(context.ApplicationName, StringComparison.OrdinalIgnoreCase)
                                                            select setting;
 
-                return clusterKeys.Select(item => machineKeys.SingleOrDefault(x => x.Key.SettingKey.Equals(item.Key.SettingKey, StringComparison.OrdinalIgnoreCase)) ?? item);
+                var merged = clusterKeys.Select(item => machineKeys.SingleOrDefault(x => x.Key.SettingKey.Equals(item.Key.SettingKey, StringComparison.OrdinalIgnoreCase)) ?? item);
+                var result = new List<DeployedSetting>();
+                foreach (var item in merged)
+                {
+                    var reader = new Utf8JsonReader(new ReadOnlySpan<byte>(Encoding.UTF8.GetBytes(item.Value)));
+                    var parsed = false;
+                    JsonDocument document = default;
+
+                    try
+                    {
+                        parsed = JsonDocument.TryParseValue(ref reader, out document);
+                    }
+                    catch (Exception) { }
+
+                    if (parsed && document.RootElement.ValueKind == JsonValueKind.Array)
+                    {
+                        var i = 0;
+                        foreach (var arrayItem in document.RootElement.EnumerateArray())
+                        {
+                            var newKey = new Key(item.Key.ApplicationName, item.Key.Cluster, item.Key.Machine, $"{item.Key.SettingKey}:{i++}");
+                            result.Add(new DeployedSetting(newKey, arrayItem.ToString()));
+                        }
+
+                        document?.Dispose();
+                    }
+                    else
+                        result.Add(item);
+                }
+
+                return result;
             }
             catch (Exception)
             {
