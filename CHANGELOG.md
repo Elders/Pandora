@@ -1,3 +1,10 @@
+## [3.2.1](https://github.com/Elders/Pandora/compare/v3.2.0...v3.2.1) (2022-08-16)
+
+
+### Bug Fixes
+
+* pipeline update ([fb01163](https://github.com/Elders/Pandora/commit/fb01163b41e3f1f1c5d4dce267347d515ad48458))
+
 # [3.2.0](https://github.com/Elders/Pandora/compare/v3.1.1...v3.2.0) (2022-07-06)
 
 
