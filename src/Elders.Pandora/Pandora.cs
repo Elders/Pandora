@@ -169,15 +169,10 @@ namespace Elders.Pandora
                     }
                     catch (Exception) { }
 
-                    if (parsed && document.RootElement.ValueKind == JsonValueKind.Array)
+                    if (parsed)
                     {
-                        var i = 0;
-                        foreach (var arrayItem in document.RootElement.EnumerateArray())
-                        {
-                            var newKey = new Key(item.Key.ApplicationName, item.Key.Cluster, item.Key.Machine, $"{item.Key.SettingKey}:{i++}");
-                            result.Add(new DeployedSetting(newKey, arrayItem.ToString()));
-                        }
-
+                        var parsedSettings = ParseNestedSetting(document.RootElement, item.Key);
+                        result.AddRange(parsedSettings);
                         document?.Dispose();
                     }
                     else
@@ -189,6 +184,49 @@ namespace Elders.Pandora
             catch (Exception)
             {
                 return Enumerable.Empty<DeployedSetting>();
+            }
+
+            static List<DeployedSetting> ParseNestedSetting(JsonElement element, Key key, int? index = null)
+            {
+                var result = new List<DeployedSetting>();
+
+                if (element.ValueKind == JsonValueKind.Object)
+                {
+                    foreach (var prop in element.EnumerateObject())
+                    {
+                        var settingKey = $"{key.SettingKey}:{prop.Name}";
+                        if (index.HasValue)
+                            settingKey = $"{key.SettingKey}:{index.Value}:{prop.Name}";
+
+                        var newKey = new Key(key.ApplicationName, key.Cluster, key.Machine, settingKey);
+                        var nested = ParseNestedSetting(prop.Value, newKey);
+                        result.AddRange(nested);
+                    }
+                }
+                else if (element.ValueKind == JsonValueKind.Array)
+                {
+                    var i = 0;
+                    foreach (var arrayItem in element.EnumerateArray())
+                    {
+                        var newKey = key;
+                        if (index.HasValue)
+                            newKey = key.WithSettingKey($"{key.SettingKey}:{index.Value}");
+
+                        var nested = ParseNestedSetting(arrayItem, newKey, i++);
+                        result.AddRange(nested);
+                    }
+                }
+                else
+                {
+                    var newKey = key;
+                    if (index.HasValue)
+                        newKey = key.WithSettingKey($"{key.SettingKey}:{index.Value}");
+
+                    var value = element.ToString();
+                    result.Add(new DeployedSetting(newKey, value));
+                }
+
+                return result;
             }
         }
 
