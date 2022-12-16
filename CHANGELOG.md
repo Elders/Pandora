@@ -1,3 +1,10 @@
+# [3.3.0-preview.1](https://github.com/Elders/Pandora/compare/v3.2.1...v3.3.0-preview.1) (2022-12-16)
+
+
+### Features
+
+* parse nested json objects and arrays as settings ([26ed94a](https://github.com/Elders/Pandora/commit/26ed94a9e365a66bfba002e41826688869859691))
+
 ## [3.2.1](https://github.com/Elders/Pandora/compare/v3.2.0...v3.2.1) (2022-08-16)
 
 
