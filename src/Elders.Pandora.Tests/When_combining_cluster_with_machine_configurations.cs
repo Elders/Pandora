@@ -16,11 +16,15 @@ namespace Elders.Pandora.Tests
 
         Because of = () => allKeys = pandora.GetAll(appContext).ToList();
 
-        It should_have_all_keys = () => allKeys.Count.ShouldEqual(3);
+        It should_have_all_keys = () => allKeys.Count.ShouldEqual(7);
 
         It should_have_propper_key1 = () => allKeys.Where(x => x.Key.SettingKey == "key1").Single().Value.ShouldEqual("machine_value_1");
         It should_have_propper_key2 = () => allKeys.Where(x => x.Key.SettingKey == "key2").Single().Value.ShouldEqual("cluster_value_2");
         It should_have_propper_key3 = () => allKeys.Where(x => x.Key.SettingKey == "key3").Single().Value.ShouldEqual("machine_value_3");
+        It should_have_propper_key4 = () => allKeys.Where(x => x.Key.SettingKey == "key4").Single().Value.ShouldEqual("machine_value_4");
+        It should_have_propper_key5 = () => allKeys.Where(x => x.Key.SettingKey == "key5").Single().Value.ShouldBeNull();
+        It should_have_propper_key6 = () => allKeys.Where(x => x.Key.SettingKey == "key6").Single().Value.ShouldEqual(string.Empty);
+        It should_have_propper_key7 = () => allKeys.Where(x => x.Key.SettingKey == "key7").Single().Value.ShouldEqual("machine_value_7");
 
         static Pandora pandora;
         static ApplicationContext appContext;
@@ -40,9 +44,15 @@ namespace Elders.Pandora.Tests
             keys.Add(new DeployedSetting(new Key(App, Cluster, Box.Machine.NotSpecified, "key1"), "cluster_value_1"));
             keys.Add(new DeployedSetting(new Key(App, Cluster, Box.Machine.NotSpecified, "key2"), "cluster_value_2"));
             keys.Add(new DeployedSetting(new Key(App, Cluster, Box.Machine.NotSpecified, "key3"), "cluster_value_3"));
+            keys.Add(new DeployedSetting(new Key(App, Cluster, Box.Machine.NotSpecified, "key4"), null));
+            keys.Add(new DeployedSetting(new Key(App, Cluster, Box.Machine.NotSpecified, "key5"), null));
+            keys.Add(new DeployedSetting(new Key(App, Cluster, Box.Machine.NotSpecified, "key6"), string.Empty));
+            keys.Add(new DeployedSetting(new Key(App, Cluster, Box.Machine.NotSpecified, "key7"), string.Empty));
 
             keys.Add(new DeployedSetting(new Key(App, Cluster, Machine, "key1"), "machine_value_1"));
             keys.Add(new DeployedSetting(new Key(App, Cluster, Machine, "key3"), "machine_value_3"));
+            keys.Add(new DeployedSetting(new Key(App, Cluster, Machine, "key4"), "machine_value_4"));
+            keys.Add(new DeployedSetting(new Key(App, Cluster, Machine, "key7"), "machine_value_7"));
         }
 
         public void Delete(string key) { throw new NotImplementedException(); }

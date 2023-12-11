@@ -2,25 +2,15 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-//using System.Text.Json.Serialization;
-//using System.Text.Json; // Check if deserialization of dictionaries is fixed => https://github.com/dotnet/runtime/issues/30524
-// December 2021 => These from Microsoft are soooo...
+using System.Text.Json;
+
 using Elders.Pandora.Box;
-using Newtonsoft.Json;
 
 namespace Elders.Pandora
 {
     public class PandoraBoxOpener
     {
-        // Check if deserialization of dictionaries is fixed => https://github.com/dotnet/runtime/issues/30524
-        //static JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions()
-        //{
-        //    PropertyNameCaseInsensitive = true,
-        //    ReadCommentHandling = JsonCommentHandling.Skip,
-        //    AllowTrailingCommas = true
-        //};
-
-        Elders.Pandora.Box.Box box;
+        Box.Box box;
 
         public PandoraBoxOpener(Box.Box box)
         {
@@ -29,12 +19,12 @@ namespace Elders.Pandora
 
         public Configuration Open(PandoraOptions options)
         {
-            options = options ?? PandoraOptions.Defaults;
+            options ??= PandoraOptions.Defaults;
 
             foreach (var reference in box.References)
             {
                 var refJarFile = reference.Values.First();
-                var referenceJar = JsonConvert.DeserializeObject<Jar>(File.ReadAllText(refJarFile));
+                var referenceJar = JsonSerializer.Deserialize<Jar>(File.ReadAllText(refJarFile));
                 var referenceBox = Box.Box.Mistranslate(referenceJar);
 
                 box.Merge(referenceBox);
@@ -52,14 +42,13 @@ namespace Elders.Pandora
             Dictionary<string, object> namanizedMachineConfigs = NamenizeConfiguration(confMachine, options.ClusterName, options.MachineName);
 
 
-            return new Elders.Pandora.Box.Configuration(box.Name, Merge(namanizedDefaltConfigs, Merge(namanizedMachineConfigs, namanizedClusterConfigs)));
+            return new Configuration(box.Name, Merge(namanizedDefaltConfigs, Merge(namanizedMachineConfigs, namanizedClusterConfigs)));
         }
 
         Dictionary<string, object> GetMachineConfiguration(string machineName)
         {
-            Machine machine = null;
             Dictionary<string, object> confMachine = new Dictionary<string, object>();
-            if (TryFindMachine(machineName, out machine))
+            if (TryFindMachine(machineName, out Machine machine))
                 confMachine = machine.AsDictionary();
 
             return confMachine;

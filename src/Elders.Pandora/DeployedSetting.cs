@@ -13,7 +13,6 @@ namespace Elders.Pandora
         public DeployedSetting(Key key, string value)
         {
             if (ReferenceEquals(null, key)) throw new ArgumentNullException(nameof(key));
-            if (string.IsNullOrEmpty(value)) throw new ArgumentNullException(nameof(value));
 
             Key = key;
             Value = value;

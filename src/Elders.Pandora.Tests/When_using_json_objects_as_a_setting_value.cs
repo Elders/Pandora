@@ -16,9 +16,11 @@ namespace Elders.Pandora.Tests
 
         Because of = () => allKeys = pandora.GetAll(appContext).ToList();
 
-        It should_have_all_keys = () => allKeys.Count.ShouldEqual(10);
+        It should_have_all_keys = () => allKeys.Count.ShouldEqual(12);
 
+        It should_have_propper_key1_nullValue = () => allKeys.Where(x => x.Key.SettingKey == "key1:nullValue").Single().Value.ShouldBeNull();
         It should_have_propper_key1_stringValue = () => allKeys.Where(x => x.Key.SettingKey == "key1:stringValue").Single().Value.ShouldEqual("value");
+        It should_have_propper_key1_stringEmpty = () => allKeys.Where(x => x.Key.SettingKey == "key1:stringEmpty").Single().Value.ShouldEqual("");
         It should_have_propper_key1_objectValue_stringValue = () => allKeys.Where(x => x.Key.SettingKey == "key1:objectValue:stringValue").Single().Value.ShouldEqual("nested-value");
         It should_have_propper_key1_objectValue_intValue = () => allKeys.Where(x => x.Key.SettingKey == "key1:objectValue:intValue").Single().Value.ShouldEqual("1");
 
@@ -45,7 +47,26 @@ namespace Elders.Pandora.Tests
             public CompositeTestConfigurationRepository()
             {
                 keys.Add(new DeployedSetting(new Key(App, Cluster, Box.Machine.NotSpecified, "key1"), "{}"));
-                keys.Add(new DeployedSetting(new Key(App, Cluster, Machine, "key1"), "{\"stringValue\": \"value\",\"objectValue\": {\"stringValue\": \"nested-value\",\"intValue\": 1,\"array\": [{\"prop1\": \"prop1\",\"prop2\": \"prop2\"},\"randomString\",{\"prop3\": \"prop3\",\"prop4\": \"prop4\"},[\"nested-array\"]]},\"boolValue\": true}"));
+                keys.Add(new DeployedSetting(new Key(App, Cluster, Machine, "key1"),
+"""
+{
+    "nullValue": null,
+    "stringValue": "value",
+    "stringEmpty": "",
+    "objectValue": {
+        "stringValue": "nested-value",
+        "intValue": 1,
+        "array": [{
+            "prop1": "prop1",
+            "prop2": "prop2"
+        }, "randomString", {
+            "prop3": "prop3",
+            "prop4": "prop4"
+        }, ["nested-array"]]
+    },
+    "boolValue": true
+}
+"""));
             }
 
             public void Delete(string key) { throw new NotImplementedException(); }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using Elders.Pandora.Box;
+using Microsoft.Extensions.Logging;
 
 namespace Elders.Pandora
 {
@@ -22,14 +23,20 @@ namespace Elders.Pandora
     {
         readonly IConfigurationRepository cfgRepo;
         readonly IPandoraContext context;
+        private readonly ILogger<Pandora> logger;
 
-        public Pandora(IPandoraContext context, IConfigurationRepository configurationRepository)
+        public Pandora(IPandoraContext context, IConfigurationRepository configurationRepository, ILoggerFactory loggerFactory)
         {
             this.context = context;
             this.cfgRepo = configurationRepository;
+            this.logger = loggerFactory?.CreateLogger<Pandora>();
         }
 
-        public Pandora(IPandoraFactory factory) : this(factory.GetContext(), factory.GetConfiguration()) { }
+        public Pandora(IPandoraContext context, IConfigurationRepository configurationRepository) : this(context, configurationRepository, null) { }
+
+        public Pandora(IPandoraFactory factory) : this(factory.GetContext(), factory.GetConfiguration(), null) { }
+
+        public Pandora(IPandoraFactory factory, ILoggerFactory loggerFactory) : this(factory.GetContext(), factory.GetConfiguration(), loggerFactory) { }
 
         public IPandoraContext ApplicationContext { get { return context; } }
 
@@ -159,6 +166,18 @@ namespace Elders.Pandora
                 var result = new List<DeployedSetting>();
                 foreach (var item in merged)
                 {
+                    if (item.Value is null)
+                    {
+                        logger?.LogWarning("Skipping unassigned key {application}.{cluster}.{machine}.{settingKey}. Value is null.",
+                            item.Key.ApplicationName,
+                            item.Key.Cluster,
+                            item.Key.Machine,
+                            item.Key.SettingKey);
+
+                        result.Add(item);
+                        continue;
+                    }
+
                     var reader = new Utf8JsonReader(new ReadOnlySpan<byte>(Encoding.UTF8.GetBytes(item.Value)));
                     var parsed = false;
                     JsonDocument document = default;
@@ -181,8 +200,9 @@ namespace Elders.Pandora
 
                 return result;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logger?.LogError(ex, "Unable to parse configurations.");
                 return Enumerable.Empty<DeployedSetting>();
             }
 
@@ -215,6 +235,14 @@ namespace Elders.Pandora
                         var nested = ParseNestedSetting(arrayItem, newKey, i++);
                         result.AddRange(nested);
                     }
+                }
+                else if (element.ValueKind == JsonValueKind.Null)
+                {
+                    var newKey = key;
+                    if (index.HasValue)
+                        newKey = key.WithSettingKey($"{key.SettingKey}:{index.Value}");
+
+                    result.Add(new DeployedSetting(newKey, null));
                 }
                 else
                 {
