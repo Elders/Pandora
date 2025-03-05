@@ -22,6 +22,7 @@ namespace Elders.Pandora.Box
             Clusters = new List<Cluster>();
             Machines = new List<Machine>();
             Defaults = new Configuration(jar.Defaults);
+            Dynamics = jar.Dynamics;
             reservedKeys = new List<string>() { Machine.ClusterKey };
         }
 
@@ -32,12 +33,21 @@ namespace Elders.Pandora.Box
             Clusters = new List<Cluster>(box.Clusters);
             Machines = new List<Machine>(box.Machines);
             Defaults = new Configuration(box.Defaults.AsDictionary());
+            Dynamics = new List<string>(box.Dynamics);
             reservedKeys = new List<string>(box.reservedKeys);
         }
 
         public string Name { get; private set; }
 
         public Configuration Defaults { get; set; }
+
+        /// <summary>
+        /// These settings are dynamic and can be changed at runtime. If a setting exists on the running environment it will NOT be updated. Otherwise it will use the values stored in the box.
+        /// </summary>
+        /// <remarks>
+        /// It is a responsibility of the deployment process to add or NOT add the dynamic settings to the running environment.
+        /// </remarks>
+        public List<string> Dynamics { get; set; }
 
         public List<Cluster> Clusters { get; set; }
 
@@ -46,6 +56,7 @@ namespace Elders.Pandora.Box
         public void Merge(Box box)
         {
             Defaults = Defaults.Join(box.Defaults);
+            Dynamics.AddRange(box.Dynamics);
             Clusters = Clusters.Merge(box.Clusters).ToList();
             Machines = Machines.Merge(box.Machines).ToList();
         }
@@ -149,6 +160,9 @@ namespace Elders.Pandora.Box
 
             if (box.Defaults != null)
                 jar.Defaults = box.Defaults.AsDictionary();
+
+            if (box.Dynamics != null)
+                jar.Dynamics = box.Dynamics;
 
             if (box.Clusters != null)
             {

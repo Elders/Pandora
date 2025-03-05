@@ -46,13 +46,14 @@ namespace Elders.Pandora
             Dictionary<string, object> confDefaults = box.Defaults.AsDictionary();
             Dictionary<string, object> confCluster = GetClusterConfiguration(options.ClusterName);
             Dictionary<string, object> confMachine = GetMachineConfiguration(options.MachineName);
+            List<string> dynamics = box.Dynamics;
 
             Dictionary<string, object> namanizedDefaltConfigs = NamenizeConfiguration(confDefaults, options.ClusterName, Machine.NotSpecified);
             Dictionary<string, object> namanizedClusterConfigs = NamenizeConfiguration(confCluster, options.ClusterName, Machine.NotSpecified);
             Dictionary<string, object> namanizedMachineConfigs = NamenizeConfiguration(confMachine, options.ClusterName, options.MachineName);
+            List<string> namanizedDynamics = NamenizeConfiguration(dynamics, options.ClusterName, Machine.NotSpecified);
 
-
-            return new Elders.Pandora.Box.Configuration(box.Name, Merge(namanizedDefaltConfigs, Merge(namanizedMachineConfigs, namanizedClusterConfigs)));
+            return new Configuration(box.Name, Merge(namanizedDefaltConfigs, Merge(namanizedMachineConfigs, namanizedClusterConfigs)), namanizedDynamics);
         }
 
         Dictionary<string, object> GetMachineConfiguration(string machineName)
@@ -78,6 +79,11 @@ namespace Elders.Pandora
         Dictionary<string, object> NamenizeConfiguration(Dictionary<string, object> settings, string clusterName, string machineName)
         {
             return settings.ToDictionary(x => NameBuilder.GetSettingName(box.Name, clusterName, machineName, x.Key), y => y.Value);
+        }
+
+        List<string> NamenizeConfiguration(List<string> dynamicSettings, string clusterName, string machineName)
+        {
+            return dynamicSettings.Select(x => NameBuilder.GetSettingName(box.Name, clusterName, machineName, x)).ToList();
         }
 
         bool TryFindCluster(string clusterName, out Cluster cluster)
