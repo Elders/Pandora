@@ -7,12 +7,20 @@ namespace Elders.Pandora.Box
     public class Configuration : ValueObject<Configuration>
     {
         private readonly Dictionary<string, object> settings;
+        private readonly List<string> dynamics = new List<string>();
 
         public Configuration(Dictionary<string, object> settings) : this("defaults", settings) { }
 
+        public Configuration(string name, Dictionary<string, object> settings, List<string> dynamics)
+           : this(name, settings)
+        {
+            if (dynamics.Any())
+                this.dynamics = dynamics.Select(x => x.ToLower()).ToList();
+        }
+
         public Configuration(string name, Dictionary<string, object> settings)
         {
-            if (String.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
+            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
 
             if (settings != null)
                 this.settings = settings.ToDictionary(key => key.Key.ToLower(), val => val.Value);
@@ -39,6 +47,8 @@ namespace Elders.Pandora.Box
                 }
             }
         }
+
+        public bool IsDynamic(string key) => dynamics.Contains(key);
 
         public Dictionary<string, object> AsDictionary()
         {

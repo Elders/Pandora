@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Machine.Specifications;
 
 namespace Elders.Pandora.Tests
@@ -47,18 +48,18 @@ namespace Elders.Pandora.Tests
                 keys.Add(new DeployedSetting(new Key(App, Cluster, Machine, "key1"), "[\"randomStringValue\", [{\"arr0\": 0,\"arr1\": \"1\"}], {\"value0\": 1,\"value1\": \"value1\"},{\"value0\": 2,\"value1\": \"value2\"},{\"value0\": 3,\"value1\": \"value3\"}]"));
             }
 
-            public void Delete(string key) { throw new NotImplementedException(); }
+            public Task DeleteAsync(string key) { throw new NotImplementedException(); }
 
-            public bool Exists(string key) { throw new NotImplementedException(); }
+            public Task<bool> ExistsAsync(string key) { throw new NotImplementedException(); }
 
-            public string Get(string key) { throw new NotImplementedException(); }
+            public Task<string> GetAsync(string key) { throw new NotImplementedException(); }
 
             public IEnumerable<DeployedSetting> GetAll(IPandoraContext context)
             {
                 return keys;
             }
 
-            public void Set(string key, string value) { throw new NotImplementedException(); }
+            public Task SetAsync(string key, string value) { throw new NotImplementedException(); }
         }
     }
 }
