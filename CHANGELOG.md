@@ -1,3 +1,5 @@
+# [4.0.0](https://github.com/Elders/Pandora/compare/v3.3.0...v4.0.0) (2025-03-10)
+
 # [3.3.0](https://github.com/Elders/Pandora/compare/v3.2.1...v3.3.0) (2022-12-16)
 
 
