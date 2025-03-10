@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Elders.Pandora.Box;
 
 namespace Elders.Pandora
@@ -33,12 +34,12 @@ namespace Elders.Pandora
 
         public IPandoraContext ApplicationContext { get { return context; } }
 
-        public string Get(string settingKey)
+        public Task<string> GetAsync(string settingKey)
         {
-            return Get(settingKey, context);
+            return GetAsync(settingKey, context);
         }
 
-        public string Get(string settingKey, IPandoraContext applicationContext)
+        public async Task<string> GetAsync(string settingKey, IPandoraContext applicationContext)
         {
             if (string.IsNullOrEmpty(settingKey)) throw new ArgumentNullException(nameof(settingKey));
             if (ReferenceEquals(null, applicationContext)) throw new ArgumentNullException(nameof(applicationContext));
@@ -46,25 +47,26 @@ namespace Elders.Pandora
             var sanitizedKey = settingKey.ToLower();
             string keyForMachine = NameBuilder.GetSettingName(applicationContext.ApplicationName, applicationContext.Cluster, applicationContext.Machine, sanitizedKey);
 
-            if (cfgRepo.Exists(keyForMachine))
+            bool exitst = await cfgRepo.ExistsAsync(keyForMachine).ConfigureAwait(false);
+            if (exitst)
             {
-                return cfgRepo.Get(keyForMachine);
+                return await cfgRepo.GetAsync(keyForMachine).ConfigureAwait(false);
             }
             else
             {
                 string keyForCluster = NameBuilder.GetSettingName(applicationContext.ApplicationName, applicationContext.Cluster, Machine.NotSpecified, sanitizedKey);
-                return cfgRepo.Get(keyForCluster);
+                return await cfgRepo.GetAsync(keyForCluster).ConfigureAwait(false);
             }
         }
 
-        public T Get<T>(string settingKey)
+        public Task<T> GetAsync<T>(string settingKey)
         {
-            return Get<T>(settingKey, context);
+            return GetAsync<T>(settingKey, context);
         }
 
-        public T Get<T>(string settingKey, IPandoraContext context)
+        public async Task<T> GetAsync<T>(string settingKey, IPandoraContext context)
         {
-            var value = Get(settingKey, context);
+            string value = await GetAsync(settingKey, context).ConfigureAwait(false);
             if (value == null)
                 return default(T);
 
@@ -78,62 +80,6 @@ namespace Elders.Pandora
             {
                 var result = JsonSerializer.Deserialize<T>(value);
                 return result;
-            }
-        }
-
-        public bool TryGet(string settingKey, out string value)
-        {
-            return TryGet(settingKey, context, out value);
-        }
-
-        public bool TryGet(string settingKey, IPandoraContext applicationContext, out string value)
-        {
-            var sanitizedKey = settingKey.ToLower();
-            var keyForMachine = NameBuilder.GetSettingName(applicationContext.ApplicationName, applicationContext.Cluster, applicationContext.Machine, sanitizedKey);
-
-            if (cfgRepo.Exists(keyForMachine))
-            {
-                value = cfgRepo.Get(keyForMachine);
-                return true;
-            }
-
-            string keyForCluster = NameBuilder.GetSettingName(applicationContext.ApplicationName, applicationContext.Cluster, Machine.NotSpecified, sanitizedKey);
-
-            if (cfgRepo.Exists(keyForCluster))
-            {
-                value = cfgRepo.Get(keyForCluster);
-                return true;
-            }
-
-            value = null;
-            return false;
-        }
-
-        public bool TryGet<T>(string settingKey, out T value)
-        {
-            return TryGet<T>(settingKey, context, out value);
-        }
-
-        public bool TryGet<T>(string settingKey, IPandoraContext applicationContext, out T value)
-        {
-            string rawValue;
-
-            if (TryGet(settingKey, applicationContext, out rawValue) == false)
-            {
-                value = default(T);
-                return false;
-            }
-
-            var converter = TypeDescriptor.GetConverter(typeof(T));
-            if (converter.IsValid(rawValue))
-            {
-                value = (T)converter.ConvertFrom(rawValue);
-                return true;
-            }
-            else
-            {
-                value = JsonSerializer.Deserialize<T>(rawValue);
-                return true;
             }
         }
 
@@ -230,26 +176,26 @@ namespace Elders.Pandora
             }
         }
 
-        public void Set(string settingKey, string value)
+        public Task SetAsync(string settingKey, string value)
         {
-            Set(settingKey, value, context);
+            return SetAsync(settingKey, value, context);
         }
 
-        public void Set(string settingKey, string value, IPandoraContext context)
+        public Task SetAsync(string settingKey, string value, IPandoraContext context)
         {
             var settingName = NameBuilder.GetSettingName(context.ApplicationName, context.Cluster, context.Machine, settingKey);
-            cfgRepo.Set(settingName, value);
+            return cfgRepo.SetAsync(settingName, value);
         }
 
-        public void Delete(string settingKey)
+        public Task DeleteAsync(string settingKey)
         {
-            Delete(settingKey, context);
+            return DeleteAsync(settingKey, context);
         }
 
-        public void Delete(string settingKey, IPandoraContext context)
+        public Task DeleteAsync(string settingKey, IPandoraContext context)
         {
             var settingName = NameBuilder.GetSettingName(context.ApplicationName, context.Cluster, context.Machine, settingKey);
-            cfgRepo.Delete(settingName);
+            return cfgRepo.DeleteAsync(settingName);
         }
     }
 }

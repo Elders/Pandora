@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Elders.Pandora
 {
@@ -14,18 +15,18 @@ namespace Elders.Pandora
             this.target = target;
         }
 
-        public void Delete(string key)
+        public Task DeleteAsync(string key)
         {
             throw new NotSupportedException($"This operation is not supported for {nameof(WindowsEnvironmentVariables)}");
         }
 
-        public bool Exists(string key)
+        public Task<bool> ExistsAsync(string key)
         {
             var setting = Environment.GetEnvironmentVariable(key) ?? Environment.GetEnvironmentVariable(key, target);
-            return ReferenceEquals(null, setting) == false;
+            return Task.FromResult(setting is not null);
         }
 
-        public string Get(string key)
+        public Task<string> GetAsync(string key)
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentException(nameof(key));
 
@@ -33,7 +34,7 @@ namespace Elders.Pandora
             if (setting == null)
                 throw new KeyNotFoundException("Unable to find environment variable " + key);
 
-            return setting;
+            return Task.FromResult(setting);
         }
 
         public IEnumerable<DeployedSetting> GetAll(IPandoraContext context)
@@ -58,12 +59,14 @@ namespace Elders.Pandora
             }
         }
 
-        public void Set(string key, string value)
+        public Task SetAsync(string key, string value)
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentException(nameof(key));
 
             if (string.IsNullOrEmpty(value) == false)
                 Environment.SetEnvironmentVariable(key, value, target);
+
+            return Task.CompletedTask;
         }
     }
 }
