@@ -12,6 +12,10 @@ This is where Pandora comes. You can configure the application using the followi
         "refSetting1": "refSetting1",
         "refSetting2": "refSetting2"
     },
+    "dynamics": [
+        "refSetting0",
+        "refSetting1"
+    ],
     "clusters": {
         "local": {
             "refSetting0": "int_refSetting0",
@@ -44,6 +48,10 @@ This is where Pandora comes. You can configure the application using the followi
         "setting1": "setting1",
         "setting2": "setting2"
     },
+    "dynamics": [
+        "setting0",
+        "setting1"
+    ],
     "clusters": {
         "local": {
             "setting0": "int_setting0",
@@ -70,9 +78,12 @@ This is where Pandora comes. You can configure the application using the followi
 - jar file: this is the file containing configuration. In this case `SampleConfiguration.json`
 - name: The application name. The recommended approach is to name the jar file with the same name
 - defaults: defines configuration keys for the current application and sets default values
+- dynamics: Defines dynamic keys, which are lists of strings that are initialized when the configuration is first created but are not updated afterward.
 - clusters: defines different environment configurations where the application will be deployed. Here `local` is the dev environment and `test` is the place for QA
 - machines: defines configurations for specific machine inside a cluster. The COMPUTERNAME is the default ENV VAR in windows.
 - references: merges two jar files. Same rules apply here. You are not allowed to have the duplicate keys in ref and main jars
 
 In order to install the configurations you will have to use Pandora.Cli. By default the configurations are applied and stored in environment variables.
 
+Dynamic Keys (Lists of Strings)
+Pandora now supports dynamic keys, which are lists of strings that are initialized when the configuration is first created. However, these dynamic keys are not updated by Pandora after their initial creation. This ensures that their values remain stable across different environments.
