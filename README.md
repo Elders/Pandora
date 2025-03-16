@@ -4,7 +4,7 @@ The problem arises when production configuration is needed which should not be p
 This is where Pandora comes. You can configure the application using the following structure and store these files in a separate repository:
 
 `ReferenceConfiguration.json`
-```
+```json
 {
     "name": "ReferenceConfiguration",
     "defaults": {
@@ -37,7 +37,7 @@ This is where Pandora comes. You can configure the application using the followi
 ```
 
 `SampleConfiguration.json`
-```
+```json
 {
     "name": "SampleConfiguration",
     "references": [
