@@ -128,8 +128,9 @@ namespace Elders.Pandora
 
                 return result;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine($"Pandora configuration error: {ex.Message}");
                 return Enumerable.Empty<DeployedSetting>();
             }
 
