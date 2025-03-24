@@ -1,3 +1,10 @@
+## [4.0.1](https://github.com/Elders/Pandora/compare/v4.0.0...v4.0.1) (2025-03-24)
+
+
+### Bug Fixes
+
+* Do not throw an error when prevent all configs from loading when parsing a broken json config ([6cdcae3](https://github.com/Elders/Pandora/commit/6cdcae36cadc543425b6318acc918f6f77e94cc9))
+
 # [4.0.0](https://github.com/Elders/Pandora/compare/v3.3.0...v4.0.0) (2025-03-10)
 
 # [3.3.0](https://github.com/Elders/Pandora/compare/v3.2.1...v3.3.0) (2022-12-16)
