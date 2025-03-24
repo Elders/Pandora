@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -169,7 +170,14 @@ namespace Elders.Pandora
                         newKey = key.WithSettingKey($"{key.SettingKey}:{index.Value}");
 
                     var value = element.ToString();
-                    result.Add(new DeployedSetting(newKey, value));
+                    if (string.IsNullOrEmpty(value))
+                    {
+                        Console.WriteLine($"Missing Pandora setting value for key {newKey.SettingKey}");
+                    }
+                    else
+                    {
+                        result.Add(new DeployedSetting(newKey, value));
+                    }
                 }
 
                 return result;
